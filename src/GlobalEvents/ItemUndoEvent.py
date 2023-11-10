@@ -1,12 +1,13 @@
 class ItemUndoEvent:
-    def __init__(self,
-                 afterId : int,
-                 beforeId : int,
-                 goldGain : int,
-                 participantId : int,
-                 timeStamp : int) -> None:
-        self.afterId = afterId
-        self.beforeId = beforeId
-        self.goldGain = goldGain
-        self.participantId = participantId
-        self.timeStamp = timeStamp
+    def __init__(self, rawDict : dict) -> None:
+        for k, v in rawDict.items():
+            if k == "afterId":
+                self.afterId = v
+            elif k == "beforeId":
+                self.beforeId = v
+            elif k == "goldGain":
+                self.goldGain = v
+            elif k == "participantId":
+                self.participantId = v
+            elif k == "timestamp":
+                self.timestamp = v

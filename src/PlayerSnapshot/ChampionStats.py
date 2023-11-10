@@ -1,58 +1,7 @@
 class ChampionStats:
     def __init__(self,
-                 abilityHaste : int = 0,
-                 abilityPower : int = 0,
-                 armor : int = 0,
-                 armorPen : int = 0,
-                 armorPenPercet : int = 0,
-                 attackDamage : int = 0,
-                 attackSpeed : int = 0,
-                 bonusArmorPenPercent : int = 0,
-                 bonusMagicPenPercent : int = 0,
-                 ccReduction : int = 0,
-                 cooldownReduction : int = 0,
-                 health : int = 0,
-                 healthMax : int = 0,
-                 healthRegen : int = 0,
-                 lifesteal : int = 0,
-                 magicPen : int = 0,
-                 magicPenPercent : int = 0,
-                 magicResist : int = 0,
-                 movementSpeed : int = 0,
-                 omnivamp : int = 0,
-                 physicalVamp : int = 0,
-                 power : int = 0,
-                 powerMax : int = 0,
-                 powerRegen : int = 0,
-                 spellVamp : int = 0) -> None:
-        self.abilityHaste = abilityHaste
-        self.abilityPower = abilityPower
-        self.armor = armor
-        self.armorPen = armorPen
-        self.armorPenPercet = armorPenPercet
-        self.attackDamage = attackDamage
-        self.attackSpeed = attackSpeed
-        self.bonusArmorPenPercent = bonusArmorPenPercent
-        self.bonusMagicPenPercent = bonusMagicPenPercent
-        self.ccReduction = ccReduction
-        self.cooldownReduction = cooldownReduction
-        self.health = health
-        self.healthMax = healthMax
-        self.healthRegen = healthRegen
-        self.lifesteal = lifesteal
-        self.magicPen = magicPen
-        self.magicPenPercent = magicPenPercent
-        self.magicResist = magicResist
-        self.movementSpeed = movementSpeed
-        self.omnivamp = omnivamp
-        self.physicalVamp = physicalVamp
-        self.power = power
-        self.powerMax = powerMax
-        self.powerRegen = powerRegen
-        self.spellVamp = spellVamp
-
-    def getChampionStatsFromRowDict(self, rowDict : dict):
-        for k, v in rowDict.items():
+                 rawDict : dict,) -> None:
+       for k, v in rawDict.items():
             if k == "abilityHase":
                 self.abilityHaste = v
             elif k == "abilityPower":

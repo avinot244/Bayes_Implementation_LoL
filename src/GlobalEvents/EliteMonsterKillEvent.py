@@ -2,18 +2,24 @@ from utils_stuff.Types import *
 from utils_stuff.Position import Position
 
 class EliteMonsterKillEvent:
-    def __init__(self,
-                 assistingParticipantsIds : list,
-                 bounty : int,
-                 killerTeamId : int,
-                 monsterSubType : MonsterSubType,
-                 monsterType : MonsterType,
-                 timeStamp : int,
-                 position : Position) -> None:
-        self.assistingParticipantsIds = assistingParticipantsIds
-        self.bounty = bounty
-        self.killerTeamId = killerTeamId
-        self.monsterSubType = monsterSubType
-        self.monsterType = monsterType
-        self.timeStamp = timeStamp
-        self.position = position
+    def __init__(self, rawDict : dict) -> None:
+        
+        for k, v in rawDict.items():
+            if k == "assistingParticipantsIds":
+                self.assistingParticipantsIds = v
+            elif k == "bounty":
+                self.bounty = v
+            elif k == "killerId":
+                self.killerId = v
+            elif k == "killerTeamId":
+                self.killerTeamId = v
+            elif k == "monsterSubType":
+                self.monsterSubType = v
+            elif k == "monsterType":
+                self.monsterType = v
+            elif k == "position":
+                self.position : Position = Position()
+                self.position.getPositionFromRawDict(v)
+            elif k == "timestamp":
+                self.timestamp = v
+

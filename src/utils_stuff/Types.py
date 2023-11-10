@@ -23,3 +23,6 @@ class LevelUpType(Enum):
 class WardType(Enum):
     ControlWard = "CONTROL_WARD" # TODO : complete with all other types
     YellowTrinket = "YELLOW_TRINKET"
+
+class BuildingType(Enum):
+    TowerBuilding = "TOWER_BUILDING" # TODO : complete with all other types

@@ -1,5 +1,3 @@
-from PlayerSnapshot.PlayerSnapshot import PlayerSnapshot
-
 class GameEvent:
     def __init__(self,
                  playerSnapShotList : list,

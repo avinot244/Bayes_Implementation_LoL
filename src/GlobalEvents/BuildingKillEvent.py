@@ -2,20 +2,22 @@ from utils_stuff.Types import *
 from utils_stuff.Position import Position
 
 class BuildingKillEvent: 
-    def __init__(self, 
-                 bounty : int,
-                 building : int,
-                 killerid : int,
-                 laneType : LaneType,
-                 position : Position,
-                 teamId : int,
-                 timeStamp : int,
-                 towerType : TowerType): 
-        self.bounty = bounty
-        self.building = building
-        self.killerid = killerid
-        self.laneType = laneType
-        self.position = position
-        self.teamId = teamId
-        self.timeStamp = timeStamp
-        self.towerType = towerType
+    def __init__(self, rawDict : dict): 
+        for k, v in rawDict.items():
+            if k == "bounty":
+                self.bounty = v
+            elif k == "buildingType":
+                self.buildingType = v
+            elif k == "killerId":
+                self.killerId = v
+            elif k == "laneType":
+                self.laneType = v
+            elif k == "position":
+                self.position : Position = Position()
+                self.position.getPositionFromRawDict(v)
+            elif k == "teamId":
+                self.teamId = v
+            elif k == "timestamp":
+                self.timestamp = v
+            elif k == "towerType":
+                self.towerType = v

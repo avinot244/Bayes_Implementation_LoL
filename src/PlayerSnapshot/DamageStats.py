@@ -1,31 +1,7 @@
 class DamageStats:
     def __init__(self,
-                 magicDamageDone : int = 0,
-                 magicDamageDoneToChampions : int = 0,
-                 magicDamageTaken : int = 0,
-                 physicalDamageDone : int = 0,
-                 physicalDamageDoneToChampions : int = 0,
-                 physicalDamageTaken : int = 0,
-                 totalDamageDone : int = 0,
-                 totalDamageDoneToChampions : int = 0,
-                 totalDamageTaken : int = 0,
-                 trueDamageDone : int = 0,
-                 trueDamageDoneToChampions : int = 0,
-                 trueDamageTaken : int = 0) -> None:
-        self.magicDamageDone = magicDamageDone
-        self.magicDamageDoneToChampions = magicDamageDoneToChampions
-        self.magicDamageTaken = magicDamageTaken
-        self.physicalDamageDone = physicalDamageDone
-        self.physicalDamageDoneToChampions = physicalDamageDoneToChampions
-        self.physicalDamageTaken = physicalDamageTaken
-        self.totalDamageDone = totalDamageDone
-        self.totalDamageDoneToChampions = totalDamageDoneToChampions
-        self.totalDamageTaken = totalDamageTaken
-        self.trueDamageDone = trueDamageDone
-        self.trueDamageDoneToChampions = trueDamageDoneToChampions
-        self.trueDamageTaken = trueDamageTaken
-    def getDamageStatsFromRowDict(self, rowDict):
-        for k, v in rowDict.items():
+                 rawDict : int) -> None:
+        for k, v in rawDict.items():
             if k == "magicDamageDone":
                 self.magicDamageDone = v
             elif k == "magicDamageDoneToChampions":
@@ -49,6 +25,6 @@ class DamageStats:
             elif k == "trueDamageDoneToChampions":
                 self.trueDamageDoneToChampions = v
             elif k == "trueDamageTaken":
-                self.trueDamageTaken
+                self.trueDamageTaken = v
     
         
