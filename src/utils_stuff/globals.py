@@ -1,4 +1,4 @@
-DATA_PATH = "../data/NORDvsBRUTE/"
+DATA_PATH = "../data/"
 
 champions_list = ["Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Ashe", "Azir",
                   "Blitzcrank", "Brand", "Braum",

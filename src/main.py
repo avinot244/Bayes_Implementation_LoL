@@ -5,44 +5,39 @@ from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
 from Details import DetailsData
-
-path_summary = "g1/ESPORTSTMNT03_3210203_SUMMARY.json"
-path_details = "g1/ESPORTSTMNT03_3210203_DETAILS.json"
+import argparse
 
 
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-m", "--match", metavar="[NORDvsBRUTE]", required=True, help="Match to analyse")
+    parser.add_argument("-g", "--game", metavar="[1|2|3|4|5]", required=True, help="Game to analyse")
+    parser.add_argument("-f", "--file", metavar="[DETAILS | SUMMARY]", required=True, help="If you want to have summary or detail json loaded")
+    args = parser.parse_args()
+    args_data = vars(args)
 
-# PARSING ALL GAME SNAPSHOTS
-with open(DATA_PATH + "g1/ESPORTSTMNT03_3210203_DETAILS.json", 'r') as f:
-    data = json.loads(f.read())
-df = pd.json_normalize(data)
+    match = ""
+    game = ""
+    file = ""
 
-
-
-detailsData : DetailsData = DetailsData(path_details)
-print(len(detailsData.gameEventList))
-
+    for arg, value in args_data.items():
+        if arg == "match":
+            match = value
+        if arg == "game":
+            game = "g{}".format(value)
+        if arg == "file":
+            file = value
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3210203_{}.json".format(file)
+    print(path)
+    detailsData : DetailsData = DetailsData(path)
+    print(len(detailsData.gameEventList))
 
 
 # GETTING UNIQUE EVENTS
-
-unique_events = get_all_event_types(DATA_PATH + "g1/ESPORTSTMNT03_3210203_DETAILS.json")
+unique_events = get_all_event_types(DATA_PATH + "NORDvsBRUTE/g1/ESPORTSTMNT03_3210203_DETAILS.json")
 keys = list(unique_events.keys())
 keys.sort()
 unique_events = {i: unique_events[i] for i in keys}
 
-
-
-
-
-
-
-    
-
-
-# for game_snapshot in df['frames'][0]:
-#     print("\n-------------------\n")
-#     print(game_snapshot)
-#     event_list = game_snapshot['events']
-#     participant_frame_updates = game_snapshot['participantFrames']
-
+print(unique_events)
 
