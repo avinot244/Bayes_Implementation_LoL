@@ -32,6 +32,8 @@ if __name__ == "__main__":
     detailsData : DetailsData = DetailsData(path)
     print(len(detailsData.gameEventList))
 
+    print(detailsData.get_player_pathing(1))
+
 
 # GETTING UNIQUE EVENTS
 unique_events = get_all_event_types(DATA_PATH + "NORDvsBRUTE/g1/ESPORTSTMNT03_3210203_DETAILS.json")

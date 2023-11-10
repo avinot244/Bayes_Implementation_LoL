@@ -36,7 +36,7 @@ class DetailsData:
             data = json.loads(f.read())
         df = pd.json_normalize(data)
         print(df)
-        self.gameEventList : list = list()
+        self.gameEventList : list[GameEvent] = list()
 
         for frame in df['frames'][0]:
             participant_frame_updates = frame['participantFrames']
@@ -108,3 +108,10 @@ class DetailsData:
         elif event_type == "WARD_PLACED":
             res = WardPlacedEvent(eventDict)
         return res
+
+    def get_player_pathing(self, participantId : int) -> list[Position]:
+        position_history : list[Position] = list()
+        for frame_data in self.gameEventList:
+            player_snapshot = frame_data.get_player_snapshot(participantId)
+            position_history.append(player_snapshot.position.__str__())
+        return position_history

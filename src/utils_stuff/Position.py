@@ -10,3 +10,5 @@ class Position:
                 self.x = value
             elif key == "y":
                 self.y = value
+    def __str__(self) -> str:
+        return "(x: {}, y: {})".format(self.x, self.y)
