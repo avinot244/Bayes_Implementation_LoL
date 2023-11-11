@@ -35,7 +35,6 @@ class DetailsData:
         with open(DATA_PATH + json_path) as f:
             data = json.loads(f.read())
         df = pd.json_normalize(data)
-        print(df)
         self.gameEventList : list[GameEvent] = list()
 
         for frame in df['frames'][0]:
@@ -113,5 +112,5 @@ class DetailsData:
         position_history : list[Position] = list()
         for frame_data in self.gameEventList:
             player_snapshot = frame_data.get_player_snapshot(participantId)
-            position_history.append(player_snapshot.position.__str__())
+            position_history.append(player_snapshot.position)
         return position_history

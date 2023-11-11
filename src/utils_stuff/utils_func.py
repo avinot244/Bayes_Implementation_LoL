@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import numpy as np
 
 
 def get_all_event_types(json_path_details:str) -> dict:
@@ -22,4 +23,6 @@ def get_all_event_types(json_path_details:str) -> dict:
     
     return unique_event_type
         
-    
+def scale(interval_min, interval_max, data):
+    scaled_mat = (data - np.min(data)) / (np.max(data) - np.min(data)) * (interval_max - interval_min) + interval_min
+    return scaled_mat
