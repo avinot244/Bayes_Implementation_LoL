@@ -8,7 +8,7 @@ from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
 from utils_stuff.utils_func import scale
-from Details import DetailsData
+from Details.DetailsData import DetailsData
 import argparse
 import matplotlib.pyplot as plt
 

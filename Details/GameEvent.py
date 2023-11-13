@@ -1,4 +1,4 @@
-from PlayerSnapshot.PlayerSnapshotClass import PlayerSnaphotClass
+from Details.PlayerSnapshot.PlayerSnapshotClass import PlayerSnaphotClass
 
 class GameEvent:
     def __init__(self,
