@@ -3,6 +3,7 @@
 
 import pandas as pd
 import json
+from PIL import Image
 
 from utils_stuff.globals import *
 from utils_stuff.utils_func import *
@@ -11,6 +12,7 @@ from utils_stuff.utils_func import scale
 from Details.DetailsData import DetailsData
 import argparse
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import Axes
 
 
 
@@ -49,21 +51,21 @@ if __name__ == "__main__":
     inhibitorRedY = [pos.y for pos in inhibitorPositionRedSide]
     inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
     inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
-    
-    plt.scatter(X, Y, color="black")
+
+    plt.figure(figsize=(4,4))
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+
+    fig, ax =plt.subplots()
+    ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
+
+
+    ax.scatter(X, Y, color="white")
     plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
     plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
     
     plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
     plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
+
+    ax.set_aspect("equal", adjustable="box")
     plt.savefig("temp.png")
-
-
-# # GETTING UNIQUE EVENTS
-# unique_events = get_all_event_types(DATA_PATH + "NORDvsBRUTE/g1/ESPORTSTMNT03_3210203_DETAILS.json")
-# keys = list(unique_events.keys())
-# keys.sort()
-# unique_events = {i: unique_events[i] for i in keys}
-
-# print(unique_events)
 

@@ -1,6 +1,8 @@
 from utils_stuff.Position import Position 
 
 DATA_PATH = "../data/"
+MINIMAP_WIDTH = 14750
+MINIMAP_HEIGHT = 14750
 
 champions_list = ["Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Ashe", "Azir",
                   "Blitzcrank", "Brand", "Braum",
