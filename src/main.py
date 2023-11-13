@@ -4,15 +4,19 @@
 import pandas as pd
 import json
 from PIL import Image
+import argparse
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import Axes
+
 
 from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
-from utils_stuff.utils_func import scale
+
 from Details.DetailsData import DetailsData
-import argparse
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import Axes
+from Summary.SummaryData import SummaryData
+
+
 
 
 
@@ -42,6 +46,7 @@ if __name__ == "__main__":
     X = [pos.x for pos in pathing]
     Y = [pos.y for pos in pathing]
 
+
     towerRedX = [pos.x for pos in towerPositionRedSide]
     towerRedY = [pos.y for pos in towerPositionRedSide]
     towerBlueX = [pos.x for pos in towerPositionBlueSide]
@@ -52,7 +57,6 @@ if __name__ == "__main__":
     inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
     inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
 
-    plt.figure(figsize=(4,4))
     img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
 
     fig, ax =plt.subplots()
@@ -68,4 +72,8 @@ if __name__ == "__main__":
 
     ax.set_aspect("equal", adjustable="box")
     plt.savefig("temp.png")
+
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3210203_SUMMARY.json"
+    summaryData : SummaryData = SummaryData(path)
+    
 

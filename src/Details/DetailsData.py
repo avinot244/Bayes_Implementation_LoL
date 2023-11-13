@@ -35,6 +35,8 @@ class DetailsData:
         with open(DATA_PATH + json_path) as f:
             data = json.loads(f.read())
         df = pd.json_normalize(data)
+        self.frameInterval = df['frameInterval'][0]
+        self.gameId = df['gameId'][0]
         self.gameEventList : list[GameEvent] = list()
 
         for frame in df['frames'][0]:

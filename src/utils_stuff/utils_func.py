@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 import numpy as np
+from utils_stuff.Position import Position
+import math
 
 
 def get_all_event_types(json_path_details:str) -> dict:
@@ -26,3 +28,6 @@ def get_all_event_types(json_path_details:str) -> dict:
 def scale(interval_min, interval_max, data):
     scaled_mat = (data - np.min(data)) / (np.max(data) - np.min(data)) * (interval_max - interval_min) + interval_min
     return scaled_mat
+
+def abs_dist(position1 : Position, position2 : Position) -> float:
+    return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
