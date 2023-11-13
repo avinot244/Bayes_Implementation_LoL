@@ -1,6 +1,6 @@
 from utils_stuff.Position import Position
-from PlayerSnapshot.ChampionStats import ChampionStats
-from PlayerSnapshot.DamageStats import DamageStats
+from Details.PlayerSnapshot.ChampionStats import ChampionStats
+from Details.PlayerSnapshot.DamageStats import DamageStats
 
 class PlayerSnaphotClass :
     def __init__(self,

@@ -25,7 +25,7 @@ from Details.GlobalEvents.TurretPlateDestroyedEvent import TurretPlateDestroyedE
 from Details.GlobalEvents.WardKillEvent import WardKillEvent
 from Details.GlobalEvents.WardPlacedEvent import WardPlacedEvent
 
-from GameEvent import GameEvent
+from Details.GameEvent import GameEvent
 
 
 
