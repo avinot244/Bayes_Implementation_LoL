@@ -5,6 +5,8 @@ class PlayerEndGameStat:
                  assists : int,
                  baitPings : int,
                  baronKills : int,
+                 basicPings : int,
+                 bountyLevel : int,
                  champExperience : int,
                  champLevel : int,
                  championId : int,
@@ -26,10 +28,10 @@ class PlayerEndGameStat:
                  enemyVisionPings : int,
                  firstBloodAssist : bool,
                  firstBloodKill : bool,
-                 firstTowerAssis : bool,
+                 firstTowerAssist : bool,
                  firstTowerKill : bool,
                  gameEndedInEarlySurrender : bool,
-                 gameEndedInSurrend : bool,
+                 gameEndedInSurrender : bool,
                  getBackPings : int,
                  goldEarned : int,
                  goldSpent : int,
@@ -40,6 +42,7 @@ class PlayerEndGameStat:
                  inhibitorLost : int,
                  item0 : int,
                  item1 : int,
+                 item2 : int,
                  item3 : int,
                  item4 : int,
                  item5 : int,
@@ -48,13 +51,13 @@ class PlayerEndGameStat:
                  killingSprees : int,
                  kills : int,
                  lane : str,
-                 largestCritivalStrike : int,
+                 largestCriticalStrike : int,
                  largestKillingSpree : int,
                  largestMultiKill : int,
                  longestTimeSpentLiving : int,
                  magicDamageDealt : int,
                  magicDamageDealtToChampions : int,
-                 magicDamageTake : int,
+                 magicDamageTaken : int,
                  needVisionPings : int,
                  neutralMinionsKilled : int,
                  nexusKills : int,
@@ -66,13 +69,14 @@ class PlayerEndGameStat:
                  participantId : int,
                  pentaKills : int,
                  physicalDamageDealt : int,
-                 physicalDamageDealtToChamions : int,
+                 physicalDamageDealtToChampions : int,
                  physicalDamageTaken : int,
                  placement : int,
-                 platerAygment1 : int,
-                 playerAygment2 : int,
+                 playerAugment1 : int,
+                 playerAugment2 : int,
                  playerAugment3 : int,
                  playerAugment4 : int,
+                 playerSubteamId : int,
                  profileIcon : int,
                  pushPings : int,
                  quadraKills : int,
@@ -89,8 +93,8 @@ class PlayerEndGameStat:
                  subteamPlacement : int,
                  summoner1Casts : int,
                  summoner2Casts : int,
-                 summonderId : int,
-                 summonderLevel : int,
+                 summonerId : int,
+                 summonerLevel : int,
                  summonerName : str,
                  teamEarlySurrendered : bool,
                  teamId : int,
@@ -98,7 +102,7 @@ class PlayerEndGameStat:
                  timeCCingOthers : int,
                  timePlayed : int,
                  totalAllyJungleMinionsKilled : int,
-                 totalDamaDealt : int,
+                 totalDamageDealt : int,
                  totalDamageDealtToChampions : int,
                  totalDamageShieldedOnTeammates : int,
                  totalDamageTaken : int,
@@ -117,7 +121,7 @@ class PlayerEndGameStat:
                  turretTakeDowns : int,
                  turretsLost : int,
                  unrealKills : int,
-                 visionClearedPing : int,
+                 visionClearedPings : int,
                  visionScore : int,
                  visionWardsBoughtInGame : int,
                  wardsKilled : int,
@@ -127,3 +131,125 @@ class PlayerEndGameStat:
         self.allInPings = allInPing
         self.assistMePings = assistMePings
         self.assists = assists
+        self.baitPings = baitPings
+        self.baronKills = baronKills
+        self.basicPings = basicPings
+        self.bountyLevel = bountyLevel
+        self.champExperience = champExperience
+        self.champLevel = champLevel
+        self.championId = championId
+        self.championName = championName
+        self.championTransform = championTransform
+        self.commandPings = commandPings
+        self.consumablesPurchased = consumablesPurchased
+        self.damageDealtToBuildings = damageDealtToBuildings
+        self.damageDealtToObjectives = damageDealtToObjectives
+        self.damageDealtToTurrets = damageDealtToTurrets
+        self.damageSelfMitigated = damageSelfMitigated
+        self.dangerPings = dangerPings
+        self.deaths = deaths
+        self.detectorWardsPlaced = detectorWardsPlaced
+        self.doubleKills = doubleKills
+        self.dragonKills = dragonKills
+        self.eligibleForProgression = eligibleForProgression
+        self.enemyMissingPings = enemyMissingPings
+        self.enemyVisionPings = enemyVisionPings
+        self.firstBloodAssist = firstBloodAssist
+        self.firstBloodKill = firstBloodKill
+        self.firstTowerAssist = firstTowerAssist
+        self.firstTowerKill = firstTowerKill
+        self.gameEndedInEarlySurrender = gameEndedInEarlySurrender
+        self.gameEndedInSurrender = gameEndedInSurrender
+        self.getBackPings = getBackPings
+        self.goldEarned = goldEarned
+        self.goldSpent = goldSpent
+        self.holdPings = holdPings
+        self.individualPosition = individualPosition
+        self.inhibitorKills = inhibitorKills
+        self.inhibitorTakedowns = inhibitorTakedowns
+        self.inhibitorLost = inhibitorLost
+        self.item0 = item0
+        self.item1 = item1
+        self.item2 = item2
+        self.item3 = item3
+        self.item4 = item4
+        self.item5 = item5
+        self.item6 = item6
+        self.itemsPurchased = itemsPurchased
+        self.killingSprees = killingSprees
+        self.kills = kills
+        self.lane = lane
+        self.largestCriticalStrike = largestCriticalStrike
+        self.largestKillingSpree = largestKillingSpree
+        self.largestMultiKill = largestMultiKill
+        self.longestTimeSpentLiving = longestTimeSpentLiving
+        self.magicDamageDealt = magicDamageDealt
+        self.magicDamageDealtToChampions = magicDamageDealtToChampions
+        self.magicDamageTaken = magicDamageTaken
+        self.needVisionPings = needVisionPings
+        self.neutralMinionsKilled = neutralMinionsKilled
+        self.nexusKills = nexusKills
+        self.nexusLost = nexusLost
+        self.nexusTakedowns = nexusTakedowns
+        self.objectivesStolen = objectivesStolen
+        self.objectivesStolenAssists = objectivesStolenAssists
+        self.onMyWayPings = onMyWayPings
+        self.participantId = participantId
+        self.pentaKills = pentaKills
+        self.physicalDamageDealt = physicalDamageDealt
+        self.physicalDamageDealtToChampions = physicalDamageDealtToChampions
+        self.physicalDamageTaken = physicalDamageTaken
+        self.placement = placement
+        self.playerAugment1 = playerAugment1
+        self.playerAugment2 = playerAugment2
+        self.playerAugment3 = playerAugment3
+        self.playerAugment4 = playerAugment4
+        self.playerSubteamId = playerSubteamId
+        self.profileIcon = profileIcon
+        self.pushPings = pushPings
+        self.quadraKills = quadraKills
+        self.riotIdName = riotIdName
+        self.riotIdTagLine = riotIdTagLine
+        self.role = role
+        self.sightWardsBoughtInGame = sightWardsBoughtInGame
+        self.spell1Casts = spell1Casts
+        self.spell1Id = spell1Id
+        self.spell2Casts = spell2Casts
+        self.spell2Id = spell2Id
+        self.spell3Casts = spell3Casts
+        self.spell4Casts = spell4Casts
+        self.subteamPlacement = subteamPlacement
+        self.summoner1Casts = summoner1Casts
+        self.summoner2Casts = summoner2Casts
+        self.summonerId = summonerId
+        self.summonerLevel = summonerLevel
+        self.summonerName = summonerName
+        self.teamEarlySurrendered = teamEarlySurrendered
+        self.teamId = teamId
+        self.teamPosition = teamPosition
+        self.timeCCingOthers = timeCCingOthers
+        self.timePlayed = timePlayed
+        self.totalAllyJungleMinionsKilled = totalAllyJungleMinionsKilled
+        self.totalDamageDealt = totalDamageDealt
+        self.totalDamageDealtToChampions = totalDamageDealtToChampions
+        self.totalDamageShieldedOnTeammates = totalDamageShieldedOnTeammates
+        self.totalDamageTaken = totalDamageTaken
+        self.totalHeal = totalHeal
+        self.totalHealsOnTeammates = totalHealsOnTeammates
+        self.totalMinionsKilled = totalMinionsKilled
+        self.totalTimeCCDealt = totalTimeCCDealt
+        self.totalTimeSpentDead = totalTimeSpentDead
+        self.totalUnitsHealed = totalUnitsHealed
+        self.tripleKills = tripleKills
+        self.trueDamageDealt = trueDamageDealt
+        self.trueDamageTaken = trueDamageTaken
+        self.turretKills = turretKills
+        self.turretTakedowns = turretTakeDowns
+        self.turretsLost = turretsLost
+        self.unrealKills = unrealKills
+        self.visionClearedPings = visionClearedPings
+        self.visionScore = visionScore
+        self.visionWardsBoughtInGame = visionWardsBoughtInGame
+        self.wardsKilled = wardsKilled
+        self.wardsPlaced = wardsPlaced
+        self.win = win
