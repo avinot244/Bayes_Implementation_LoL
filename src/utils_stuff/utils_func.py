@@ -1,8 +1,12 @@
 import json
 import pandas as pd
 import numpy as np
-from utils_stuff.Position import Position
 import math
+import matplotlib.pyplot as plt
+from PIL import Image
+
+from Details.DetailsData import DetailsData
+from utils_stuff.globals import *
 
 
 def get_all_event_types(json_path_details:str) -> dict:
@@ -31,3 +35,36 @@ def scale(interval_min, interval_max, data):
 
 def abs_dist(position1 : Position, position2 : Position) -> float:
     return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
+
+def plot_player_position(participantId : int, detailsData : DetailsData, figName : str):
+    pathing = detailsData.get_player_pathing(participantId)
+    X = [pos.x for pos in pathing]
+    Y = [pos.y for pos in pathing]
+
+
+
+    towerRedX = [pos.x for pos in towerPositionRedSide]
+    towerRedY = [pos.y for pos in towerPositionRedSide]
+    towerBlueX = [pos.x for pos in towerPositionBlueSide]
+    towerBlueY = [pos.y for pos in towerPositionBlueSide]
+
+    inhibitorRedX = [pos.x for pos in inhibitorPositionRedSide]
+    inhibitorRedY = [pos.y for pos in inhibitorPositionRedSide]
+    inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
+    inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
+
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+
+    fig, ax = plt.subplots()
+    ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
+
+
+    ax.scatter(X, Y, color="white")
+    plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
+    plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
+    
+    plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
+    plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
+
+    ax.set_aspect("equal", adjustable="box")
+    plt.savefig("{}.png".format(figName))

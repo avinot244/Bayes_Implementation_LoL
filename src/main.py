@@ -39,41 +39,24 @@ if __name__ == "__main__":
             game = "g{}".format(value)
         if arg == "file":
             file = value
+    
+
     path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
     detailsData : DetailsData = DetailsData(path)
-
-    pathing = detailsData.get_player_pathing(1)
-    X = [pos.x for pos in pathing]
-    Y = [pos.y for pos in pathing]
-
-
-    towerRedX = [pos.x for pos in towerPositionRedSide]
-    towerRedY = [pos.y for pos in towerPositionRedSide]
-    towerBlueX = [pos.x for pos in towerPositionBlueSide]
-    towerBlueY = [pos.y for pos in towerPositionBlueSide]
-
-    inhibitorRedX = [pos.x for pos in inhibitorPositionRedSide]
-    inhibitorRedY = [pos.y for pos in inhibitorPositionRedSide]
-    inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
-    inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
-
-    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
-
-    fig, ax =plt.subplots()
-    ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
-
-
-    ax.scatter(X, Y, color="white")
-    plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
-    plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
-    
-    plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
-    plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
-
-    ax.set_aspect("equal", adjustable="box")
-    plt.savefig("temp.png")
-
     path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
     summaryData : SummaryData = SummaryData(path)
+
+    plot_player_position(1, detailsData, "positionsZeus")
+    plot_player_position(2, detailsData, "positionsOner")
+    plot_player_position(3, detailsData, "positionsFaker")
+    plot_player_position(4, detailsData, "positionsGumayusi")
+    plot_player_position(5, detailsData, "positionsKeria")
+
+    plot_player_position(6, detailsData, "positions369")
+    plot_player_position(7, detailsData, "positionsKanavi")
+    plot_player_position(8, detailsData, "positionsKnight")
+    plot_player_position(9, detailsData, "positionsRuler")
+    plot_player_position(10, detailsData, "positionsMissing")
+    
     
 
