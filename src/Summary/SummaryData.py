@@ -5,6 +5,8 @@ from utils_stuff.globals import DATA_PATH
 
 from Summary.PlayerEndGameStat import PlayerEndGameStat
 from Summary.TeamEndGameStat import TeamEndGameStat
+from Summary.Ban import Ban
+from Summary.Objective import Objective
 
 class SummaryData:
     def __init__(self, json_path):
@@ -49,7 +51,7 @@ class SummaryData:
                                                        participant['consumablesPurchased'],
                                                        participant['damageDealtToBuildings'],
                                                        participant['damageDealtToObjectives'],
-                                                       participant['damageDealtTotTurrets'],
+                                                       participant['damageDealtToTurrets'],
                                                        participant['damageSelfMitigated'],
                                                        participant['dangerPings'],
                                                        participant['deaths'],
@@ -64,15 +66,15 @@ class SummaryData:
                                                        participant['firstTowerAssist'],
                                                        participant['firstTowerKill'],
                                                        participant['gameEndedInEarlySurrender'],
-                                                       participant['gameEndInSurrender'],
+                                                       participant['gameEndedInSurrender'],
                                                        participant['getBackPings'],
                                                        participant['goldEarned'],
                                                        participant['goldSpent'],
                                                        participant['holdPings'],
                                                        participant['individualPosition'],
                                                        participant['inhibitorKills'],
-                                                       participant['inhibitorTakedownd'],
-                                                       participant['inhibitorLost'],
+                                                       participant['inhibitorTakedowns'],
+                                                       participant['inhibitorsLost'],
                                                        participant['item0'],
                                                        participant['item1'],
                                                        participant['item2'],
@@ -80,7 +82,7 @@ class SummaryData:
                                                        participant['item4'],
                                                        participant['item5'],
                                                        participant['item6'],
-                                                       participant['itemPurchased'],
+                                                       participant['itemsPurchased'],
                                                        participant['killingSprees'],
                                                        participant['kills'],
                                                        participant['lane'],
@@ -103,8 +105,8 @@ class SummaryData:
                                                        participant['pentaKills'],
                                                        participant['physicalDamageDealt'],
                                                        participant['physicalDamageDealtToChampions'],
-                                                       participant['physicaleDamageTaken'],
-                                                       participant['palecement'],
+                                                       participant['physicalDamageTaken'],
+                                                       participant['placement'],
                                                        participant['playerAugment1'],
                                                        participant['playerAugment2'],
                                                        participant['playerAugment3'],
@@ -114,7 +116,7 @@ class SummaryData:
                                                        participant['pushPings'],
                                                        participant['quadraKills'],
                                                        participant['riotIdName'],
-                                                       participant['riotIdTagLine'],
+                                                       participant['riotIdTagline'],
                                                        participant['role'],
                                                        participant['sightWardsBoughtInGame'],
                                                        participant['spell1Casts'],
@@ -134,14 +136,14 @@ class SummaryData:
                                                        participant['teamPosition'],
                                                        participant['timeCCingOthers'],
                                                        participant['timePlayed'],
-                                                       participant['totalALlyJungleMinionsKilled'],
+                                                       participant['totalAllyJungleMinionsKilled'],
                                                        participant['totalDamageDealt'],
-                                                       participant['totalDamageDealtToChamions'],
+                                                       participant['totalDamageDealtToChampions'],
                                                        participant['totalDamageShieldedOnTeammates'],
                                                        participant['totalDamageTaken'],
                                                        participant['totalEnemyJungleMinionsKilled'],
                                                        participant['totalHeal'],
-                                                       participant['totalHealOnTeammates'],
+                                                       participant['totalHealsOnTeammates'],
                                                        participant['totalMinionsKilled'],
                                                        participant['totalTimeCCDealt'],
                                                        participant['totalTimeSpentDead'],
@@ -162,4 +164,24 @@ class SummaryData:
                                                        participant['win'])
             self.participants.append(participantEndGameStat)
         
-        # TODO : Parse team end game stats
+        for team in df['teams'][0]:
+            bans = team['bans']
+            objectives  : dict = team['objectives']
+            
+            banList : list[Ban] = list()
+            for ban in bans :
+                banObject = Ban(ban['championId'],
+                                ban['pickTurn'])
+                banList.append(banObject)
+            
+            objectiveList : list[Objective] = list()
+            for objectiveName, objectiveStat in objectives.items():
+                objectiveObject = Objective(objectiveName,
+                                            objectiveStat['first'],
+                                            objectiveStat['kills'])
+                objectiveList.append(objectiveObject)
+            
+            teamObject = TeamEndGameStat(banList, objectiveList,
+                                         team['teamId'],
+                                         team['win'])
+            self.teams.append(teamObject)

@@ -39,7 +39,7 @@ if __name__ == "__main__":
             game = "g{}".format(value)
         if arg == "file":
             file = value
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3210203_{}.json".format(file)
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
     detailsData : DetailsData = DetailsData(path)
 
     pathing = detailsData.get_player_pathing(1)
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     ax.set_aspect("equal", adjustable="box")
     plt.savefig("temp.png")
 
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3210203_SUMMARY.json"
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
     summaryData : SummaryData = SummaryData(path)
     
 
