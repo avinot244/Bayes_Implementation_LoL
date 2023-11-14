@@ -118,7 +118,7 @@ class PlayerEndGameStat:
                  trueDamageDealtToChampions : int,
                  trueDamageTaken : int,
                  turretKills : int,
-                 turretTakeDowns : int,
+                 turretTakedowns : int,
                  turretsLost : int,
                  unrealKills : int,
                  visionClearedPings : int,
@@ -242,9 +242,10 @@ class PlayerEndGameStat:
         self.totalUnitsHealed = totalUnitsHealed
         self.tripleKills = tripleKills
         self.trueDamageDealt = trueDamageDealt
+        self.trueDamageDealtToChampions = trueDamageDealtToChampions
         self.trueDamageTaken = trueDamageTaken
         self.turretKills = turretKills
-        self.turretTakedowns = turretTakeDowns
+        self.turretTakedowns = turretTakedowns
         self.turretsLost = turretsLost
         self.unrealKills = unrealKills
         self.visionClearedPings = visionClearedPings
