@@ -1,5 +1,5 @@
 # clear && python3 main.py --match NORDvsBRUTE --game 1 --file DETAILS
-
+# clear && python3 main.py --match JDGvsT1 --game 1 --file DETAILS
 
 import pandas as pd
 import json
@@ -46,12 +46,24 @@ if __name__ == "__main__":
     path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
     summaryData : SummaryData = SummaryData(path)
 
+    timestampBeg = summaryData.gameStartTimestamp
+    timeStampEnd = summaryData.gameEndTimestamp
+    print("Begining timestamp :", summaryData.gameStartTimestamp)
+    print("End timestemp :", summaryData.gameEndTimestamp)
+    totalTimeStamp = summaryData.gameEndTimestamp - summaryData.gameStartTimestamp
+    print("Total timestamp :", totalTimeStamp)
+    print("Real game time :", summaryData.gameDuration)
+
+    convert_into_real_time(timestampBeg, timeStampEnd)
+
+    #Positions for T1
     plot_player_position(1, detailsData, "positionsZeus")
     plot_player_position(2, detailsData, "positionsOner")
     plot_player_position(3, detailsData, "positionsFaker")
     plot_player_position(4, detailsData, "positionsGumayusi")
     plot_player_position(5, detailsData, "positionsKeria")
 
+    #Positions for JDG
     plot_player_position(6, detailsData, "positions369")
     plot_player_position(7, detailsData, "positionsKanavi")
     plot_player_position(8, detailsData, "positionsKnight")

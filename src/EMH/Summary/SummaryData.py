@@ -3,10 +3,10 @@ import pandas as pd
 
 from utils_stuff.globals import DATA_PATH
 
-from Summary.PlayerEndGameStat import PlayerEndGameStat
-from Summary.TeamEndGameStat import TeamEndGameStat
-from Summary.Ban import Ban
-from Summary.Objective import Objective
+from EMH.Summary.PlayerEndGameStat import PlayerEndGameStat
+from EMH.Summary.TeamEndGameStat import TeamEndGameStat
+from EMH.Summary.Ban import Ban
+from EMH.Summary.Objective import Objective
 
 class SummaryData:
     def __init__(self, json_path):

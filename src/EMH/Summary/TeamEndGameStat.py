@@ -1,5 +1,5 @@
-from Summary.Ban import Ban
-from Summary.Objective import Objective
+from EMH.Summary.Ban import Ban
+from EMH.Summary.Objective import Objective
 
 class TeamEndGameStat:
     def __init__(self,

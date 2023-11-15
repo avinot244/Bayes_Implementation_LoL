@@ -4,6 +4,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from PIL import Image
+from time import strftime, localtime
 
 from Details.DetailsData import DetailsData
 from utils_stuff.globals import *
@@ -29,10 +30,6 @@ def get_all_event_types(json_path_details:str) -> dict:
     
     return unique_event_type
         
-def scale(interval_min, interval_max, data):
-    scaled_mat = (data - np.min(data)) / (np.max(data) - np.min(data)) * (interval_max - interval_min) + interval_min
-    return scaled_mat
-
 def abs_dist(position1 : Position, position2 : Position) -> float:
     return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
 
@@ -68,3 +65,10 @@ def plot_player_position(participantId : int, detailsData : DetailsData, figName
 
     ax.set_aspect("equal", adjustable="box")
     plt.savefig("{}.png".format(figName))
+
+def convert_into_real_time(timestampBeg : int, timestampEnd : int):
+    
+    print(timestampBeg)
+
+    date = strftime('%Y-%m-%d %H:%M:%S', localtime(timestampBeg))
+    print(date)

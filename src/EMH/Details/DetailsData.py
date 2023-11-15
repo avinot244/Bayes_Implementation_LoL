@@ -4,28 +4,28 @@ import pandas as pd
 from utils_stuff.globals import DATA_PATH
 from utils_stuff.Position import Position
 
-from Details.PlayerSnapshot.ChampionStats import ChampionStats
-from Details.PlayerSnapshot.DamageStats import DamageStats
-from Details.PlayerSnapshot.PlayerSnapshotClass import PlayerSnaphotClass
+from EMH.Details.PlayerSnapshot.ChampionStats import ChampionStats
+from EMH.Details.PlayerSnapshot.DamageStats import DamageStats
+from EMH.Details.PlayerSnapshot.PlayerSnapshotClass import PlayerSnaphotClass
 
-from Details.GlobalEvents.BuildingKillEvent import BuildingKillEvent
-from Details.GlobalEvents.ChampionKillEvent import ChampionKillEvent
-from Details.GlobalEvents.EliteMonsterKillEvent import EliteMonsterKillEvent
-from Details.GlobalEvents.GameEndEvent import GameEndEvent
-from Details.GlobalEvents.ItemDestroyedEvent import ItemDestroyedEvent
-from Details.GlobalEvents.ItemPurchasedEvent import ItemPurchasedEvent
-from Details.GlobalEvents.ItemSoldEvent import ItemSoldEvent
-from Details.GlobalEvents.ItemUndoEvent import ItemUndoEvent
-from Details.GlobalEvents.LevelUpEvent import LevelUpEvent
-from Details.GlobalEvents.ObjectiveBountyFinishEvent import ObjectiveBountyFinishEvent
-from Details.GlobalEvents.ObjectiveBountyPrestartEvent import ObjectiveBountyPrestartEvent
-from Details.GlobalEvents.PauseEndEvent import PauseEndEvent
-from Details.GlobalEvents.SkillLevelUpEvent import SkillLevelUpEvent
-from Details.GlobalEvents.TurretPlateDestroyedEvent import TurretPlateDestroyedEvent
-from Details.GlobalEvents.WardKillEvent import WardKillEvent
-from Details.GlobalEvents.WardPlacedEvent import WardPlacedEvent
+from EMH.Details.GlobalEvents.BuildingKillEvent import BuildingKillEvent
+from EMH.Details.GlobalEvents.ChampionKillEvent import ChampionKillEvent
+from EMH.Details.GlobalEvents.EliteMonsterKillEvent import EliteMonsterKillEvent
+from EMH.Details.GlobalEvents.GameEndEvent import GameEndEvent
+from EMH.Details.GlobalEvents.ItemDestroyedEvent import ItemDestroyedEvent
+from EMH.Details.GlobalEvents.ItemPurchasedEvent import ItemPurchasedEvent
+from EMH.Details.GlobalEvents.ItemSoldEvent import ItemSoldEvent
+from EMH.Details.GlobalEvents.ItemUndoEvent import ItemUndoEvent
+from EMH.Details.GlobalEvents.LevelUpEvent import LevelUpEvent
+from EMH.Details.GlobalEvents.ObjectiveBountyFinishEvent import ObjectiveBountyFinishEvent
+from EMH.Details.GlobalEvents.ObjectiveBountyPrestartEvent import ObjectiveBountyPrestartEvent
+from EMH.Details.GlobalEvents.PauseEndEvent import PauseEndEvent
+from EMH.Details.GlobalEvents.SkillLevelUpEvent import SkillLevelUpEvent
+from EMH.Details.GlobalEvents.TurretPlateDestroyedEvent import TurretPlateDestroyedEvent
+from EMH.Details.GlobalEvents.WardKillEvent import WardKillEvent
+from EMH.Details.GlobalEvents.WardPlacedEvent import WardPlacedEvent
 
-from Details.GameEvent import GameEvent
+from EMH.Details.GameEvent import GameEvent
 
 
 
