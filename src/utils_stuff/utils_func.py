@@ -33,10 +33,9 @@ def get_all_event_types(json_path_details:str) -> dict:
 def abs_dist(position1 : Position, position2 : Position) -> float:
     return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
 
-def plot_player_position(participantId : int, detailsData : DetailsData, figName : str):
-    pathing = detailsData.get_player_pathing(participantId)
-    X = [pos.x for pos in pathing]
-    Y = [pos.y for pos in pathing]
+def plot_player_position(positionList : list[Position], figName : str):
+    X = [pos.x for pos in positionList]
+    Y = [pos.y for pos in positionList]
 
 
 
@@ -56,7 +55,7 @@ def plot_player_position(participantId : int, detailsData : DetailsData, figName
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
 
 
-    ax.scatter(X, Y, color="white")
+    ax.scatter(X, Y, color="white", s = [10])
     plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
     plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
     
@@ -65,6 +64,7 @@ def plot_player_position(participantId : int, detailsData : DetailsData, figName
 
     ax.set_aspect("equal", adjustable="box")
     plt.savefig("{}.png".format(figName))
+    plt.close()
 
 def convert_into_real_time(timestampBeg : int, timestampEnd : int):
     

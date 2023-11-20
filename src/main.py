@@ -23,12 +23,15 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--match", metavar="[NORDvsBRUTE]", required=True, help="Match to analyse")
     parser.add_argument("-g", "--game", metavar="[1|2|3|4|5]", required=True, help="Game to analyse")
     parser.add_argument("-f", "--file", metavar="[DETAILS | SUMMARY]", required=True, help="If you want to have summary or detail json loaded")
+    parser.add_argument("-l", "--load", action="store_true", default=False, help="Load serilized object linked to inputs")
+
     args = parser.parse_args()
     args_data = vars(args)
 
     match = ""
     game = ""
     file = ""
+    load = False
 
     for arg, value in args_data.items():
         if arg == "match":
@@ -37,6 +40,8 @@ if __name__ == "__main__":
             game = "g{}".format(value)
         if arg == "file":
             file = value
+        if arg == "load":
+            load = value
     
 
     # path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
@@ -51,15 +56,50 @@ if __name__ == "__main__":
     #     data = json.loads(f.read())
     # df = pd.json_normalize(data)
 
-
-    data = SeparatedData(rootdir)
- 
     pathData = DATA_PATH + match + game + "data"
-    file = open(pathData, 'ab')
-    pickle.dump(data, file)
-    file.close()
+    data : SeparatedData = None
+    if load :
+        print("Loading serialized data")
+        file = open(pathData, 'rb')
+        data : SeparatedData = pickle.load(file)
+        file.close()
+    else :
+        data = SeparatedData(rootdir)
+        pathData = DATA_PATH + match + game + "data"
+        file = open(pathData, 'ab')
+        pickle.dump(data, file)
+        file.close()
     
+    playerName = data.getPlayerList()[0][0]
+    participantID = data.getPlayerID(playerName)
+    print("ParticipantId of {} : {}".format(playerName, participantID))
+    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
+    plot_player_position(positionHistoryZeus, "positions_Zeus")
 
+    playerName = data.getPlayerList()[0][1]
+    participantID = data.getPlayerID(playerName)
+    print("ParticipantId of {} : {}".format(playerName, participantID))
+    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
+    plot_player_position(positionHistoryZeus, "positions_Oner")
+
+    playerName = data.getPlayerList()[0][2]
+    participantID = data.getPlayerID(playerName)
+    print("ParticipantId of {} : {}".format(playerName, participantID))
+    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
+    plot_player_position(positionHistoryZeus, "positions_Faker")
+    
+    playerName = data.getPlayerList()[0][3]
+    participantID = data.getPlayerID(playerName)
+    print("ParticipantId of {} : {}".format(playerName, participantID))
+    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
+    plot_player_position(positionHistoryZeus, "positions_Gumayusi")
+
+    playerName = data.getPlayerList()[0][4]
+    participantID = data.getPlayerID(playerName)
+    print("ParticipantId of {} : {}".format(playerName, participantID))
+    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
+    plot_player_position(positionHistoryZeus, "positions_Keria")
+    
     # for player in df['payload.payload.payload.teamOne.players'][0]:
     #     print("\n------------\n")
     #     print(player)

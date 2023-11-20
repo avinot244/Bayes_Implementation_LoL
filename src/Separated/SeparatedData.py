@@ -55,6 +55,7 @@ class SeparatedData:
                         position : Position = Position(position_list[0], position_list[1])
                         temp_player : Player = Player(player_dict_team_one['championName'],
                                                     player_dict_team_one['summonerName'],
+                                                    player_dict_team_one['participantID'],
                                                     player_dict_team_one['level'],
                                                     player_dict_team_one['experience'],
                                                     player_dict_team_one['attackDamage'],
@@ -116,6 +117,7 @@ class SeparatedData:
                         position : Position = Position(position_list[0], position_list[1])
                         temp_player : Player = Player(player_dict_team_two['championName'],
                                                     player_dict_team_two['summonerName'],
+                                                    player_dict_team_two['participantID'],
                                                     player_dict_team_two['level'],
                                                     player_dict_team_two['experience'],
                                                     player_dict_team_two['attackDamage'],
@@ -150,3 +152,29 @@ class SeparatedData:
                                                     teamOne,
                                                     teamTwo)
                     self.gameSnapshotList.append(gameSnapshot)
+
+    def getPlayerList(self):
+        firstGameSnapshot = self.gameSnapshotList[0]
+        playersTeamOne : list[str] = firstGameSnapshot.teamOne.getPlayerList()
+        playersTeamTwo : list[str] = firstGameSnapshot.teamTwo.getPlayerList()
+        return playersTeamOne, playersTeamTwo
+
+    def getPlayerPositionHistory(self, participantID : int) -> list[Position]:
+        positionList : list[Position] = list()  
+        for gameSnapshot in self.gameSnapshotList:
+            if gameSnapshot.teamOne.isPlayerInTeam(participantID):
+                playerIdx : int = gameSnapshot.teamOne.getPlayerIdx(participantID)
+                positionPlayer : Position = gameSnapshot.teamOne.getPlayerPosition(playerIdx)
+                positionList.append(positionPlayer)
+            else:
+                if gameSnapshot.teamOne.isPlayerInTeam(participantID):
+                    playerIdx : int = gameSnapshot.teamTwo.getPlayerIdx(participantID)
+                    positionPlayer : Position = gameSnapshot.teamTwo.getPlayerPosition(playerIdx)
+                    positionList.append(positionPlayer)
+        return positionList
+    
+    def getPlayerID(self, playerName : str) -> int:
+        if playerName in self.gameSnapshotList[0].teamOne.getPlayerList():
+            return self.gameSnapshotList[0].teamOne.getPlayerID(playerName)
+        else:
+            return self.gameSnapshotList[0].teamTwo.getPlayerID(playerName)

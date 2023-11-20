@@ -6,6 +6,7 @@ class Player:
     def __init__(self,
                  championName : str,
                  summonerName : str,
+                 participantID : int,
                  level : int,
                  experience : int,
                  attackDamage : int,
@@ -24,6 +25,7 @@ class Player:
                  stats : Stat) -> None:
         self.championName = championName
         self.summonerName = summonerName
+        self.participantID = participantID
         self.level = level
         self.experience = experience
         self.attackDamage = attackDamage
@@ -40,4 +42,6 @@ class Player:
         self.position = position
         self.items = items
         self.stats = stats
-        
+    
+    def getPosition(self):
+        return self.position
