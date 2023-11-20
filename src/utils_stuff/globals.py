@@ -4,6 +4,8 @@ DATA_PATH = "../data/"
 MINIMAP_WIDTH = 14750
 MINIMAP_HEIGHT = 14750
 
+TYPES = ["INFO", "SNAPSHOT", "GAME_EVENT"]
+
 champions_list = ["Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Ashe", "Azir",
                   "Blitzcrank", "Brand", "Braum",
                   "Caitlyn", "Cassiopeia", "Cho'Gath", "Corki",

@@ -1,21 +1,19 @@
 # clear && python3 main.py --match NORDvsBRUTE --game 1 --file DETAILS
 # clear && python3 main.py --match JDGvsT1 --game 1 --file DETAILS
 
-import pandas as pd
-import json
-from PIL import Image
 import argparse
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import Axes
-
+import os
+import json
+import pandas as pd
+import pickle
 
 from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
 
-from Details.DetailsData import DetailsData
-from Summary.SummaryData import SummaryData
-
+from EMH.Details.DetailsData import DetailsData
+from EMH.Summary.SummaryData import SummaryData
+from Separated.SeparatedData import SeparatedData
 
 
 
@@ -41,34 +39,34 @@ if __name__ == "__main__":
             file = value
     
 
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
-    detailsData : DetailsData = DetailsData(path)
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
-    summaryData : SummaryData = SummaryData(path)
+    # path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
+    # detailsData : DetailsData = DetailsData(path)
+    # path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
+    # summaryData : SummaryData = SummaryData(path)
 
-    timestampBeg = summaryData.gameStartTimestamp
-    timeStampEnd = summaryData.gameEndTimestamp
-    print("Begining timestamp :", summaryData.gameStartTimestamp)
-    print("End timestemp :", summaryData.gameEndTimestamp)
-    totalTimeStamp = summaryData.gameEndTimestamp - summaryData.gameStartTimestamp
-    print("Total timestamp :", totalTimeStamp)
-    print("Real game time :", summaryData.gameDuration)
-
-    convert_into_real_time(timestampBeg, timeStampEnd)
-
-    #Positions for T1
-    plot_player_position(1, detailsData, "positionsZeus")
-    plot_player_position(2, detailsData, "positionsOner")
-    plot_player_position(3, detailsData, "positionsFaker")
-    plot_player_position(4, detailsData, "positionsGumayusi")
-    plot_player_position(5, detailsData, "positionsKeria")
-
-    #Positions for JDG
-    plot_player_position(6, detailsData, "positions369")
-    plot_player_position(7, detailsData, "positionsKanavi")
-    plot_player_position(8, detailsData, "positionsKnight")
-    plot_player_position(9, detailsData, "positionsRuler")
-    plot_player_position(10, detailsData, "positionsMissing")
-    
+    rootdir = '../data/JDGvsT1/{}/Separated'.format(game)
     
 
+    # with open(rootdir + "/8905.json", 'r') as f:
+    #     data = json.loads(f.read())
+    # df = pd.json_normalize(data)
+
+
+    data = SeparatedData(rootdir)
+ 
+    pathData = DATA_PATH + match + game + "data"
+    file = open(pathData, 'ab')
+    pickle.dump(data, file)
+    file.close()
+    
+
+    # for player in df['payload.payload.payload.teamOne.players'][0]:
+    #     print("\n------------\n")
+    #     print(player)
+
+    # for subdir, dirs, files in os.walk(rootdir):
+    #     for file in files:
+    #         with open(os.path.join(subdir, file)) as f:
+    #             data = json.loads(f.read())
+    #         df = pd.json_normalize(data)
+            

@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from time import strftime, localtime
 
-from Details.DetailsData import DetailsData
+from EMH.Details.DetailsData import DetailsData
 from utils_stuff.globals import *
 
 
