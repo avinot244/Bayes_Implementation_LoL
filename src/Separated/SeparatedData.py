@@ -27,9 +27,11 @@ class SeparatedData:
             self.begGameTime : int = 0
             self.endGameTime : int = 0
             print("Parsing game snapshot files from root directory {}".format(root_dir))
-            for subdir, dirs, files in os.walk(root_dir):
-                for file in tqdm(files):
-                    with open(os.path.join(subdir, file)) as f:
+            for subdir, dirs, files in os.walk(root_dir, topdown=True):
+                l = lambda s : s[:-5]
+                files = [l(f) for f in files]
+                for file in tqdm(sorted(files, key=int)):
+                    with open(os.path.join(subdir, file + ".json")) as f:
                         data = json.loads(f.read())
                     
                     df = pd.json_normalize(data)
@@ -204,7 +206,7 @@ class SeparatedData:
 
         for snapshot in self.gameSnapshotList:
             snapshotTime = snapshot.convertGameTimeToSeconds(gameDuration, self.begGameTime, self.endGameTime)
-            if snapshotTime < 300 and snapshotTime >= 90:
+            if snapshotTime < 300:
                 before15.append(snapshot)
             elif snapshotTime < 1500 and snapshotTime >= 300:
                 between15and25.append(snapshot)

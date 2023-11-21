@@ -74,6 +74,7 @@ if __name__ == "__main__":
     plotTeamPosition(data.getPlayerList()[0], data)
     plotTeamPosition(data.getPlayerList()[1], data)
 
+
     print(data.begGameTime, data.endGameTime)
     gameDuration : int = summaryData.gameDuration
     begGameTime : int = data.begGameTime
@@ -88,6 +89,7 @@ if __name__ == "__main__":
     print(len(before15Data.gameSnapshotList))
 
     plotTeamPosition(before15Data.getPlayerList()[0], before15Data)
+    plotTeamPositionAnimated(before15Data.getPlayerList()[0], before15Data)
 
 
     # for player in df['payload.payload.payload.teamOne.players'][0]:
