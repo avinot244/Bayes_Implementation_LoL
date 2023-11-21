@@ -8,3 +8,5 @@ class Snapshot:
         self.gameTime = gameTime
         self.teamOne = teamOne
         self.teamTwo = teamTwo
+    def convertGameTimeToSeconds(self, gameDuration : int, begGameTime : int, endGameTime : int):
+        return ((self.gameTime - begGameTime)*gameDuration)/(endGameTime - begGameTime)

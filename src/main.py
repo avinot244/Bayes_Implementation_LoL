@@ -6,6 +6,7 @@ import os
 import json
 import pandas as pd
 import pickle
+import datetime
 
 from utils_stuff.globals import *
 from utils_stuff.utils_func import *
@@ -14,6 +15,7 @@ from utils_stuff.Types import *
 from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
 from Separated.SeparatedData import SeparatedData
+from Separated.Snapshot import Snapshot
 
 
 
@@ -44,10 +46,8 @@ if __name__ == "__main__":
             load = value
     
 
-    # path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_DETAILS.json"
-    # detailsData : DetailsData = DetailsData(path)
-    # path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
-    # summaryData : SummaryData = SummaryData(path)
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
+    summaryData : SummaryData = SummaryData(path)
 
     rootdir = '../data/JDGvsT1/{}/Separated'.format(game)
     
@@ -73,13 +73,23 @@ if __name__ == "__main__":
 
     plotTeamPosition(data.getPlayerList()[0], data)
     plotTeamPosition(data.getPlayerList()[1], data)
-    gameTimeList : list[int] = list()
-    for gameSnapshot in data.gameSnapshotList:
-        gameTimeList.append(gameSnapshot.gameTime)
-    print(max(gameTimeList), min(gameTimeList))
-    print(data.fileNames[0], data.fileNames[-1])
 
+    print(data.begGameTime, data.endGameTime)
+    gameDuration : int = summaryData.gameDuration
+    begGameTime : int = data.begGameTime
+    endGameTime : int = data.endGameTime
+
+    snapshot : Snapshot = data.gameSnapshotList[150]
+    print(summaryData.gameDuration)
+    print(snapshot.convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime))
+
+    (before15Data, between15and25Data, above25Data) = data.splitData(summaryData.gameDuration)
     
+    print(len(before15Data.gameSnapshotList))
+
+    plotTeamPosition(before15Data.getPlayerList()[0], before15Data)
+
+
     # for player in df['payload.payload.payload.teamOne.players'][0]:
     #     print("\n------------\n")
     #     print(player)

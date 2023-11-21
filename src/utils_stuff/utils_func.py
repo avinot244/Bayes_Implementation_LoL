@@ -4,7 +4,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 from PIL import Image
-from time import strftime, localtime
+from datetime import datetime
 
 from EMH.Details.DetailsData import DetailsData
 from Separated.SeparatedData import SeparatedData
@@ -34,6 +34,13 @@ def get_all_event_types(json_path_details:str) -> dict:
 def abs_dist(position1 : Position, position2 : Position) -> float:
     return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
 
+def createGrayScale(length : int):
+    grayScale : list[float] = list()
+    for i in range(length):
+        value = i/length
+        grayScale.append([value, value, value])
+    return grayScale
+
 def plot_player_position(positionList : list[Position], figName : str):
     X = [pos.x for pos in positionList]
     Y = [pos.y for pos in positionList]
@@ -55,8 +62,11 @@ def plot_player_position(positionList : list[Position], figName : str):
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
 
-
-    ax.scatter(X, Y, color="white", s = [10])
+    grayScale = createGrayScale(len(X))
+    X.reverse()
+    Y.reverse()
+    grayScale.reverse()
+    ax.scatter(X, Y, s = [10], c=grayScale)
     plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
     plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
     
@@ -64,8 +74,10 @@ def plot_player_position(positionList : list[Position], figName : str):
     plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
 
     ax.set_aspect("equal", adjustable="box")
+    plt.axis('off')
     plt.savefig("{}.png".format(figName))
     plt.close()
+
 
 def plotTeamPosition(playerNameList : list[str], data : SeparatedData):
     for playerName in playerNameList:
@@ -75,8 +87,13 @@ def plotTeamPosition(playerNameList : list[str], data : SeparatedData):
         plot_player_position(positionHistory, "positions_{}".format(playerName))
 
 def convert_into_real_time(timestampBeg : int, timestampEnd : int):
-    
-    print(timestampBeg)
+    dateBeg = datetime.fromtimestamp(timestampBeg/1000.0)
+    print(dateBeg)
 
-    date = strftime('%Y-%m-%d %H:%M:%S', localtime(timestampBeg))
-    print(date)
+    dateEnd = datetime.fromtimestamp(timestampEnd/1000.0)
+    print(dateEnd)
+
+    return dateBeg, dateEnd
+
+
+
