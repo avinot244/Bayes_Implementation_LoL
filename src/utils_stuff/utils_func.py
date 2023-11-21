@@ -7,6 +7,7 @@ from PIL import Image
 from time import strftime, localtime
 
 from EMH.Details.DetailsData import DetailsData
+from Separated.SeparatedData import SeparatedData
 from utils_stuff.globals import *
 
 
@@ -65,6 +66,13 @@ def plot_player_position(positionList : list[Position], figName : str):
     ax.set_aspect("equal", adjustable="box")
     plt.savefig("{}.png".format(figName))
     plt.close()
+
+def plotTeamPosition(playerNameList : list[str], data : SeparatedData):
+    for playerName in playerNameList:
+        participantID = data.getPlayerID(playerName)
+        positionHistory = data.getPlayerPositionHistory(participantID)
+        playerName = playerName.replace(' ', '_')
+        plot_player_position(positionHistory, "positions_{}".format(playerName))
 
 def convert_into_real_time(timestampBeg : int, timestampEnd : int):
     

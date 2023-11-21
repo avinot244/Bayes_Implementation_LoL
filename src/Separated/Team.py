@@ -51,6 +51,5 @@ class Team:
     def getPlayerID(self, playerName) -> int:
         for player in self.players:
             if player.summonerName == playerName:
-                print(player.summonerName)
                 return player.participantID
         

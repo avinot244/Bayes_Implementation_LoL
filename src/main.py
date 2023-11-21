@@ -70,35 +70,15 @@ if __name__ == "__main__":
         pickle.dump(data, file)
         file.close()
     
-    playerName = data.getPlayerList()[0][0]
-    participantID = data.getPlayerID(playerName)
-    print("ParticipantId of {} : {}".format(playerName, participantID))
-    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
-    plot_player_position(positionHistoryZeus, "positions_Zeus")
 
-    playerName = data.getPlayerList()[0][1]
-    participantID = data.getPlayerID(playerName)
-    print("ParticipantId of {} : {}".format(playerName, participantID))
-    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
-    plot_player_position(positionHistoryZeus, "positions_Oner")
+    plotTeamPosition(data.getPlayerList()[0], data)
+    plotTeamPosition(data.getPlayerList()[1], data)
+    gameTimeList : list[int] = list()
+    for gameSnapshot in data.gameSnapshotList:
+        gameTimeList.append(gameSnapshot.gameTime)
+    print(max(gameTimeList), min(gameTimeList))
+    print(data.fileNames[0], data.fileNames[-1])
 
-    playerName = data.getPlayerList()[0][2]
-    participantID = data.getPlayerID(playerName)
-    print("ParticipantId of {} : {}".format(playerName, participantID))
-    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
-    plot_player_position(positionHistoryZeus, "positions_Faker")
-    
-    playerName = data.getPlayerList()[0][3]
-    participantID = data.getPlayerID(playerName)
-    print("ParticipantId of {} : {}".format(playerName, participantID))
-    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
-    plot_player_position(positionHistoryZeus, "positions_Gumayusi")
-
-    playerName = data.getPlayerList()[0][4]
-    participantID = data.getPlayerID(playerName)
-    print("ParticipantId of {} : {}".format(playerName, participantID))
-    positionHistoryZeus = data.getPlayerPositionHistory(participantID)
-    plot_player_position(positionHistoryZeus, "positions_Keria")
     
     # for player in df['payload.payload.payload.teamOne.players'][0]:
     #     print("\n------------\n")

@@ -15,14 +15,18 @@ from tqdm import tqdm
 class SeparatedData:
     def __init__(self, root_dir : str) -> None:
         self.gameSnapshotList : list[Snapshot] = list()
+        self.fileNames : list[str] = list()
+        self.begGameTime : int = 0
+        self.endGameTime : int = 0
         print("Parsing game snapshot files from root directory {}".format(root_dir))
         for subdir, dirs, files in os.walk(root_dir):
             for file in tqdm(files):
                 with open(os.path.join(subdir, file)) as f:
                     data = json.loads(f.read())
+                
                 df = pd.json_normalize(data)
                 if df['payload.payload.type'][0] == "SNAPSHOT" and df['payload.payload.subject'][0] == "MATCH":
-                    
+                    self.fileNames.append(os.path.join(subdir, file))
                     players_team_one : list[Player] = list()
 
                     # Parsing players for team one
@@ -152,6 +156,10 @@ class SeparatedData:
                                                     teamOne,
                                                     teamTwo)
                     self.gameSnapshotList.append(gameSnapshot)
+                elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'START_MAP':
+                    self.begGameTime = df['payload.payload.payload.gameTime'][0]
+                elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'END_MAP':
+                    self.endGameTime = df['payload.payload.payload.gameTime'][0]
 
     def getPlayerList(self):
         firstGameSnapshot = self.gameSnapshotList[0]
@@ -167,10 +175,9 @@ class SeparatedData:
                 positionPlayer : Position = gameSnapshot.teamOne.getPlayerPosition(playerIdx)
                 positionList.append(positionPlayer)
             else:
-                if gameSnapshot.teamOne.isPlayerInTeam(participantID):
-                    playerIdx : int = gameSnapshot.teamTwo.getPlayerIdx(participantID)
-                    positionPlayer : Position = gameSnapshot.teamTwo.getPlayerPosition(playerIdx)
-                    positionList.append(positionPlayer)
+                playerIdx : int = gameSnapshot.teamTwo.getPlayerIdx(participantID)
+                positionPlayer : Position = gameSnapshot.teamTwo.getPlayerPosition(playerIdx)
+                positionList.append(positionPlayer)
         return positionList
     
     def getPlayerID(self, playerName : str) -> int:
