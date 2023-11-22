@@ -71,25 +71,22 @@ if __name__ == "__main__":
         file.close()
     
 
-    plotTeamPosition(data.getPlayerList()[0], data)
-    plotTeamPosition(data.getPlayerList()[1], data)
-
-
-    print(data.begGameTime, data.endGameTime)
     gameDuration : int = summaryData.gameDuration
     begGameTime : int = data.begGameTime
     endGameTime : int = data.endGameTime
 
-    snapshot : Snapshot = data.gameSnapshotList[150]
-    print(summaryData.gameDuration)
-    print(snapshot.convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime))
+    splitList = [300, 1400]
+    splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
 
-    (before15Data, between15and25Data, above25Data) = data.splitData(summaryData.gameDuration)
-    
-    print(len(before15Data.gameSnapshotList))
+    firstSplit = splittedDataset[0]
+    print("len unsplited dataset :", len(data.gameSnapshotList))
+    print("len first split :", len(firstSplit.gameSnapshotList))
 
-    plotTeamPosition(before15Data.getPlayerList()[0], before15Data)
-    plotTeamPositionAnimated(before15Data.getPlayerList()[0], before15Data)
+    print("Ploting position")
+    plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
+
+    print("Creating animation")
+    plotTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
 
 
     # for player in df['payload.payload.payload.teamOne.players'][0]:

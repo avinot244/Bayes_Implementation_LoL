@@ -161,7 +161,8 @@ class SeparatedData:
                                     df['payload.payload.payload.teamTwo.towerKills'],
                                     df['payload.payload.payload.teamTwo.killedDragonTypes'],
                                     players_team_two)
-                        gameSnapshot : Snapshot = Snapshot(df['payload.payload.payload.gameTime'][0], 
+                        gameSnapshot : Snapshot = Snapshot(file,
+                                                        df['payload.payload.payload.gameTime'][0], 
                                                         teamOne,
                                                         teamTwo)
                         self.gameSnapshotList.append(gameSnapshot)
@@ -199,22 +200,26 @@ class SeparatedData:
             return self.gameSnapshotList[0].teamTwo.getPlayerID(playerName)
         
     
-    def splitData(self, gameDuration : int):
-        before15 : list[Snapshot] = list()
-        between15and25 : list[Snapshot] = list()
-        above25 : list[Snapshot] = list()
-
+    def splitData(self, gameDuration : int, splitList : list[int]):
+        snapshotListTemp : list[list[Snapshot]] = [[] for _ in range(1 + len(splitList))]
+        print(len(snapshotListTemp))
+        res : list[SeparatedData] = list() # List of len 1+len(splitList)
+        c1, c2, c3 = (0,0,0)
         for snapshot in self.gameSnapshotList:
             snapshotTime = snapshot.convertGameTimeToSeconds(gameDuration, self.begGameTime, self.endGameTime)
-            if snapshotTime < 300:
-                before15.append(snapshot)
-            elif snapshotTime < 1500 and snapshotTime >= 300:
-                between15and25.append(snapshot)
-            else:
-                above25.append(snapshot)
-        
-        before15Data = SeparatedData(gameSnapShotList=before15, begGameTime=self.begGameTime, endGameTime=self.endGameTime)
-        between15and25Data = SeparatedData(gameSnapShotList=between15and25, begGameTime=self.begGameTime, endGameTime=self.endGameTime)
-        above25Data = SeparatedData(gameSnapShotList=above25, begGameTime=self.begGameTime, endGameTime=self.endGameTime)
-
-        return before15Data, between15and25Data, above25Data
+            for i in range(len(splitList) - 1):            
+                if i == 0 and snapshotTime < splitList[i]:
+                    snapshotListTemp[0].append(snapshot)
+                    c1 += 1
+                    break 
+                elif snapshotTime > splitList[i] and snapshotTime < splitList[i+1]:
+                    snapshotListTemp[i + 1].append(snapshot)
+                    c2 += 1
+                    break
+                else:
+                    snapshotListTemp[-1].append(snapshot)
+                    c3 += 1
+                    break
+        for snapshotLst in snapshotListTemp:
+            res.append(SeparatedData(gameSnapShotList=snapshotLst, begGameTime=self.begGameTime, endGameTime=self.endGameTime))
+        return res

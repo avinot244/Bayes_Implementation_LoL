@@ -100,11 +100,15 @@ def plot_player_position_animated(positionList : list[Position], figName : str):
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
 
-    scat = ax.scatter(X[0], Y[0], color="white", s=[10])
+    scat = ax.scatter(X[0], Y[0], color="white", s=[5])
 
     def update(frame):
-        x = X[:frame]
-        y = Y[:frame]
+        if frame > 10:
+            x = X[frame-10:frame]
+            y = Y[frame-10:frame]
+        else:
+            x = X[:frame]
+            y = Y[:frame]
         data = np.stack([x, y]).T
         scat.set_offsets(data)
         return scat
