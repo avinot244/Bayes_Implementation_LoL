@@ -86,7 +86,10 @@ if __name__ == "__main__":
     plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
 
     print("Creating animation")
-    plotTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
+    # plotTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
+
+    positionsList : list[list[Position]] = list()
+    plotAllTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
 
 
     # for player in df['payload.payload.payload.teamOne.players'][0]:

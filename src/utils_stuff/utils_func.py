@@ -79,11 +79,57 @@ def plot_player_position(positionList : list[Position], figName : str):
     plt.savefig("{}.png".format(figName))
     plt.close()
 
+
+def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], figName : str):
+    assert len(positionLists) == len(colorList)
+    assert figName != ""
+
+    towerRedX = [pos.x for pos in towerPositionRedSide]
+    towerRedY = [pos.y for pos in towerPositionRedSide]
+    towerBlueX = [pos.x for pos in towerPositionBlueSide]
+    towerBlueY = [pos.y for pos in towerPositionBlueSide]
+
+    inhibitorRedX = [pos.x for pos in inhibitorPositionRedSide]
+    inhibitorRedY = [pos.y for pos in inhibitorPositionRedSide]
+    inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
+    inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
+
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+
+    fig, ax = plt.subplots()
+    ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
+    plt.scatter(towerRedX, towerRedY, color="Red", s=[100])
+    plt.scatter(towerBlueX, towerBlueY, color="Blue", s=[100])
+    
+    plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
+    plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
+    ax.set_aspect("equal", adjustable="box")
+    plt.axis('off')
+
+    scatters = [ax.scatter([], [], color=colorList[i], s=[5]) for i in range(len(positionLists))]
+
+    def update(frame):
+        for i in range(len(positionLists)):
+            X = [pos.x for pos in positionLists[i]]
+            Y = [pos.y for pos in positionLists[i]]
+            if frame > 10:   
+                x = X[frame-10:frame]
+                y = Y[frame-10:frame]
+            else:
+                x = X[:frame]
+                y = Y[:frame]
+            
+            data = np.stack([x, y]).T
+            scatters[i].set_offsets(data)
+        return scatters
+    ani = animation.FuncAnimation(fig=fig, func=update, frames=len(positionLists[0]), interval=200)
+    writervideo = animation.FFMpegWriter(fps=60) 
+    ani.save(figName + '.mp4', writer=writervideo) 
+    plt.close()
+
 def plot_player_position_animated(positionList : list[Position], figName : str):
     X = [pos.x for pos in positionList]
     Y = [pos.y for pos in positionList]
-
-
 
     towerRedX = [pos.x for pos in towerPositionRedSide]
     towerRedY = [pos.y for pos in towerPositionRedSide]
@@ -140,6 +186,16 @@ def plotTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
         positionHistory = data.getPlayerPositionHistory(participantID)
         playerName = playerName.replace(' ', '_')
         plot_player_position_animated(positionHistory, "positions_{}".format(playerName))
+    
+def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
+    positionLists : list[list[Position]] = list()
+    for playerName in playerNameList:
+        participantID = data.getPlayerID(playerName)
+        positionHistory = data.getPlayerPositionHistory(participantID)
+        playerName = playerName.replace(' ', '_')
+        positionLists.append(positionHistory)
+    colorList = ["blue", "green", "yellow", "red", "white"]
+    plot_multiple_players_positions_animated(positionLists, colorList, "positions_T1")
 
 
 def convert_into_real_time(timestampBeg : int, timestampEnd : int):
