@@ -97,6 +97,6 @@ if __name__ == "__main__":
 
     snapshot15 = data.getSnapShotByTime(900, gameDuration)
     print(snapshot15.convertGameTimeToSeconds(gameDuration, data.begGameTime, data.endGameTime))
-    gameStat15 : GameStat = GameStat(snapshot15, gameDuration, begGameTime, endGameTime)
+    gameStat15 : GameStat = GameStat(snapShot=snapshot15, gameDuration=gameDuration, begGameTime=begGameTime, endGameTime=endGameTime)
 
     saveDiffStatGame(gameStat15, game, "./", snapshot15)

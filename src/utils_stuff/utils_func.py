@@ -264,6 +264,66 @@ def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Sn
         header = ['Player_Name', 'XPD@{}'.format(timeSaved), 'CSD@{}'.format(timeSaved), 'GD@{}'.format(timeSaved)]
         writer.writerow(header)
 
+        playerXPDiffAvg : list[float] = list()
+        playerCSDiffAvg : list[float] = list()
+        playerGoldDiffAvg : list[float] = list()
+
+        for i in range(5):
+            XPDiffAvg : float = 0
+            CSDiffAvg : float = 0
+            GoldDiffAvg : float = 0
+            for stat in statList:
+                XPDiffAvg += stat.playerXPDiff[i]
+                CSDiffAvg += stat.playerCSDiff[i]
+                GoldDiffAvg += stat.playerGoldDiff[i]
+            playerXPDiffAvg.append(XPDiffAvg/len(statList))
+            playerCSDiffAvg.append(CSDiffAvg/len(statList))
+            playerGoldDiffAvg.append(GoldDiffAvg/len(statList))
+
+            data = []
+            data.append(snapShotList[0].teamOne.players[i].summonerName)
+            data.append(playerXPDiffAvg[i])
+            data.append(playerCSDiffAvg[i])
+            data.append(playerGoldDiffAvg[i])
+            writer.writerow(data)
+
+    with open(csv_name_revert, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        header = ['Player_Name', 'XPD@{}'.format(timeSaved), 'CSD@{}'.format(timeSaved), 'GD@{}'.format(timeSaved)]
+        writer.writerow(header)
+        
+        playerXPDiffAvg : list[float] = list()
+        playerCSDiffAvg : list[float] = list()
+        playerGoldDiffAvg : list[float] = list()
+        teamGoldDiffAvg : float = 0
+
+        for i in range(5):
+            XPDiffAvg : float = 0
+            CSDiffAvg : float = 0
+            GoldDiffAvg : float = 0
+            for stat in statList:
+                XPDiffAvg += stat.playerXPDiff[i]
+                CSDiffAvg += stat.playerCSDiff[i]
+                GoldDiffAvg += stat.playerGoldDiff[i]
+            playerXPDiffAvg.append(XPDiffAvg/len(statList))
+            playerCSDiffAvg.append(CSDiffAvg/len(statList))
+            playerGoldDiffAvg.append(GoldDiffAvg/len(statList))
+
+            data = []
+            data.append(snapShotList[0].teamTwo.players[i].summonerName)
+            data.append(-playerXPDiffAvg[i])
+            data.append(-playerCSDiffAvg[i])
+            data.append(-playerGoldDiffAvg[i])
+            writer.writerow(data)
+        
+        
+        for stat in statList:
+            teamGoldDiffAvg += stat.teamGoldDiff
+        teamGoldDiffAvg /= len(statList)
+            
+            
+
+
         
 
 
