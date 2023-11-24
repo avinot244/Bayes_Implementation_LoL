@@ -45,3 +45,12 @@ class Player:
     
     def getPosition(self):
         return self.position
+    
+    def CSdiff(self, player):
+        return self.stats.minionsKilled - player.stats.minionsKilled
+
+    def goldDiff(self, player):
+        return self.totalGold - player.totalGold
+    
+    def XPdiff(self, player):
+        return self.experience - player.experience

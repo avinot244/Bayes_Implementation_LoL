@@ -202,24 +202,36 @@ class SeparatedData:
     
     def splitData(self, gameDuration : int, splitList : list[int]):
         snapshotListTemp : list[list[Snapshot]] = [[] for _ in range(1 + len(splitList))]
-        print(len(snapshotListTemp))
         res : list[SeparatedData] = list() # List of len 1+len(splitList)
-        c1, c2, c3 = (0,0,0)
         for snapshot in self.gameSnapshotList:
             snapshotTime = snapshot.convertGameTimeToSeconds(gameDuration, self.begGameTime, self.endGameTime)
             for i in range(len(splitList) - 1):            
                 if i == 0 and snapshotTime < splitList[i]:
                     snapshotListTemp[0].append(snapshot)
-                    c1 += 1
                     break 
                 elif snapshotTime > splitList[i] and snapshotTime < splitList[i+1]:
                     snapshotListTemp[i + 1].append(snapshot)
-                    c2 += 1
                     break
-                else:
+                elif i == len(splitList) - 2:
                     snapshotListTemp[-1].append(snapshot)
-                    c3 += 1
                     break
         for snapshotLst in snapshotListTemp:
             res.append(SeparatedData(gameSnapShotList=snapshotLst, begGameTime=self.begGameTime, endGameTime=self.endGameTime))
         return res
+    
+    def getSnapShotByTime(self, time : float, gameDuration : int):
+        """Gets snapshot where time is the closest"""
+        begGameTime = self.begGameTime
+        endGameTime = self.endGameTime
+
+        firstSnapShotTime = self.gameSnapshotList[0].convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime)
+        delta = abs(time - firstSnapShotTime)
+        idx = 0
+        for i in range(len(self.gameSnapshotList)):
+            snapShotTime = self.gameSnapshotList[i].convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime)
+            tempDelta = abs(time - snapShotTime)
+            if tempDelta < delta:
+                delta = tempDelta
+                idx = i
+        
+        return self.gameSnapshotList[idx]

@@ -1,6 +1,8 @@
-import numpy as np
+import csv
 
-x = [0, 1, 2, 3]
-y = [4, 5, 6, 7]
-res = np.stack((x, y))
-print(res)
+with open("temp.csv", "w", newline='') as f:
+    writer = csv.writer(f)
+    header = ['name', 'greeting']
+    data = ['AV', 'yo']
+    writer.writerow(header)
+    writer.writerow(data)

@@ -1,5 +1,6 @@
 from Separated.Player import Player
 from utils_stuff.Position import Position
+import re
 
 class Team:
     def __init__(self,
@@ -52,4 +53,9 @@ class Team:
         for player in self.players:
             if player.summonerName == playerName:
                 return player.participantID
+    
+    def getTeamName(self) -> str:
+        splits = re.split("\s", self.players[0].summonerName)
+        return splits[0]
+
         

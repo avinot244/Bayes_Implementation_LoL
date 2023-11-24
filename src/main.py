@@ -1,5 +1,6 @@
 # clear && python3 main.py --match NORDvsBRUTE --game 1 --file DETAILS
 # clear && python3 main.py --match JDGvsT1 --game 1 --file DETAILS
+from tqdm import tqdm
 
 import argparse
 import os
@@ -16,6 +17,7 @@ from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
 from Separated.SeparatedData import SeparatedData
 from Separated.Snapshot import Snapshot
+from GameStat import GameStat
 
 
 
@@ -52,9 +54,6 @@ if __name__ == "__main__":
     rootdir = '../data/JDGvsT1/{}/Separated'.format(game)
     
 
-    # with open(rootdir + "/8905.json", 'r') as f:
-    #     data = json.loads(f.read())
-    # df = pd.json_normalize(data)
 
     pathData = DATA_PATH + match + game + "data"
     data : SeparatedData = None
@@ -75,7 +74,7 @@ if __name__ == "__main__":
     begGameTime : int = data.begGameTime
     endGameTime : int = data.endGameTime
 
-    splitList = [300, 1400]
+    splitList = [300, 900, gameDuration]
     splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
 
     firstSplit = splittedDataset[0]
@@ -86,19 +85,18 @@ if __name__ == "__main__":
     plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
 
     print("Creating animation")
-    # plotTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
-
     positionsList : list[list[Position]] = list()
-    plotAllTeamPositionAnimated(firstSplit.getPlayerList()[0], firstSplit)
+    # i = 0
+    
+    # for split in splittedDataset:
+    #     name = ""
+    #     if i < len(splitList):
+    #         name = "position_both_teams_{}".format(splitList[i])
+    #         plotBothTeamsPositionAnimated(split.getPlayerList()[0], split.getPlayerList()[1], split, name)        
+    #     i += 1
 
+    snapshot15 = data.getSnapShotByTime(900, gameDuration)
+    print(snapshot15.convertGameTimeToSeconds(gameDuration, data.begGameTime, data.endGameTime))
+    gameStat15 : GameStat = GameStat(snapshot15, gameDuration, begGameTime, endGameTime)
 
-    # for player in df['payload.payload.payload.teamOne.players'][0]:
-    #     print("\n------------\n")
-    #     print(player)
-
-    # for subdir, dirs, files in os.walk(rootdir):
-    #     for file in files:
-    #         with open(os.path.join(subdir, file)) as f:
-    #             data = json.loads(f.read())
-    #         df = pd.json_normalize(data)
-            
+    saveDiffStatGame(gameStat15, game, "./", snapshot15)

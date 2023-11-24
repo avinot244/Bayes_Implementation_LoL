@@ -5,11 +5,13 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
-from datetime import datetime
+import csv
 
 from EMH.Details.DetailsData import DetailsData
 from Separated.SeparatedData import SeparatedData
+from Separated.Snapshot import Snapshot
 from utils_stuff.globals import *
+from GameStat import GameStat
 
 
 def get_all_event_types(json_path_details:str) -> dict:
@@ -80,7 +82,7 @@ def plot_player_position(positionList : list[Position], figName : str):
     plt.close()
 
 
-def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], figName : str):
+def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str):
     assert len(positionLists) == len(colorList)
     assert figName != ""
 
@@ -106,7 +108,7 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
     ax.set_aspect("equal", adjustable="box")
     plt.axis('off')
 
-    scatters = [ax.scatter([], [], color=colorList[i], s=[5]) for i in range(len(positionLists))]
+    scatters = [ax.scatter([], [], color=colorList[i], s=[25], marker=markerList[i]) for i in range(len(positionLists))]
 
     def update(frame):
         for i in range(len(positionLists)):
@@ -187,25 +189,81 @@ def plotTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
         playerName = playerName.replace(' ', '_')
         plot_player_position_animated(positionHistory, "positions_{}".format(playerName))
     
-def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
+def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData, name : str):
     positionLists : list[list[Position]] = list()
     for playerName in playerNameList:
         participantID = data.getPlayerID(playerName)
         positionHistory = data.getPlayerPositionHistory(participantID)
         playerName = playerName.replace(' ', '_')
         positionLists.append(positionHistory)
-    colorList = ["blue", "green", "yellow", "red", "white"]
-    plot_multiple_players_positions_animated(positionLists, colorList, "positions_T1")
+    colorList = ["blue", "green", "red", "yellow", "purple"]
+    markerList = ["o"]*5
+    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name)
+
+def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameListTeamTwo : list[str], data : SeparatedData, name : str):
+    positionLists : list[list[Position]] = list()
+    # Getting positions for team one
+    for playerName in playerNameListTeamOne:
+        participantID = data.getPlayerID(playerName)
+        positionHistory = data.getPlayerPositionHistory(participantID)
+        playerName = playerName.replace(' ', '_')
+        positionLists.append(positionHistory)
+    
+    # Getting positions for team two
+    for playerName in playerNameListTeamTwo:
+        participantID = data.getPlayerID(playerName)
+        positionHistory = data.getPlayerPositionHistory(participantID)
+        playerName = playerName.replace(' ', '_')
+        positionLists.append(positionHistory)
+    colorList = ["blue", "green", "red", "yellow", "purple"] * 2
+    markerList = ["o"] * 5 + ["^"]*5
+    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name)
 
 
-def convert_into_real_time(timestampBeg : int, timestampEnd : int):
-    dateBeg = datetime.fromtimestamp(timestampBeg/1000.0)
-    print(dateBeg)
+def saveDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapshot):
+    teamOneName = snapShot.teamOne.getTeamName()
+    teamTwoName = snapShot.teamTwo.getTeamName()
 
-    dateEnd = datetime.fromtimestamp(timestampEnd/1000.0)
-    print(dateEnd)
+    csv_name = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
+    csv_name_revert = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamTwoName, teamOneName)
 
-    return dateBeg, dateEnd
+    with open(csv_name, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        header =  ["Player_Name", "XPD@{}".format(stat.time), "CSD@{}".format(stat.time), "GD@{}".format(stat.time)]
+        writer.writerow(header)
+        for i in range(5):
+            data = []
+            data.append(snapShot.teamOne.players[i].summonerName)
+            data.append(stat.playerXPDiff[i])
+            data.append(stat.playerCSDiff[i])
+            data.append(stat.playerGoldDiff[i])
+            writer.writerow(data)
+    
+    with open(csv_name_revert, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        header =  ["Player_Name", "XPD@{}".format(stat.time), "CSD@{}".format(stat.time), "GD@{}".format(stat.time)]
+        writer.writerow(header)
+        for i in range(5):
+            data = []
+            data.append(snapShot.teamTwo.players[i].summonerName)
+            data.append(-stat.playerXPDiff[i])
+            data.append(-stat.playerCSDiff[i])
+            data.append(-stat.playerGoldDiff[i])
+            writer.writerow(data)          
+            
+def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Snapshot]):
+    teamOneName = snapShotList[0].teamOne.getTeamName()
+    teamTwoName = snapShotList[0].teamTwo.getTeamName()
+    timeSaved = statList[0].time
 
+    csv_name = "{}/diff_{}_{}_against_{}.csv".format(path, timeSaved, teamOneName, teamTwoName)
+    csv_name_revert = "{}/diff_{}_{}_against_{}.csv".format(path, timeSaved, teamTwoName, teamOneName)
+    
+    with open(csv_name, 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        header = ['Player_Name', 'XPD@{}'.format(timeSaved), 'CSD@{}'.format(timeSaved), 'GD@{}'.format(timeSaved)]
+        writer.writerow(header)
+
+        
 
 
