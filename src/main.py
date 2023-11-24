@@ -50,19 +50,67 @@ if __name__ == "__main__":
             load = value
     
 
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228025_SUMMARY.json"
-    summaryData : SummaryData = SummaryData(path)
+    
     
     if game == "gBO":
         rootdir = "../data/{}/".format(match)
         pathData = DATA_PATH + match + "BOData"
+        dirList : list[str] = []
+        for subdir, dirs, _ in os.walk(rootdir):
+            dirList.append(dirs)
         
-        
-        data : SeparatedData = None
+        nbGameBo = len(dirList[0])
+        gameList = dirList[0]
+
+        allSeparatedData : list[SeparatedData] = []
+        allSummaryData : list[SummaryData] = []
+        allSnapshot15 : list[Snapshot] = []
+        allGameStat15 : list[GameStat] = []
         
 
-    
+        for gameIdx in gameList:
+            subRootdir = "../data/{}/{}".format(match, gameIdx)
+            pathData = DATA_PATH + match + gameIdx + "data"
+
+            summaryDataPath = getSummaryData(subRootdir)
+            summaryDataTemp : SummaryData = SummaryData(summaryDataPath)
+            separatedDataTemp : SeparatedData = None
+            gameStatTemp : GameStat = None
+            
+            if load :
+                
+                print("Loading serialized data")
+                file = open(pathData, 'rb')
+                separatedDataTemp : SeparatedData = pickle.load(file)
+                file.close()
+            else:
+                print("Creating our data")
+                separatedDataTemp = SeparatedData(subRootdir + "/Separated")
+                file = open(pathData, 'ab')
+                pickle.dump(separatedDataTemp, file)
+                file.close()
+            
+            gameDuration : int = summaryDataTemp.gameDuration
+            begGameTime : int = separatedDataTemp.begGameTime
+            endGameTime : int = separatedDataTemp.endGameTime
+
+            gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(900, gameDuration),
+                                    gameDuration,
+                                    begGameTime,
+                                    endGameTime)
+
+            allSeparatedData.append(separatedDataTemp)
+            allSnapshot15.append(separatedDataTemp.getSnapShotByTime(900, gameDuration))
+            allSummaryData.append(summaryDataTemp)
+            allGameStat15.append(gameStatTemp)
+
+        saveDiffStatBO(allGameStat15, "./saved_data", allSnapshot15)
+
     else :
+        subRootdir = "../data/{}/{}".format(match, game)
+        summaryDataPath = getSummaryData(subRootdir)
+        summaryData : SummaryData = SummaryData(summaryDataPath)
+        
         rootdir = '../data/{}/{}/Separated'.format(match, game)
         pathData = DATA_PATH + match + game + "data"
         data : SeparatedData = None
@@ -105,7 +153,6 @@ if __name__ == "__main__":
         #     i += 1
 
         snapshot15 = data.getSnapShotByTime(900, gameDuration)
-        print(snapshot15.convertGameTimeToSeconds(gameDuration, data.begGameTime, data.endGameTime))
         gameStat15 : GameStat = GameStat(snapShot=snapshot15, gameDuration=gameDuration, begGameTime=begGameTime, endGameTime=endGameTime)
 
-        saveDiffStatGame(gameStat15, game, "./", snapshot15)
+        saveDiffStatGame(gameStat15, game, "./saved_data", snapshot15)

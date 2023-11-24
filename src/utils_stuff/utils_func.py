@@ -2,6 +2,8 @@ import json
 import pandas as pd
 import numpy as np
 import math
+import os
+import re
 
 from utils_stuff.globals import *
 
@@ -28,3 +30,11 @@ def get_all_event_types(json_path_details:str) -> dict:
         
 def abs_dist(position1 : Position, position2 : Position) -> float:
     return math.sqrt(np.abs(position2.x - position1.x)**2 + np.abs(position2.y - position1.y)**2)
+
+
+def getSummaryData(rootdir : str) -> str:
+    for subdir, _, files in os.walk(rootdir):
+        for file in files:
+            x = re.search("SUMMARY", file)
+            if x != None:
+                return os.path.join(subdir, file)
