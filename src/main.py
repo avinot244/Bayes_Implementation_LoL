@@ -12,6 +12,8 @@ import datetime
 from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
+from utils_stuff.plots import *
+from utils_stuff.statDiff import *
 
 from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
@@ -25,7 +27,7 @@ from GameStat import GameStat
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--match", metavar="[NORDvsBRUTE]", required=True, help="Match to analyse")
-    parser.add_argument("-g", "--game", metavar="[1|2|3|4|5]", required=True, help="Game to analyse")
+    parser.add_argument("-g", "--game", metavar="[1|2|3|4|5|BO]", required=True, help="Game to analyse")
     parser.add_argument("-f", "--file", metavar="[DETAILS | SUMMARY]", required=True, help="If you want to have summary or detail json loaded")
     parser.add_argument("-l", "--load", action="store_true", default=False, help="Load serilized object linked to inputs")
 
@@ -48,55 +50,62 @@ if __name__ == "__main__":
             load = value
     
 
-    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228010_SUMMARY.json"
+    path = DATA_PATH + match + "/" + game + "/" + "ESPORTSTMNT03_3228025_SUMMARY.json"
     summaryData : SummaryData = SummaryData(path)
-
-    rootdir = '../data/JDGvsT1/{}/Separated'.format(game)
     
+    if game == "gBO":
+        rootdir = "../data/{}/".format(match)
+        pathData = DATA_PATH + match + "BOData"
+        
+        
+        data : SeparatedData = None
+        
 
-
-    pathData = DATA_PATH + match + game + "data"
-    data : SeparatedData = None
-    if load :
-        print("Loading serialized data")
-        file = open(pathData, 'rb')
-        data : SeparatedData = pickle.load(file)
-        file.close()
+    
     else :
-        data = SeparatedData(rootdir)
+        rootdir = '../data/{}/{}/Separated'.format(match, game)
         pathData = DATA_PATH + match + game + "data"
-        file = open(pathData, 'ab')
-        pickle.dump(data, file)
-        file.close()
-    
+        data : SeparatedData = None
+        if load :
+            print("Loading serialized data")
+            file = open(pathData, 'rb')
+            data : SeparatedData = pickle.load(file)
+            file.close()
+        else :
+            data = SeparatedData(rootdir)
+            pathData = DATA_PATH + match + game + "data"
+            file = open(pathData, 'ab')
+            pickle.dump(data, file)
+            file.close()
+        
 
-    gameDuration : int = summaryData.gameDuration
-    begGameTime : int = data.begGameTime
-    endGameTime : int = data.endGameTime
+        gameDuration : int = summaryData.gameDuration
+        begGameTime : int = data.begGameTime
+        endGameTime : int = data.endGameTime
 
-    splitList = [300, 900, gameDuration]
-    splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
+        splitList = [300, 900, gameDuration]
+        splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
 
-    firstSplit = splittedDataset[0]
-    print("len unsplited dataset :", len(data.gameSnapshotList))
-    print("len first split :", len(firstSplit.gameSnapshotList))
+        firstSplit = splittedDataset[0]
+        print("len unsplited dataset :", len(data.gameSnapshotList))
+        print("len first split :", len(firstSplit.gameSnapshotList))
 
-    print("Ploting position")
-    plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
+        print("Ploting position")
+        plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
 
-    print("Creating animation")
-    positionsList : list[list[Position]] = list()
-    # i = 0
-    
-    # for split in splittedDataset:
-    #     name = ""
-    #     if i < len(splitList):
-    #         name = "position_both_teams_{}".format(splitList[i])
-    #         plotBothTeamsPositionAnimated(split.getPlayerList()[0], split.getPlayerList()[1], split, name)        
-    #     i += 1
+        print("Creating animation")
+        positionsList : list[list[Position]] = list()
+        # i = 0
+        
+        # for split in splittedDataset:
+        #     name = ""
+        #     if i < len(splitList):
+        #         name = "position_both_teams_{}_{}".format(splitList[i], game)
+        #         plotBothTeamsPositionAnimated(split.getPlayerList()[0], split.getPlayerList()[1], split, name)        
+        #     i += 1
 
-    snapshot15 = data.getSnapShotByTime(900, gameDuration)
-    print(snapshot15.convertGameTimeToSeconds(gameDuration, data.begGameTime, data.endGameTime))
-    gameStat15 : GameStat = GameStat(snapShot=snapshot15, gameDuration=gameDuration, begGameTime=begGameTime, endGameTime=endGameTime)
+        snapshot15 = data.getSnapShotByTime(900, gameDuration)
+        print(snapshot15.convertGameTimeToSeconds(gameDuration, data.begGameTime, data.endGameTime))
+        gameStat15 : GameStat = GameStat(snapShot=snapshot15, gameDuration=gameDuration, begGameTime=begGameTime, endGameTime=endGameTime)
 
-    saveDiffStatGame(gameStat15, game, "./", snapshot15)
+        saveDiffStatGame(gameStat15, game, "./", snapshot15)
