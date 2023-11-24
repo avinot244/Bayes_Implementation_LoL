@@ -1,6 +1,8 @@
 import csv
 
 from Separated.Snapshot import Snapshot
+from Separated.SeparatedData import SeparatedData
+from Separated.Player import Player
 from utils_stuff.globals import *
 from GameStat import GameStat
 
@@ -107,8 +109,32 @@ def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Sn
         teamGoldDiffAvg /= len(statList)
             
             
-
-
+def getJungleProximity(data : SeparatedData, team : int):
+    """team attribute stands for the number of the team (can be either one or two)"""
+    jungleProximitySummary : dict = dict()
+    
+    if team == 0:
+        playerList = data.gameSnapshotList[0].teamOne.getPlayerList()
+        for playerName in playerList:
+            jungleProximitySummary[playerName] = 0
+    elif team == 1:
+        playerList = data.gameSnapshotList[0].teamTwo.getPlayerList()
+        for playerName in playerList:
+            jungleProximitySummary[playerName] = 0
+    c = 0
+    for snapshot in data.gameSnapshotList:
+        if team == 0:
+            closestPlayer : Player = snapshot.teamOne.getClosesPlayerToJungler()
+            jungleProximitySummary[closestPlayer.summonerName] += 1
+        elif team == 1:
+            closestPlayer : Player = snapshot.teamTwo.getClosesPlayerToJungler()
+            jungleProximitySummary[closestPlayer.summonerName] += 1
+        c += 1
+    
+    for k in jungleProximitySummary.keys():
+        jungleProximitySummary[k] /= c
+    
+    return jungleProximitySummary
         
 
 

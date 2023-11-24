@@ -1,5 +1,7 @@
 from Separated.Player import Player
 from utils_stuff.Position import Position
+from utils_stuff.utils_func import abs_dist
+
 import re
 
 class Team:
@@ -58,4 +60,15 @@ class Team:
         splits = re.split("\s", self.players[0].summonerName)
         return splits[0]
 
+    def getClosesPlayerToJungler(self) -> Player:
+        jungle = self.players[1]
+        dist = abs_dist(jungle.position, self.players[0].position)
+        idx = 0
+        for i in range(len(self.players)):
+            if i != 1:
+                distTemp = abs_dist(jungle.position, self.players[i].position)
+                if distTemp < dist:
+                    dist = distTemp
+                    idx = i
         
+        return self.players[idx]

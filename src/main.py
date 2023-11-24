@@ -13,12 +13,13 @@ from utils_stuff.globals import *
 from utils_stuff.utils_func import *
 from utils_stuff.Types import *
 from utils_stuff.plots import *
-from utils_stuff.statDiff import *
+from utils_stuff.stats import *
 
 from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
 from Separated.SeparatedData import SeparatedData
 from Separated.Snapshot import Snapshot
+from Separated.Player import Player
 from GameStat import GameStat
 
 
@@ -134,15 +135,15 @@ if __name__ == "__main__":
         splitList = [300, 900, gameDuration]
         splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
 
-        firstSplit = splittedDataset[0]
+        firstSplit : SeparatedData = splittedDataset[0]
         print("len unsplited dataset :", len(data.gameSnapshotList))
         print("len first split :", len(firstSplit.gameSnapshotList))
 
-        print("Ploting position")
-        plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
+        # print("Ploting position")
+        # plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
 
-        print("Creating animation")
-        positionsList : list[list[Position]] = list()
+        # print("Creating animation")
+        # positionsList : list[list[Position]] = list()
         # i = 0
         
         # for split in splittedDataset:
@@ -153,6 +154,9 @@ if __name__ == "__main__":
         #     i += 1
 
         snapshot15 = data.getSnapShotByTime(900, gameDuration)
-        gameStat15 : GameStat = GameStat(snapShot=snapshot15, gameDuration=gameDuration, begGameTime=begGameTime, endGameTime=endGameTime)
-
-        saveDiffStatGame(gameStat15, game, "./saved_data", snapshot15)
+        closestPlayerTeamOne : Player = snapshot15.teamOne.getClosesPlayerToJungler()
+        print("Closes player to Oner at 15 min is : {}".format(closestPlayerTeamOne.summonerName))
+        jungleProxT1 = getJungleProximity(data, 0)
+        print(jungleProxT1)
+        jungleProxJDG = getJungleProximity(data, 1)
+        print(jungleProxJDG)
