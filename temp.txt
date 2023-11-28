@@ -1,0 +1,15 @@
+main.py --pathing --anim --game [1|5] --player [list_of_players_wanted]
+        --overview --time [time_wanted] --game [1|5|BO]
+        --load
+
+yaml :
+    - path brute data
+    - path where to save results
+    - path where to save srialized objets
+
+
+- position des ward
+- quadriller la map -> heat map -> profil joueur
+- herald drop zone ?
+
+- word embedding de champion ?

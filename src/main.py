@@ -49,9 +49,7 @@ if __name__ == "__main__":
             file = value
         if arg == "load":
             load = value
-    
 
-    
     
     if game == "gBO":
         rootdir = "../data/{}/".format(match)
@@ -138,25 +136,25 @@ if __name__ == "__main__":
         firstSplit : SeparatedData = splittedDataset[0]
         print("len unsplited dataset :", len(data.gameSnapshotList))
         print("len first split :", len(firstSplit.gameSnapshotList))
-
-        # print("Ploting position")
-        # plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
-
-        # print("Creating animation")
-        # positionsList : list[list[Position]] = list()
-        # i = 0
         
-        # for split in splittedDataset:
-        #     name = ""
-        #     if i < len(splitList):
-        #         name = "position_both_teams_{}_{}".format(splitList[i], game)
-        #         plotBothTeamsPositionAnimated(split.getPlayerList()[0], split.getPlayerList()[1], split, name)        
-        #     i += 1
+        print("Ploting position")
+        plotTeamPosition(firstSplit.getPlayerList()[0], firstSplit)
 
-        snapshot15 = data.getSnapShotByTime(900, gameDuration)
-        closestPlayerTeamOne : Player = snapshot15.teamOne.getClosesPlayerToJungler()
-        print("Closes player to Oner at 15 min is : {}".format(closestPlayerTeamOne.summonerName))
-        jungleProxT1 = getJungleProximity(data, 0)
-        print(jungleProxT1)
-        jungleProxJDG = getJungleProximity(data, 1)
-        print(jungleProxJDG)
+        print("Creating animation")
+        positionsList : list[list[Position]] = list()
+        i = 0
+        
+        for split in splittedDataset:
+            name = ""
+            if i < len(splitList):
+                name = "position_both_teams_{}_{}".format(splitList[i], game)
+                plotBothTeamsPositionAnimated(split.getPlayerList()[0], split.getPlayerList()[1], split, name)        
+            i += 1
+
+        # snapshot15 = data.getSnapShotByTime(900, gameDuration)
+        # closestPlayerTeamOne : Player = snapshot15.teamOne.getClosesPlayerToJungler()
+        # print("Closes player to Oner at 15 min is : {}".format(closestPlayerTeamOne.summonerName))
+        # jungleProxT1 = getJungleProximity(data, 0)
+        # print(jungleProxT1)
+        # jungleProxJDG = getJungleProximity(data, 1)
+        # print(jungleProxJDG)

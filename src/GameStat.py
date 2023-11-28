@@ -15,7 +15,6 @@ class GameStat:
         self.playerCSDiff : list[float] = list()
         self.playerGoldDiff : list[float] = list()
         self.teamGoldDiff : float = 0
-        # TODO : add jungle proximity
 
         for i in range(5):
             playerOne : Player = snapShot.teamOne.players[i]

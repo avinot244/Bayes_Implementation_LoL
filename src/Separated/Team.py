@@ -70,5 +70,4 @@ class Team:
                 if distTemp < dist:
                     dist = distTemp
                     idx = i
-        
         return self.players[idx]
