@@ -50,7 +50,7 @@ def plot_player_position(positionList : list[Position], figName : str):
 
 
 def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str):
-    assert len(positionLists) == len(colorList)
+    subteamLength = len(positionLists)//2
     assert figName != ""
 
     towerRedX = [pos.x for pos in towerPositionRedSide]
@@ -75,8 +75,13 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
     ax.set_aspect("equal", adjustable="box")
     plt.axis('off')
 
-    scatters = [ax.scatter([], [], color=colorList[i], s=[25], marker=markerList[i]) for i in range(len(positionLists))]
+    scatters = []
 
+    for i in range(len(positionLists)):
+        if i < subteamLength:
+            scatters.append(ax.scatter([], [], color=colorList[i%subteamLength], s=[25], marker=markerList[i%subteamLength]))
+        else:
+            scatters.append(ax.scatter([], [], color=colorList[i%subteamLength], s=[25], marker=markerList[5+i%subteamLength]))
     def update(frame):
         for i in range(len(positionLists)):
             X = [pos.x for pos in positionLists[i]]
@@ -142,12 +147,14 @@ def plot_player_position_animated(positionList : list[Position], figName : str):
 
         
 
-def plotTeamPosition(playerNameList : list[str], data : SeparatedData):
+def plotTeamPosition(playerNameList : list[str], data : SeparatedData, name : str):
+    
     for playerName in playerNameList:
         participantID = data.getPlayerID(playerName)
         positionHistory = data.getPlayerPositionHistory(participantID)
         playerName = playerName.replace(' ', '_')
-        plot_player_position(positionHistory, "positions_{}".format(playerName))
+        plot_player_position(positionHistory, name + "_{}".format(playerName))
+
 
 def plotTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
     for playerName in playerNameList:
@@ -179,6 +186,7 @@ def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameL
     # Getting positions for team two
     for playerName in playerNameListTeamTwo:
         participantID = data.getPlayerID(playerName)
+        
         positionHistory = data.getPlayerPositionHistory(participantID)
         playerName = playerName.replace(' ', '_')
         positionLists.append(positionHistory)

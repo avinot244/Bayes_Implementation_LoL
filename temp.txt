@@ -1,11 +1,11 @@
-main.py --pathing --anim --game [1|5] --player [list_of_players_wanted]
+main.py --pathing --anim --game [1|5] --summonners [list_of_players_wanted]
         --overview --time [time_wanted] --game [1|5|BO]
         --load
 
 yaml :
     - path brute data
     - path where to save results
-    - path where to save srialized objets
+    - path where to save serialized objets
 
 
 - position des ward

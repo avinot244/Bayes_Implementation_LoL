@@ -1,0 +1,11 @@
+brute_data: "../data/"
+save_path: "./saved_data"
+serialized_path: "../data/"
+match: "JDGvsT1"
+split: 300,900
+playersTeamOne: 
+  - "T1 Faker"
+  - "T1 Oner"
+playersTeamTwo:
+  - "JDG knight"
+  - "JDG Kanavi"
