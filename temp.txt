@@ -1,4 +1,4 @@
-main.py --pathing --anim --game [1|5] --summonners [list_of_players_wanted]
+main.py --pathing --anim --game [1|5]
         --overview --time [time_wanted] --game [1|5|BO]
         --load
 

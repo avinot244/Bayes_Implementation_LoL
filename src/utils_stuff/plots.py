@@ -13,7 +13,7 @@ def createGrayScale(length : int):
         grayScale.append([value, value, value])
     return grayScale
 
-def plot_player_position(positionList : list[Position], figName : str):
+def plot_player_position(positionList : list[Position], figName : str, path : str):
     X = [pos.x for pos in positionList]
     Y = [pos.y for pos in positionList]
 
@@ -45,13 +45,13 @@ def plot_player_position(positionList : list[Position], figName : str):
 
     ax.set_aspect("equal", adjustable="box")
     plt.axis('off')
-    plt.savefig("{}.png".format(figName))
+    plt.savefig(path + "{}.png".format(figName))
     plt.close()
 
 
-def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str):
+def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str, path : str):
     subteamLength = len(positionLists)//2
-    assert figName != ""
+    assert figName != "" and path != ""
 
     towerRedX = [pos.x for pos in towerPositionRedSide]
     towerRedY = [pos.y for pos in towerPositionRedSide]
@@ -98,7 +98,7 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
         return scatters
     ani = animation.FuncAnimation(fig=fig, func=update, frames=len(positionLists[0]), interval=200)
     writervideo = animation.FFMpegWriter(fps=60) 
-    ani.save(figName + '.mp4', writer=writervideo) 
+    ani.save(path + figName + '.mp4', writer=writervideo) 
     plt.close()
 
 def plot_player_position_animated(positionList : list[Position], figName : str):
@@ -147,7 +147,7 @@ def plot_player_position_animated(positionList : list[Position], figName : str):
 
         
 
-def plotTeamPosition(playerNameList : list[str], data : SeparatedData, name : str):
+def plotTeamPosition(playerNameList : list[str], data : SeparatedData, name : str, path : str):
     
     for playerName in playerNameList:
         participantID = data.getPlayerID(playerName)
@@ -163,7 +163,7 @@ def plotTeamPositionAnimated(playerNameList : list[str], data : SeparatedData):
         playerName = playerName.replace(' ', '_')
         plot_player_position_animated(positionHistory, "positions_{}".format(playerName))
     
-def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData, name : str):
+def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData, name : str, path : str):
     positionLists : list[list[Position]] = list()
     for playerName in playerNameList:
         participantID = data.getPlayerID(playerName)
@@ -172,9 +172,9 @@ def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData
         positionLists.append(positionHistory)
     colorList = ["blue", "green", "red", "yellow", "purple"]
     markerList = ["o"]*5
-    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name)
+    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name, path)
 
-def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameListTeamTwo : list[str], data : SeparatedData, name : str):
+def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameListTeamTwo : list[str], data : SeparatedData, name : str, path : str):
     positionLists : list[list[Position]] = list()
     # Getting positions for team one
     for playerName in playerNameListTeamOne:
@@ -191,5 +191,5 @@ def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameL
         playerName = playerName.replace(' ', '_')
         positionLists.append(positionHistory)
     colorList = ["blue", "green", "red", "yellow", "purple"] * 2
-    markerList = ["o"] * 5 + ["^"]*5
-    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name)
+    markerList = ["o"] * 5 + ["^"] * 5
+    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name, path)
