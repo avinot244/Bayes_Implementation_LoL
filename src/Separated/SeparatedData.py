@@ -1,4 +1,4 @@
-import json
+import ujson
 import pandas as pd
 import os
 
@@ -32,7 +32,7 @@ class SeparatedData:
                 files = [l(f) for f in files]
                 for file in tqdm(sorted(files, key=int)):
                     with open(os.path.join(subdir, file + ".json")) as f:
-                        data = json.loads(f.read())
+                        data = ujson.loads(f.read())
                     
                     df = pd.json_normalize(data)
                     if df['payload.payload.type'][0] == "SNAPSHOT" and df['payload.payload.subject'][0] == "MATCH":

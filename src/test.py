@@ -1,8 +1,4 @@
-import csv
+from YamlParser import YamlParer
 
-with open("temp.csv", "w", newline='') as f:
-    writer = csv.writer(f)
-    header = ['name', 'greeting']
-    data = ['AV', 'yo']
-    writer.writerow(header)
-    writer.writerow(data)
+ymlParser = YamlParer("./src/config.yml")
+print(ymlParser.ymlDict)
