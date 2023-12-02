@@ -10,7 +10,7 @@ import pickle
 import datetime
 
 from utils_stuff.globals import *
-from utils_stuff.utils_func import *
+from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
 from utils_stuff.plots import *
 from utils_stuff.stats import *
@@ -34,6 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("-g", "--game", metavar="[1|2|3|4|5|BO]", type=str, help="Game to analyse or if we want the whole Best-Off")
     parser.add_argument("-o", "--overview", action="store_true", default=False, help="Compute game stat of players")
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
+    parser.add_argument("-j", "--jungle-prox", action="store_true", default=False, help="Prints jungle proximity at a given time")
     parser.add_argument("-l", "--load", action="store_true", default=False, help="Tells if we want to load serialized object")
     
 
@@ -46,6 +47,7 @@ if __name__ == "__main__":
     overview = False
     time = 0
     load = False
+    jungleProximity = False
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -60,6 +62,8 @@ if __name__ == "__main__":
             time = value
         if arg == "load":
             load = value
+        if arg == "jungle_prox":
+            jungleProximity = value
 
     yamlParser : YamlParer = YamlParer("./config.yml")
 
@@ -69,8 +73,7 @@ if __name__ == "__main__":
         # Loading data of the game
         match = yamlParser.ymlDict['match']
         rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-        summaryDataPath = getSummaryData(rootdir)
-        summaryData : SummaryData = SummaryData(summaryDataPath)
+        summaryData : SummaryData = getSummaryData(rootdir)
 
         pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}".format(game) + 'data'
         data : SeparatedData = None
@@ -91,7 +94,11 @@ if __name__ == "__main__":
         begGameTime : int = data.begGameTime
         endGameTime : int = data.endGameTime
         splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-        splitList.append(gameDuration)
+        splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
+        if splitList[-1] > gameDuration:
+            splitList[-1] = gameDuration
+        else:
+            splitList.append(gameDuration)
         splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
         
         playerNameListTeamOne = yamlParser.ymlDict['playersTeamOne']
@@ -142,13 +149,11 @@ if __name__ == "__main__":
                 subRootdir = yamlParser.ymlDict['brute_data'] + "/{}/{}".format(yamlParser.ymlDict['match'], gameIdx)
                 pathData = yamlParser.ymlDict['brute_data'] + yamlParser.ymlDict['match'] + gameIdx + "data"
 
-                summaryDataPath = getSummaryData(subRootdir)
-                summaryDataTemp : SummaryData = SummaryData(summaryDataPath)
+                summaryDataTemp : SummaryData = getSummaryData(subRootdir)
                 separatedDataTemp : SeparatedData = None
                 gameStatTemp : GameStat = None
                 
                 if load :
-                    
                     print("Loading serialized data")
                     file = open(pathData, 'rb')
                     separatedDataTemp : SeparatedData = pickle.load(file)
@@ -165,7 +170,6 @@ if __name__ == "__main__":
                 endGameTime : int = separatedDataTemp.endGameTime
 
                 if time != None:
-
                     gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(time, gameDuration),
                                             gameDuration,
                                             begGameTime,
@@ -192,8 +196,7 @@ if __name__ == "__main__":
             print("Computing overview of game {} at {}".format(game, time))
             match = yamlParser.ymlDict['match']
             rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-            summaryDataPath = getSummaryData(rootdir)
-            summaryData : SummaryData = SummaryData(summaryDataPath)
+            summaryData : SummaryData = getSummaryData(rootdir)
             
             pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}".format(game) + 'data'
             data : SeparatedData = None
@@ -222,3 +225,24 @@ if __name__ == "__main__":
                 gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
                 path = "{}/GameStat/{}".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
                 saveDiffStatGame(gameStat, "g{}".format(game), path, snapShot)
+    
+    elif jungleProximity:
+        assert game != None
+        print("Getting jungle proximity of game {}".format(game))
+        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+
+        splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
+        if splitList[-1] > gameDuration:
+            splitList[-1] = gameDuration
+        else:
+            splitList.append(gameDuration)
+        splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
+        
+        teamNames = data.getTeamNames()
+
+        jungleProxList : list = list()
+        print(len(splittedDataset))
+        for splitData in splittedDataset:
+            jungleProxList.append(getJungleProximity(splitData, teamNames['T1']))
+        
+        print(jungleProxList)
