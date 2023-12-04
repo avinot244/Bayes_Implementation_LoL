@@ -201,9 +201,7 @@ class SeparatedData:
         
     
     def splitData(self, gameDuration : int, splitList : list[int]):
-        print(len(splitList))
-        snapshotListTemp : list[list[Snapshot]] = [[] for _ in range(1 + len(splitList))]
-        print(len(snapshotListTemp))
+        snapshotListTemp : list[list[Snapshot]] = [[] for _ in range(len(splitList))]
         res : list[SeparatedData] = list() # List of len 1+len(splitList)
         for snapshot in self.gameSnapshotList:
             snapshotTime = snapshot.convertGameTimeToSeconds(gameDuration, self.begGameTime, self.endGameTime)

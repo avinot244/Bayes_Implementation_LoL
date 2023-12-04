@@ -1,4 +1,6 @@
+from errorHandling import *
 from YamlParser import YamlParer
 
-ymlParser = YamlParer("./src/config.yml")
-print(ymlParser.ymlDict)
+yamlParser : YamlParer = YamlParer("./src/config.yml")
+
+print(checkMatchName(yamlParser, './data'))

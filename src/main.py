@@ -14,6 +14,7 @@ from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
 from utils_stuff.plots import *
 from utils_stuff.stats import *
+from errorHandling import checkMatchName, checkTeamComposition
 
 from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
@@ -67,6 +68,8 @@ if __name__ == "__main__":
 
     yamlParser : YamlParer = YamlParer("./config.yml")
 
+    assert checkMatchName(yamlParser, DATA_PATH)
+
     if pathing:
         assert game != "BO"
         
@@ -99,12 +102,15 @@ if __name__ == "__main__":
             splitList[-1] = gameDuration
         else:
             splitList.append(gameDuration)
+        print(splitList)
         splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
         
         playerNameListTeamOne = yamlParser.ymlDict['playersTeamOne']
         playerNameListTeamTwo = yamlParser.ymlDict['playersTeamTwo']
         playerNameList = [playerNameListTeamOne, playerNameListTeamTwo]
-        # TODO : Make assertions to check if players parsed in yml file are in each teams
+
+        checkTeamComposition(playerNameList, data)
+
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))
         if anim:
@@ -150,24 +156,9 @@ if __name__ == "__main__":
                 pathData = yamlParser.ymlDict['brute_data'] + yamlParser.ymlDict['match'] + gameIdx + "data"
 
                 summaryDataTemp : SummaryData = getSummaryData(subRootdir)
-                separatedDataTemp : SeparatedData = None
-                gameStatTemp : GameStat = None
                 
-                if load :
-                    print("Loading serialized data")
-                    file = open(pathData, 'rb')
-                    separatedDataTemp : SeparatedData = pickle.load(file)
-                    file.close()
-                else:
-                    print("Creating our data")
-                    separatedDataTemp = SeparatedData(subRootdir + "/Separated")
-                    file = open(pathData, 'ab')
-                    pickle.dump(separatedDataTemp, file)
-                    file.close()
-                
-                gameDuration : int = summaryDataTemp.gameDuration
-                begGameTime : int = separatedDataTemp.begGameTime
-                endGameTime : int = separatedDataTemp.endGameTime
+                gameNumber = gameIdx.split("g")[1]
+                (separatedDataTemp, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, gameNumber)
 
                 if time != None:
                     gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(time, gameDuration),
@@ -190,31 +181,12 @@ if __name__ == "__main__":
                     allSummaryData.append(summaryDataTemp)
                     allGameStat15.append(gameStatTemp)
 
-            saveDiffStatBO(allGameStat15, "./saved_data", allSnapshot15)
+            pathDiffBO = "./saved_data/GameStat/" + yamlParser.ymlDict['match']
+            saveDiffStatBO(allGameStat15, pathDiffBO, allSnapshot15)
         
         else:
             print("Computing overview of game {} at {}".format(game, time))
-            match = yamlParser.ymlDict['match']
-            rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-            summaryData : SummaryData = getSummaryData(rootdir)
-            
-            pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}".format(game) + 'data'
-            data : SeparatedData = None
-            if load :
-                print("Loading serialized data")
-                file = open(pathData, 'rb')
-                data : SeparatedData = pickle.load(file)
-                file.close()
-            else :
-                data = SeparatedData(rootdir + "/Separated")
-                pathData = DATA_PATH + match + "g{}".format(game) + "data"
-                file = open(pathData, 'ab')
-                pickle.dump(data, file)
-                file.close()
-            
-            gameDuration : int = summaryData.gameDuration
-            begGameTime : int = data.begGameTime
-            endGameTime : int = data.endGameTime
+            (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
             if time != None:
                 snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
                 gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
