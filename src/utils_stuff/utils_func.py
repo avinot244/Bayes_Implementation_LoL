@@ -48,7 +48,7 @@ def getData(load : bool,
     rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
     summaryData = getSummaryData(rootdir)
 
-    pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}".format(game)
+    pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}data".format(game)
     data : SeparatedData = None
     if load :
         print("Loading serialized data")

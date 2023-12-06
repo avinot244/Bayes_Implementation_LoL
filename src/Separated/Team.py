@@ -1,6 +1,6 @@
 from Separated.Player import Player
 from utils_stuff.Position import Position
-from utils_stuff.computation import abs_dist
+from utils_stuff.Computation.computation import abs_dist
 
 import re
 
