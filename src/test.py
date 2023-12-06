@@ -1,24 +1,13 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
+from AreaMapping.Zone import Zone
+from utils_stuff.Position import Position
+from utils_stuff.plotsZone import *
+from utils_stuff.globals import *
+from utils_stuff.Computation.computation import centralSymmetry
+import os
 
-url = "https://mobalytics.gg/lol/champions/aatrox/guide"
-html = urlopen(url).read()
-soup = BeautifulSoup(html, features="html.parser")
-
-# kill all script and style elements
-for script in soup(["script", "style"]):
-    script.extract()    # rip it out
-
-# get text
-text = soup.get_text()
-
-# break into lines and remove leading and trailing space on each
-lines = (line.strip() for line in text.splitlines())
-
-
-# break multi-headlines into a line each
-chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-# drop blank lines
-text = '\n'.join(chunk for chunk in chunks if chunk)
-
-print(text)
+midLaneZone = Zone(midLaneBoundary)
+topLaneZone = Zone(topLaneBoundary)
+botLaneBoundary = [centralSymmetry(coo, mapCenter) for coo in topLaneBoundary]
+botLaneZone = Zone(botLaneBoundary)
+zoneLst = [midLaneZone, topLaneZone, botLaneZone]
+plotZones(zoneLst)

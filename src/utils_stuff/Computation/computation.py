@@ -10,7 +10,10 @@ def paralel(f1 : Linear, f2 : Linear):
     return f1.a == f2.a
 
 def getCross(f1 : Linear, f2 : Linear) -> Position:
-    assert paralel(f1, f2)
+    assert not(paralel(f1, f2))
     x = (f1.b - f2.b)/(f2.a - f1.a)
-    y = (f2.b - f1.b)/(f1.a - f2.a)
+    y = f1.f(x)
     return Position(x, y)
+
+def centralSymmetry(coo : Position, center : Position):
+    return Position(2*center.x - coo.x, 2*center.y - coo.y)

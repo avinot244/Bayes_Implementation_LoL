@@ -14,3 +14,8 @@ yaml :
 - herald drop zone ?
 
 - word embedding de champion ?
+
+LanePresence
+Forward%
+Roam%
+Gank/Invade% -> faire avec les entrées jungle
