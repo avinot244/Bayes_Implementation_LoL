@@ -49,9 +49,17 @@ towerPositionBlueSide = [Position(5846, 6396), Position(5048, 4812), Position(36
 inhibitorPositionRedSide = [Position(11261, 13659), Position(11603, 11667), Position(13598, 11316)]
 inhibitorPositionBlueSide = [Position(1169, 3573), Position(3203, 3208), Position(3454, 1241)]
 
+midLaneBoundary = [Position(5200,6030), Position(6055,5388), Position(9740,8810), Position(8840,9480)]
 
+topLaneBoundary = [Position(1724,10202), Position(1733,10523), Position(1778,10889), Position(1947,11397),
+                   Position(2241,11816), Position(2812,11281), Position(3667,11459), Position(3427,11878),
+                   Position(3427,11878), Position(2972, 12199), Position(2954,12467), Position(3614, 12841),
+                   Position(4095,13019), Position(4666,13108), Position(4639, 14036), Position(3703, 14027),
+                   Position(2758, 13795), Position(2179, 13482), Position(1893,13492), Position(1430, 13634),
+                   Position(1109, 13501), Position(886, 13242), Position(904, 12752), Position(1038, 12574),
+                   Position(1038, 12217), Position(717, 11433), Position(681, 10434)]
 
-
+mapCenter = Position(MINIMAP_WIDTH//2, MINIMAP_HEIGHT//2)
 
 
 

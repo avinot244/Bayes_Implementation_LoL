@@ -12,7 +12,7 @@ import datetime
 from utils_stuff.globals import *
 from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
-from utils_stuff.plots import *
+from utils_stuff.plotsTeam import *
 from utils_stuff.stats import *
 from errorHandling import checkMatchName, checkTeamComposition
 
