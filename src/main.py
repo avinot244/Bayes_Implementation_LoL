@@ -102,14 +102,14 @@ if __name__ == "__main__":
             splitList[-1] = gameDuration
         else:
             splitList.append(gameDuration)
-        print(splitList)
         splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
         
         playerNameListTeamOne = yamlParser.ymlDict['playersTeamOne']
         playerNameListTeamTwo = yamlParser.ymlDict['playersTeamTwo']
+
         playerNameList = [playerNameListTeamOne, playerNameListTeamTwo]
 
-        checkTeamComposition(playerNameList, data)
+        assert checkTeamComposition(playerNameList, data)
 
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))

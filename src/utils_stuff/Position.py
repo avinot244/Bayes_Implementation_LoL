@@ -12,3 +12,5 @@ class Position:
                 self.y = value
     def __str__(self) -> str:
         return "(x: {}, y: {})".format(self.x, self.y)
+    def toList(self):
+        return [self.x, self.y]

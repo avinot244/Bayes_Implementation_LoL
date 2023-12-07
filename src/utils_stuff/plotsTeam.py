@@ -50,6 +50,7 @@ def plot_player_position(positionList : list[Position], figName : str, path : st
 
 
 def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str, path : str):
+    
     subteamLength = len(positionLists)//2
     assert figName != "" and path != ""
 

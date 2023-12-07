@@ -1,11 +1,17 @@
 brute_data: "../data/"
 save_path: "./saved_data"
 serialized_path: "../data/"
-match: "WBGvsT1"
+match: "JDGvsT1"
 split: 300,900
-playersTeamOne:
-  - "WBG Xiaohu"
-  - "WBG Weiwei"
-playersTeamTwo: 
-  - "T1 Faker"
+playersTeamTwo:
+  - "JDG 369"
+  - "JDG Kanavi"
+  - "JDG knight"
+  - "JDG Ruler"
+  - "JDG MISSING"
+playersTeamOne: 
+  - "T1 Zeus"
   - "T1 Oner"
+  - "T1 Faker"
+  - "T1 Gumayusi"
+  - "T1 Keria"

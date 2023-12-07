@@ -49,15 +49,23 @@ towerPositionBlueSide = [Position(5846, 6396), Position(5048, 4812), Position(36
 inhibitorPositionRedSide = [Position(11261, 13659), Position(11603, 11667), Position(13598, 11316)]
 inhibitorPositionBlueSide = [Position(1169, 3573), Position(3203, 3208), Position(3454, 1241)]
 
-midLaneBoundary = [Position(5200,6030), Position(6055,5388), Position(9740,8810), Position(8840,9480)]
+midLaneBoundary = [Position(6074,5430), Position(7757, 6047), Position(8633, 6692), Position(9738, 8815), Position(8836, 9479),
+                   Position(7085, 8736), Position(6262, 8046), Position(5183, 6038)]
 
-topLaneBoundary = [Position(1724,10202), Position(1733,10523), Position(1778,10889), Position(1947,11397),
-                   Position(2241,11816), Position(2812,11281), Position(3667,11459), Position(3427,11878),
-                   Position(3427,11878), Position(2972, 12199), Position(2954,12467), Position(3614, 12841),
-                   Position(4095,13019), Position(4666,13108), Position(4639, 14036), Position(3703, 14027),
-                   Position(2758, 13795), Position(2179, 13482), Position(1893,13492), Position(1430, 13634),
-                   Position(1109, 13501), Position(886, 13242), Position(904, 12752), Position(1038, 12574),
-                   Position(1038, 12217), Position(717, 11433), Position(681, 10434)]
+topLaneBoundary = [Position(1716,10133), Position(3939, 11566), Position(4167, 11760), Position(4656, 12653),
+                   Position(4632, 14035), Position(3398, 14006), Position(1081, 13534), Position(866, 13223), Position(671, 10171)]
+
+botLaneBoundary = [Position(10119, 745), Position(11263, 736), Position(13353, 1109), Position(13763, 1370), Position(13885, 1650),
+                   Position(14096, 4760), Position(14076, 5060), Position(12983, 5089), Position(11822, 4702), Position(10951, 4199),
+                   Position(10177, 2167)]
+
+jungleEntry1Blue = [Position(8464, 4705), Position(9030, 5411), Position(8221, 5919), Position(7652, 5192)]
+
+jungleEntry2Blue = [Position(10155, 2598), Position(11240, 3162), Position(11094, 3799), Position(10042, 3547)]
+
+jungleEntry3Blue = [Position(4881, 7805), Position(5566, 8569), Position(5008, 8841), Position(4459, 8417), Position(4329, 7828)]
+
+jungleEntry4Blue = [Position(3570, 9789), Position(3249, 9226), Position(3624, 8875), Position(3900, 9343)]
 
 mapCenter = Position(MINIMAP_WIDTH//2, MINIMAP_HEIGHT//2)
 

@@ -7,7 +7,7 @@ from Separated.SeparatedData import SeparatedData
 from utils_stuff.globals import *
 from AreaMapping.Zone import Zone
 
-def plotZones(zoneList : list[Zone]):
+def plotZones(zoneList : list[Zone], colorLst : list[str]):
     img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
 
     fig, ax = plt.subplots()
@@ -29,10 +29,11 @@ def plotZones(zoneList : list[Zone]):
     plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
     plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
 
-    for zone in zoneList:
+    for i in range(len(zoneList)):
+        zone = zoneList[i]
         X : list = [(lambda pos : pos.x)(pos) for pos in zone.boundary]
         Y : list = [(lambda pos : pos.y)(pos) for pos in zone.boundary]
         X.append(X[0])
         Y.append(Y[0])
-        plt.plot(X,Y,"r-")
+        plt.plot(X,Y,"{}-".format(colorLst[i]))
     plt.savefig("temp.png")

@@ -2,6 +2,8 @@ from utils_stuff.Position import Position
 from utils_stuff.Computation.Linear import Linear
 from utils_stuff.Computation.computation import paralel, getCross
 
+from matplotlib.path import Path
+
 class Zone:
     def __init__(self,
                  boundary : list[Position]) -> None:
@@ -20,3 +22,10 @@ class Zone:
             i += 1
         assert i == len(linearList) - 1 
         self.boundary = boundary
+    
+    def containsPoint(self, coo : Position):
+        shape = []
+        for pos in self.boundary:
+            shape.append(pos.toList())
+        bbPath = Path(shape)
+        return bbPath.contains_point((coo.x, coo.y))
