@@ -2,7 +2,7 @@ brute_data: "../data/"
 save_path: "./saved_data"
 serialized_path: "../data/"
 match: "JDGvsT1"
-split: 300,900
+split: 90,300,900,1200,1300
 playersTeamTwo:
   - "JDG 369"
   - "JDG Kanavi"
