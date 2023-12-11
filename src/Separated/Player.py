@@ -54,3 +54,6 @@ class Player:
     
     def XPdiff(self, player):
         return self.experience - player.experience
+
+    def isAlive(self) -> bool:
+        return self.alive

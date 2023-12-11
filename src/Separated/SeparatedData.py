@@ -185,15 +185,20 @@ class SeparatedData:
         for gameSnapshot in self.gameSnapshotList:
             if gameSnapshot.teamOne.isPlayerInTeam(participantID):
                 playerIdx : int = gameSnapshot.teamOne.getPlayerIdx(participantID)
-                positionPlayer : Position = gameSnapshot.teamOne.getPlayerPosition(playerIdx)
-                positionList.append(positionPlayer)
+                if gameSnapshot.teamOne.players[playerIdx].isAlive():
+                    positionPlayer : Position = gameSnapshot.teamOne.getPlayerPosition(playerIdx)
+                    positionList.append(positionPlayer)
             else:
                 playerIdx : int = gameSnapshot.teamTwo.getPlayerIdx(participantID)
-                positionPlayer : Position = gameSnapshot.teamTwo.getPlayerPosition(playerIdx)
-                positionList.append(positionPlayer)
+                if gameSnapshot.teamTwo.players[playerIdx].isAlive():
+                    positionPlayer : Position = gameSnapshot.teamTwo.getPlayerPosition(playerIdx)
+                    positionList.append(positionPlayer)
         return positionList
     
+    
+
     def getPlayerID(self, playerName : str) -> int:
+        assert playerName in self.gameSnapshotList[0].teamOne.getPlayerList() or playerName in self.gameSnapshotList[0].teamTwo.getPlayerList()
         if playerName in self.gameSnapshotList[0].teamOne.getPlayerList():
             return self.gameSnapshotList[0].teamOne.getPlayerID(playerName)
         else:
@@ -205,15 +210,9 @@ class SeparatedData:
         res : list[SeparatedData] = list() # List of len 1+len(splitList)
         for snapshot in self.gameSnapshotList:
             snapshotTime = snapshot.convertGameTimeToSeconds(gameDuration, self.begGameTime, self.endGameTime)
-            for i in range(len(splitList) - 1):            
-                if i == 0 and snapshotTime < splitList[i]:
-                    snapshotListTemp[0].append(snapshot)
-                    break 
-                elif snapshotTime > splitList[i] and snapshotTime < splitList[i+1]:
-                    snapshotListTemp[i + 1].append(snapshot)
-                    break
-                elif i == len(splitList) - 2:
-                    snapshotListTemp[-1].append(snapshot)
+            for i in range(len(splitList)):
+                if snapshotTime < splitList[i]:
+                    snapshotListTemp[i].append(snapshot)
                     break
         for snapshotLst in snapshotListTemp:
             res.append(SeparatedData(gameSnapShotList=snapshotLst, begGameTime=self.begGameTime, endGameTime=self.endGameTime))

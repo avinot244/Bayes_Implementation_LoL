@@ -12,7 +12,7 @@ import datetime
 from utils_stuff.globals import *
 from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
-from utils_stuff.plotsTeam import *
+from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
 from errorHandling import checkMatchName, checkTeamComposition
 
@@ -76,26 +76,11 @@ if __name__ == "__main__":
         # Loading data of the game
         match = yamlParser.ymlDict['match']
         rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-        summaryData : SummaryData = getSummaryData(rootdir)
-
-        pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}".format(game) + 'data'
-        data : SeparatedData = None
-        if load :
-            print("Loading serialized data")
-            file = open(pathData, 'rb')
-            data : SeparatedData = pickle.load(file)
-            file.close()
-        else :
-            data = SeparatedData(rootdir + "/Separated")
-            pathData = DATA_PATH + match + "g{}".format(game) + "data"
-            file = open(pathData, 'ab')
-            pickle.dump(data, file)
-            file.close()
         
         # Getting global info of the game
-        gameDuration : int = summaryData.gameDuration
-        begGameTime : int = data.begGameTime
-        endGameTime : int = data.endGameTime
+        summaryData : SummaryData = getSummaryData(rootdir)
+        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+
         splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
         splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
         if splitList[-1] > gameDuration:

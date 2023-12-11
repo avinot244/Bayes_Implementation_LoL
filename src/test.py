@@ -1,34 +1,15 @@
-from AreaMapping.Zone import Zone
-from AreaMapping.Grid import Grid
-from utils_stuff.Position import Position
-from utils_stuff.plotsZone import *
-from utils_stuff.globals import *
-from utils_stuff.Computation.computation import centralSymmetry
-import os
+splitList = [90,540,1491]
+toSplit = [0, 50, 90, 250, 540, 1200]
+print(toSplit)
+temp = [[] for _ in range(len(splitList))]
+res = list()
 
-midLaneZone = Zone(midLaneBoundary)
-topLaneZone = Zone(topLaneBoundary)
-botLaneZone = Zone(botLaneBoundary)
-jungleEntry1BlueZone = Zone(jungleEntry1Blue)
-jungleEntry2BlueZone = Zone(jungleEntry2Blue)
-jungleEntry3BlueZone = Zone(jungleEntry3Blue)
-jungleEntry4BlueZone = Zone(jungleEntry4Blue)
+for snapShotTime in toSplit:
+    for i in range(len(splitList)):
+        print(temp)
+        if snapShotTime < splitList[i]:
+            temp[i].append(snapShotTime)
+            break
+        
 
-jungleEntry1RedZone = Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry1Blue])
-jungleEntry2RedZone = Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry2Blue])
-jungleEntry3RedZone = Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry3Blue])
-jungleEntry4RedZone = Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry4Blue])
-
-zoneLst = [midLaneZone, jungleEntry1BlueZone, jungleEntry2BlueZone, jungleEntry3BlueZone, jungleEntry4BlueZone, topLaneZone, botLaneZone,
-           jungleEntry1RedZone, jungleEntry2RedZone, jungleEntry3RedZone, jungleEntry4RedZone]
-
-myGrid = Grid(zoneLst)
-
-colorLst = ["b", "g", "g", "g", "g", "r", "y", "g", "g", "g", "g"]
-
-plotZones(myGrid, colorLst)
-
-dicto = {"a":1, "b":2, "c": 3}
-for key in dicto.keys():
-    dicto[key] += 1
-print(dicto)
+print(temp)
