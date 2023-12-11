@@ -19,6 +19,11 @@ class AreaMapping:
                                                        Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry2Blue]),
                                                        Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry3Blue]),
                                                        Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry4Blue])])
+        
+        self.forwardMidBlue : list[Grid] = None
+        self.forwardMidRed : list[Grid] = None
+        # For forward % we can do a list of grid for each lane where in each grid we have the forward degree zone
+        
         self.teamOneMapping : dict = dict()
         self.teamTwoMapping : dict = dict()
     def computeMapping(self, data : SeparatedData):

@@ -19,3 +19,7 @@ LanePresence
 Forward%
 Roam%
 Gank/Invade% -> faire avec les entrées jungle
+
+TODO : 
+- normaliser les stats sur les autres games -> extraction automatiques des données via l'api
+- heatmap position joueurs

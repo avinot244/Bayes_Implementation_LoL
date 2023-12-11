@@ -36,4 +36,5 @@ def plotZones(grid : Grid, colorLst : list[str]):
         X.append(X[0])
         Y.append(Y[0])
         plt.plot(X,Y,"{}-".format(colorLst[i]))
+    # plt.show()
     plt.savefig("temp.png")
