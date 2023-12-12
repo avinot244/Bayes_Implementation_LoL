@@ -14,6 +14,7 @@ from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
+from utils_stuff.plots.densityPlot import densityPlot
 from errorHandling import checkMatchName, checkTeamComposition
 
 from EMH.Details.DetailsData import DetailsData
@@ -32,6 +33,7 @@ if __name__ == "__main__":
     
     parser.add_argument("-p", "--pathing", action="store_true", default=False, help="Tells if we want to print pathing of players")
     parser.add_argument("-a", "--anim", action="store_true", default=False, help="Tells if we want to plot animations. Only with --pathing option")
+    parser.add_argument("-d", "--density", action="store_true", default=False, help="Tells if we want to plot the position density. Only with --pathing option")
     parser.add_argument("-g", "--game", metavar="[1|2|3|4|5|BO]", type=str, help="Game to analyse or if we want the whole Best-Off")
     parser.add_argument("-o", "--overview", action="store_true", default=False, help="Compute game stat of players")
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
@@ -44,6 +46,7 @@ if __name__ == "__main__":
 
     pathing = False
     anim = False
+    density = False
     game = ""
     overview = False
     time = 0
@@ -65,13 +68,15 @@ if __name__ == "__main__":
             load = value
         if arg == "jungle_prox":
             jungleProximity = value
+        if arg == "density":
+            density = value
 
     yamlParser : YamlParer = YamlParer("./config.yml")
 
     assert checkMatchName(yamlParser, DATA_PATH)
 
     if pathing:
-        assert game != "BO"
+        
         
         # Loading data of the game
         match = yamlParser.ymlDict['match']
@@ -99,7 +104,11 @@ if __name__ == "__main__":
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match']))
         if anim:
+            assert game != "BO"
             print("Ploting pathing with animation of game {} for players {}".format(game, playerNameList))
+            if not(os.path.exists("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))):
+                    os.makedirs("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))
+            
             i = 0
             for split in splittedDataset:
                 name = ""
@@ -108,7 +117,28 @@ if __name__ == "__main__":
                     path = "{}/Position/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
                     plotBothTeamsPositionAnimated(playerNameList[0], playerNameList[1], split, name, path)        
                 i += 1
+        elif density:
+            if game != "BO":
+                print("Plotting position density of game {} for players {}".format(game, playerNameList))
+                if not(os.path.exists("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))):
+                    os.makedirs("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))
+                save_path = "{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
+                
+                i = 0
+                print([len(split.gameSnapshotList) for split in splittedDataset])
+                for split in splittedDataset:
+                    graph_name = ""
+                    if i < len(splitList):
+                        # For team one
+                        graph_name = "position_density_teamOne_{}_g{}_{}".format(splitList[i], game, yamlParser.ymlDict['match'])
+                        densityPlot(playerNameList[0], graph_name, save_path, split)
+
+                        # For team two
+                        graph_name = "position_density_teamTwo_{}_g{}_{}".format(splitList[i], game, yamlParser.ymlDict['match'])
+                        densityPlot(playerNameList[1], graph_name, save_path, split)
+                    i += 1
         else:
+            assert game != "BO"
             print("Plotting pathing without animation of game {} for players {}".format(game, playerNameList))
             i = 0
             for split in splittedDataset:

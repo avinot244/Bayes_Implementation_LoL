@@ -2,16 +2,8 @@ brute_data: "../data/"
 save_path: "./saved_data"
 serialized_path: "../data/"
 match: "JDGvsT1"
-split: 90,540
+split: 90,540,900,1500
 playersTeamTwo:
-  - "JDG 369"
   - "JDG Kanavi"
-  - "JDG knight"
-  - "JDG Ruler"
-  - "JDG MISSING"
 playersTeamOne: 
-  - "T1 Zeus"
   - "T1 Oner"
-  - "T1 Faker"
-  - "T1 Gumayusi"
-  - "T1 Keria"

@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import gaussian_kde
 
 from EMH.Summary.SummaryData import SummaryData
 from utils_stuff.utils_func import *
@@ -21,7 +22,6 @@ for subdir, dirs, _ in os.walk(rootdir):
 
 nbGameBo = len(dirList[0])
 gameList = dirList[0]
-
 all_position : list[Position] = []
 
 for gameIdx in gameList:
@@ -45,19 +45,30 @@ for gameIdx in gameList:
     participantID : int = splittedDatasetTemp[1].getPlayerID("T1 Oner")
     positionHistoryTemp = splittedDatasetTemp[1].getPlayerPositionHistory(participantID)
     all_position += positionHistoryTemp
-    print(len(all_position), len(positionHistoryTemp))
 
-
-
+# Splitting positions and adding map borders to it
 x = [(lambda pos : pos.x)(pos) for pos in all_position]
+x.append(0)
+x.append(MINIMAP_WIDTH)
 y = [(lambda pos : pos.y)(pos) for pos in all_position]
+y.append(0)
+y.append(MINIMAP_HEIGHT)
+
+x = np.array(x)
+y = np.array(y)
 
 fig, ax = plt.subplots()
 
-# Plotting the position heatmap
-h = ax.hist2d(x, y, bins=[np.arange(0,MINIMAP_WIDTH,150), np.arange(0,MINIMAP_HEIGHT,150)], alpha = 1, zorder=-1)
-# plt.show()
-fig.colorbar(h[3], ax=ax)
+
+# Evaluate a gaussian kde on a regular grid of nbins x nbins over data extents
+nbins=300
+k = gaussian_kde([x,y])
+xi, yi = np.mgrid[x.min():x.max():nbins*1j, y.min():y.max():nbins*1j] # Meshing our positions
+zi = k(np.vstack([xi.flatten(), yi.flatten()])) # Making a kernel density estimation with a gaussian projection
+
+# Make the plot
+plt.pcolormesh(xi, yi, zi.reshape(xi.shape), shading='auto', zorder=-1)
+# plt.colorbar()
 
 # Plotting minimap
 img = np.asarray(Image.open("../Summoner's_Rift_MinimapTransparent.webp"))
