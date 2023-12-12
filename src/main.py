@@ -77,11 +77,9 @@ if __name__ == "__main__":
 
     if pathing:
         
-        
         # Loading data of the game
         match = yamlParser.ymlDict['match']
         rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-        
         # Getting global info of the game
         summaryData : SummaryData = getSummaryData(rootdir)
         (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
@@ -106,23 +104,24 @@ if __name__ == "__main__":
         if anim:
             assert game != "BO"
             print("Ploting pathing with animation of game {} for players {}".format(game, playerNameList))
-            if not(os.path.exists("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))):
-                    os.makedirs("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))
+            if not(os.path.exists("{}/Position/PositionAnimated/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game))):
+                    os.makedirs("{}/Position/PositionAnimated/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game))
             
             i = 0
             for split in splittedDataset:
                 name = ""
                 if i < len(splitList):
                     name = "position_both_teams_{}_g{}_{}".format(splitList[i], game, yamlParser.ymlDict['match'])
-                    path = "{}/Position/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
+                    path = "{}/Position/PositionAnimated/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game)
+                    print("saving it to :", path)
                     plotBothTeamsPositionAnimated(playerNameList[0], playerNameList[1], split, name, path)        
                 i += 1
         elif density:
             if game != "BO":
                 print("Plotting position density of game {} for players {}".format(game, playerNameList))
-                if not(os.path.exists("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))):
-                    os.makedirs("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match']))
-                save_path = "{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
+                if not(os.path.exists("{}/Position/PositionDensity/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game))):
+                    os.makedirs("{}/Position/PositionDensity/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game))
+                save_path = "{}/Position/PositionDensity/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game)
                 
                 i = 0
                 print([len(split.gameSnapshotList) for split in splittedDataset])
@@ -150,8 +149,8 @@ if __name__ == "__main__":
                 i += 1
             
     elif overview:
-        if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/{}/".format(yamlParser.ymlDict['match']))):
-            os.makedirs(yamlParser.ymlDict['save_path'] + "/GameStat/{}/".format(yamlParser.ymlDict['match']))
+        if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/g{}/".format(yamlParser.ymlDict['match'], game))):
+            os.makedirs(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/g{}/".format(yamlParser.ymlDict['match'], game))
         if game == "BO":
             print("Computing overvie of the whole Best-Off of match {}".format(yamlParser.ymlDict['match']))
             rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(yamlParser.ymlDict['match'])
@@ -196,7 +195,7 @@ if __name__ == "__main__":
                     allSummaryData.append(summaryDataTemp)
                     allGameStat15.append(gameStatTemp)
 
-            pathDiffBO = "./saved_data/GameStat/" + yamlParser.ymlDict['match']
+            pathDiffBO = "./saved_data/GameStat/OverView/" + yamlParser.ymlDict['match']
             saveDiffStatBO(allGameStat15, pathDiffBO, allSnapshot15)
         
         else:
@@ -205,12 +204,12 @@ if __name__ == "__main__":
             if time != None:
                 snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
                 gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
-                path = "{}/GameStat/{}".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
+                path = "{}/GameStat/Overview/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game)
                 saveDiffStatGame(gameStat, "g{}".format(game), path, snapShot)
             else:
                 snapShot : Snapshot = data.getSnapShotByTime(gameDuration, gameDuration)
                 gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
-                path = "{}/GameStat/{}".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'])
+                path = "{}/GameStat/OverView/{}/g{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'], game)
                 saveDiffStatGame(gameStat, "g{}".format(game), path, snapShot)
     
     elif jungleProximity:
