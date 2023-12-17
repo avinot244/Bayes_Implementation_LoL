@@ -4,15 +4,7 @@ serialized_path: "../data/"
 match: "JDGvsT1"
 split: 90,540,900,1500
 playersTeamOne: 
-  - "T1 Zeus"
   - "T1 Oner"
-  - "T1 Faker"
-  - "T1 Gumayusi"
-  - "T1 Keria"
 
 playersTeamTwo:
   - "JDG Kanavi"
-  - "JDG knight"
-  - "JDG Ruler"
-  - "JDG MISSING"
-

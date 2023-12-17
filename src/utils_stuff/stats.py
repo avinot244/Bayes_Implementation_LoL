@@ -1,4 +1,5 @@
 import csv
+import pandas as pd
 
 from Separated.Snapshot import Snapshot
 from Separated.SeparatedData import SeparatedData
@@ -37,7 +38,17 @@ def saveDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapsho
             data.append(-stat.playerCSDiff[i])
             data.append(-stat.playerGoldDiff[i])
             writer.writerow(data)          
-            
+
+def plotDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapshot):
+    saveDiffStatGame(stat, game, path, snapShot)
+    teamOneName = snapShot.teamOne.getTeamName()
+    teamTwoName = snapShot.teamTwo.getTeamName()
+    csv_name = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
+    
+    df = pd.read_csv(csv_name)
+    print(df)
+
+
 def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Snapshot]):
     teamOneName = snapShotList[0].teamOne.getTeamName()
     teamTwoName = snapShotList[0].teamTwo.getTeamName()

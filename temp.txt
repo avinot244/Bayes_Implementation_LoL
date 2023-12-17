@@ -18,3 +18,24 @@ Forward%
 
 TODO : 
 - normaliser les stats sur les autres games -> extraction automatiques des données via l'api
+
+
+Requète pour avoir le token d'authentification : 
+curl --request POST \
+  --url https://lolesports-api.bayesesports.com/v2/auth/login \
+  --header  'Content-Type: application/json' \
+  --data    '{  "username": "user_email@example.com",
+                "password": "user_password" }'
+
+{
+    "accessToken":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ii1QVEFKQnBGR0lieWtSRnlBUkFPbSJ9.eyJuaWNrbmFtZSI6Im1haWwucGVyZXoubmljb2xhcyIsIm5hbWUiOiJtYWlsLnBlcmV6Lm5pY29sYXNAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzllNTY5ZmI5NWZiMzAxYzQxMzNjOTc2MGIxYmViZTliP3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGbWEucG5nIiwidXBkYXRlZF9hdCI6IjIwMjMtMTItMTdUMTI6MTU6MzguMDY5WiIsImVtYWlsIjoibWFpbC5wZXJlei5uaWNvbGFzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL2JheWVzLXJpb3QuZXUuYXV0aDAuY29tLyIsImF1ZCI6InZHaGQ5bkpFSU5tQ3U1c3IyQ0tYNDFpclh1ekZlM0hTIiwiaWF0IjoxNzAyODE1MzM4LCJleHAiOjE3MDI4NTEzMzgsInN1YiI6ImF1dGgwfDY0YWQ3MThlYzE1Nzc1OWZkZjc4ZGUxYSJ9.v9xUnytKPd1XiqeeBLMfUKIARkgobXX89eKY_bZ-hLz4QReAxFKDHnnfwSzMHDpu6N5nVJ9l-XemYolPdJ0becndqWDtBuoFIxx2WpARN7t7N6oAgowkDue3KAk9QXR2ixkmk_WtVezFsLti_O6q6x9GCBT-18PEvtKFYIJqyhzsdINZUB6_JR2KV0rzq5QYjLiCigfL6YXRTio7a4uhXV14-2C6AIB-lu3tudtFWsAW9xG3FfWEZeR8ihjlXUJSxGl2T2M34s_MhjQHny3_l0Qy2dJuMlSk8ZyYijuMeO72KtWw9YwQrBBPslsd6s0bpFgFD8kMFwz7NjGPf2KYbg",
+    "refreshToken":"GrLcK6z9GuJXRSd1FnBIOsGyLAk98_PCh-LFjgS8rSjAP",
+    "expiresIn":36000,
+    "success":true
+}
+Refrehing acess token:
+
+curl --request POST \
+  --url https://lolesports-api.bayesesports.com/v2/auth/refresh \
+  --header  'Content-Type: application/json' \
+  --data    '{ "refreshToken": "v1.MUVzTitZcdL8...VXkVQs"  }'

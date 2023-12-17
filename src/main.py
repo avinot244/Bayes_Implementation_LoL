@@ -36,6 +36,7 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--density", action="store_true", default=False, help="Tells if we want to plot the position density. Only with --pathing option")
     parser.add_argument("-g", "--game", metavar="[1|2|3|4|5|BO]", type=str, help="Game to analyse or if we want the whole Best-Off")
     parser.add_argument("-o", "--overview", action="store_true", default=False, help="Compute game stat of players")
+    parser.add_argument("-g", "--graph", action="store_true", default=False, help="Tells if we want to plot the stats")
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
     parser.add_argument("-j", "--jungle-prox", action="store_true", default=False, help="Prints jungle proximity at a given time")
     parser.add_argument("-l", "--load", action="store_true", default=False, help="Tells if we want to load serialized object")
@@ -52,6 +53,7 @@ if __name__ == "__main__":
     time = 0
     load = False
     jungleProximity = False
+    graph = False
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -62,6 +64,8 @@ if __name__ == "__main__":
             game = value
         if arg == "overview":
             overview = value
+        if arg == "graph":
+            graph = value
         if arg == "time":
             time = value
         if arg == "load":
@@ -149,10 +153,20 @@ if __name__ == "__main__":
                 i += 1
             
     elif overview:
+        if graph:
+            if game == "BO":
+                print("Plotting overview of th whole Best-Of of match {}".format(yamlParser.ymlDict['match']))
+            else:
+                print("Plotting overview of game {} at {} for match {}".format(game, time, yamlParser.ymlDict['match']))
+                (data, gameDuration , begGameTime, endGameTime) = getData(load, yamlParser, game)
+                if time != None:
+                    snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
+                    gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
+                    #TODO : do graph stuff
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/g{}/".format(yamlParser.ymlDict['match'], game))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/g{}/".format(yamlParser.ymlDict['match'], game))
         if game == "BO":
-            print("Computing overvie of the whole Best-Off of match {}".format(yamlParser.ymlDict['match']))
+            print("Computing overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match']))
             rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(yamlParser.ymlDict['match'])
             pathData = yamlParser.ymlDict['serialized_path'] + yamlParser.ymlDict['match'] + "BOData"
             dirList : list[str] = list()
@@ -199,7 +213,7 @@ if __name__ == "__main__":
             saveDiffStatBO(allGameStat15, pathDiffBO, allSnapshot15)
         
         else:
-            print("Computing overview of game {} at {}".format(game, time))
+            print("Computing overview of game {} at {} for match {}".format(game, time, yamlParser.ymlDict['match']))
             (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
             if time != None:
                 snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
