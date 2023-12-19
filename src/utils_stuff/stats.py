@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from Separated.Snapshot import Snapshot
 from Separated.SeparatedData import SeparatedData
@@ -12,8 +13,8 @@ def saveDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapsho
     teamOneName = snapShot.teamOne.getTeamName()
     teamTwoName = snapShot.teamTwo.getTeamName()
 
-    csv_name = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
-    csv_name_revert = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamTwoName, teamOneName)
+    csv_name = "{}diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
+    csv_name_revert = "{}diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamTwoName, teamOneName)
 
     with open(csv_name, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
@@ -46,8 +47,17 @@ def plotDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapsho
     csv_name = "{}/diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
     
     df = pd.read_csv(csv_name)
-    print(df)
-
+    print(df.head())
+    labels = ["XPD@{}".format(stat.time), "CSD@{}".format(stat.time), "GD@{}".format(stat.time)]
+    idx = 0
+    for idx in range(len(df)):
+        playerName = df.iloc[idx].to_list()[0]
+        data = df.iloc[idx].to_list()[1:]
+    
+        plt.barh(y=labels, width=data)
+        plt.savefig("BarPlot{}.png".format(playerName))
+        plt.clf()
+    
 
 def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Snapshot]):
     teamOneName = snapShotList[0].teamOne.getTeamName()

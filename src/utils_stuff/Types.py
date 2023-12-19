@@ -5,6 +5,18 @@ class TowerType(Enum):
     BaseTurret = "BASE_TURRET"
     NexusTurret = "NEXUS_TURRET"
 
+class GameTypes(Enum):
+    Esports = "ESPORTS"
+    Scrim = "SCRIM"
+    ChampionsQueue = "CHAMPIONS_QUEUE"
+    Generic = "GENERIC"
+
+class DownloadOptions(Enum):
+    GamhDetails = "GAMH_DETAILS"
+    GamhSummary = "GAMH_SUMMARY"
+    RoflReplay = "ROFL_REPLAY"
+    HistoricBayesSeparated = "HISTORIC_BAYES_SEPARATED"
+    HistoricBayesDump = "HISTORIC_BAYES_DUMP"
 
 class LaneType(Enum):
     TopLane = "TOP_LANE"

@@ -1,6 +1,7 @@
 main.py --pathing --density --anim --game [1|5]
-        --overview --time [time_wanted] --game [1|5|BO]
+        --overview --graph --time [time_wanted] --game [1|5|BO]
         --jungle-prox
+        --download --dateBeg --dateEnd --page --game-type
         --load
 
 yaml :

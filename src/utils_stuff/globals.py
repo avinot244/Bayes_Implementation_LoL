@@ -6,6 +6,8 @@ MINIMAP_HEIGHT = 14750
 YAML_PATH = ""
 
 TYPES = ["INFO", "SNAPSHOT", "GAME_EVENT"]
+GAME_TYPES = ["ESPORTS", "SCRIM", "CHAMPIONS_QUEUE", "GENERIC"]
+DOWNLOAD_OPTIONS = ["GAMH_DETAILS", "GAMH_SUMMARY", "ROFL_REPLAY", "HISTORIC_BAYES_SEPARATED", "HISTORIC_BAYES_DUMP"]
 
 champions_list = ["Aatrox", "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Ashe", "Azir",
                   "Blitzcrank", "Brand", "Braum",
