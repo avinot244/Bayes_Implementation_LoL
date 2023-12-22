@@ -2,9 +2,9 @@ import csv
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from Separated.Snapshot import Snapshot
-from Separated.SeparatedData import SeparatedData
-from Separated.Player import Player
+from Separated.Game.Snapshot import Snapshot
+from Separated.Game.SeparatedData import SeparatedData
+from Separated.Game.Player import Player
 from utils_stuff.globals import *
 from GameStat import GameStat
 

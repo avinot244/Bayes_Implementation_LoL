@@ -3,7 +3,7 @@ from scipy.stats import gaussian_kde
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from Separated.SeparatedData import SeparatedData
+from Separated.Game.SeparatedData import SeparatedData
 from utils_stuff.Position import Position
 from utils_stuff.globals import *
 

@@ -47,9 +47,30 @@ def get_games_by_date(begDate : str, endDate : str, gameType : str) -> list:
     platformGameIdList : list = list()
 
     for games in result['items']:
+        platformGameIdList.append(games['platformGameId'])    
+    return platformGameIdList
+
+def get_game_by_playerName(playerName : str, gameType : str) -> list:
+    token = get_token()
+    querystring = {"type" : gameType,
+                   "playerName" : playerName}
+    response = requests.get(
+        'https://lolesports-api.bayesesports.com/v2/games',
+        headers={"Authorization" : "Bearer {}".format(token)},
+        params=querystring
+    )
+    if response.status_code != 200:
+        response.raise_for_status
+    result : dict = response.json()
+
+    platformGameIdList : list = list()
+    
+    for games in result['items']:
         platformGameIdList.append(games['platformGameId'])
     
     return platformGameIdList
+
+
 def get_download_link(platformGameId : str, downloadOption : str) -> str:
     token = get_token()
     querystring = {"option" : downloadOption}
@@ -61,6 +82,7 @@ def get_download_link(platformGameId : str, downloadOption : str) -> str:
     if response.status_code != 200:
         response.raise_for_status()
     return response.json()['url']
+
 
 def save_downloaded_file(url : str, path : str, name : str, downloadOption : str):
     print("Saving {} with {} download".format(name, downloadOption))

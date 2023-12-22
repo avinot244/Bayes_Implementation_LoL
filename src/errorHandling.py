@@ -1,5 +1,5 @@
 from YamlParser import YamlParer
-from Separated.SeparatedData import SeparatedData
+from Separated.Game.SeparatedData import SeparatedData
 import os
 import re
 

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from PIL import Image
 
-from Separated.SeparatedData import SeparatedData
+from Separated.Game.SeparatedData import SeparatedData
 from utils_stuff.globals import *
 from AreaMapping.Grid import Grid
 

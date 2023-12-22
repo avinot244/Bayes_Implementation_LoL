@@ -7,7 +7,7 @@ from utils_stuff.utils_func import *
 from utils_stuff.globals import *
 from utils_stuff.globals import *
 from PIL import Image
-from Separated.Snapshot import Snapshot
+from Separated.Game.Snapshot import Snapshot
 from GameStat import GameStat
 
 yamlParser : YamlParer = YamlParer("./config.yml")

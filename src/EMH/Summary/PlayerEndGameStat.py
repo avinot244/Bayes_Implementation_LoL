@@ -3,7 +3,6 @@ class PlayerEndGameStat:
                  allInPing : int,
                  assistMePings : int,
                  assists : int,
-                 baitPings : int,
                  baronKills : int,
                  basicPings : int,
                  bountyLevel : int,
@@ -80,8 +79,6 @@ class PlayerEndGameStat:
                  profileIcon : int,
                  pushPings : int,
                  quadraKills : int,
-                 riotIdName : str,
-                 riotIdTagLine : str,
                  role : str,
                  sightWardsBoughtInGame : int,
                  spell1Casts : int,
@@ -131,7 +128,6 @@ class PlayerEndGameStat:
         self.allInPings = allInPing
         self.assistMePings = assistMePings
         self.assists = assists
-        self.baitPings = baitPings
         self.baronKills = baronKills
         self.basicPings = basicPings
         self.bountyLevel = bountyLevel
@@ -208,8 +204,6 @@ class PlayerEndGameStat:
         self.profileIcon = profileIcon
         self.pushPings = pushPings
         self.quadraKills = quadraKills
-        self.riotIdName = riotIdName
-        self.riotIdTagLine = riotIdTagLine
         self.role = role
         self.sightWardsBoughtInGame = sightWardsBoughtInGame
         self.spell1Casts = spell1Casts

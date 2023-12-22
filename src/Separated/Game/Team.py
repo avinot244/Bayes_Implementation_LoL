@@ -1,4 +1,4 @@
-from Separated.Player import Player
+from Separated.Game.Player import Player
 from utils_stuff.Position import Position
 from utils_stuff.Computation.computation import abs_dist
 

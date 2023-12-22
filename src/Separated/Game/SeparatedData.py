@@ -4,11 +4,19 @@ import os
 
 from utils_stuff.globals import DATA_PATH
 from utils_stuff.Position import Position
-from Separated.Snapshot import Snapshot
-from Separated.Player import Player
-from Separated.Team import Team
-from Separated.Item import Item
-from Separated.Stat import Stat
+from Separated.Game.Snapshot import Snapshot
+from Separated.Game.Player import Player as separatedPlayer
+from Separated.Game.Team import Team as separatedTeam
+from Separated.Game.Item import Item
+from Separated.Game.Stat import Stat
+
+from Separated.Draft.DraftSnapshot import DraftSnapshot
+from Separated.Draft.BanHeroSnapshot import BanHeroSnapShot
+from Separated.Draft.SelectedHeroSnapshot import SelectedHeroSnapshot
+from Separated.Draft.Draft import Draft
+from Separated.Draft.Player import Player as draftPlayer
+from Separated.Draft.Team import Team as draftTeam
+
 from tqdm import tqdm
 
 
@@ -26,6 +34,11 @@ class SeparatedData:
             self.gameSnapshotList : list[Snapshot] = list()
             self.begGameTime : int = 0
             self.endGameTime : int = 0
+
+            tempBans : list[BanHeroSnapShot] = list()
+            tempPicks : list[SelectedHeroSnapshot] = list()
+            tempDraftSnapshotList : list[DraftSnapshot] = list()
+
             print("Parsing game snapshot files from root directory {}".format(root_dir))
             for subdir, dirs, files in os.walk(root_dir, topdown=True):
                 l = lambda s : s[:-5]
@@ -36,7 +49,7 @@ class SeparatedData:
                     
                     df = pd.json_normalize(data)
                     if df['payload.payload.type'][0] == "SNAPSHOT" and df['payload.payload.subject'][0] == "MATCH":
-                        players_team_one : list[Player] = list()
+                        players_team_one : list[separatedPlayer] = list()
 
                         # Parsing players for team one
                         for player_dict_team_one in df['payload.payload.payload.teamOne.players'][0]:
@@ -66,7 +79,7 @@ class SeparatedData:
                                                     player_stat_dict['totalTimeCCOthers'])
                             position_list = player_dict_team_one['position']
                             position : Position = Position(position_list[0], position_list[1])
-                            temp_player : Player = Player(player_dict_team_one['championName'],
+                            temp_player : separatedPlayer = separatedPlayer(player_dict_team_one['championName'],
                                                         player_dict_team_one['summonerName'],
                                                         player_dict_team_one['participantID'],
                                                         player_dict_team_one['level'],
@@ -87,7 +100,7 @@ class SeparatedData:
                                                         player_stat)
                             players_team_one.append(temp_player)
                         
-                        teamOne = Team(df['payload.payload.payload.teamOne.assists'],
+                        teamOne = separatedTeam(df['payload.payload.payload.teamOne.assists'],
                                     df['payload.payload.payload.teamOne.baronKills'],
                                     df['payload.payload.payload.teamOne.championsKills'],
                                     df['payload.payload.payload.teamOne.deaths'],
@@ -99,7 +112,7 @@ class SeparatedData:
                                     df['payload.payload.payload.teamOne.killedDragonTypes'],
                                     players_team_one)
                         
-                        players_team_two : list[Player] = list()
+                        players_team_two : list[separatedPlayer] = list()
                         # Parsing players for team two
                         for player_dict_team_two in df['payload.payload.payload.teamTwo.players'][0]:
                             temp_items : list[Item] = list()
@@ -128,7 +141,7 @@ class SeparatedData:
                                                     player_stat_dict['totalTimeCCOthers'])
                             position_list = player_dict_team_two['position']
                             position : Position = Position(position_list[0], position_list[1])
-                            temp_player : Player = Player(player_dict_team_two['championName'],
+                            temp_player : separatedPlayer = separatedPlayer(player_dict_team_two['championName'],
                                                         player_dict_team_two['summonerName'],
                                                         player_dict_team_two['participantID'],
                                                         player_dict_team_two['level'],
@@ -150,7 +163,7 @@ class SeparatedData:
                             players_team_two.append(temp_player)
 
                         
-                        teamTwo = Team(df['payload.payload.payload.teamTwo.assists'],
+                        teamTwo = separatedTeam(df['payload.payload.payload.teamTwo.assists'],
                                     df['payload.payload.payload.teamTwo.baronKills'],
                                     df['payload.payload.payload.teamTwo.championsKills'],
                                     df['payload.payload.payload.teamTwo.deaths'],
@@ -162,6 +175,7 @@ class SeparatedData:
                                     df['payload.payload.payload.teamTwo.killedDragonTypes'],
                                     players_team_two)
                         gameSnapshot : Snapshot = Snapshot(file,
+                                                           df['seqIdx'],
                                                         df['payload.payload.payload.gameTime'][0], 
                                                         teamOne,
                                                         teamTwo)
@@ -170,6 +184,29 @@ class SeparatedData:
                         self.begGameTime = df['payload.payload.payload.gameTime'][0]
                     elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'END_MAP':
                         self.endGameTime = df['payload.payload.payload.gameTime'][0]
+                    elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'BANNED_HERO':
+                        
+                        
+                        banHeroSnapShot : BanHeroSnapShot = BanHeroSnapShot(df['payload.payload.payload.championId'])
+                        tempBans.append(banHeroSnapShot)
+                    elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'SELECTED_HERO':
+                        selectedHeroSnapshot : SelectedHeroSnapshot = SelectedHeroSnapshot(df['payload.payload.payload.championId'])
+                        tempPicks.append(selectedHeroSnapshot)
+                    elif df['payload.payload.type'][0] == 'SNAPSHOT' and df['payload.payload.subject'][0] == 'TEAM':
+                        #TODO add draft snapshot to the DraftSnapshot object
+                        teamOneData : list[draftPlayer] = list()
+                        for player_dict_team_one in df['payload.payload.payload.teamOne.players'][0]:
+                            teamOneData.append(draftPlayer(player_dict_team_one['championID'], player_dict_team_one['summonerName']))
+                        teamOne : draftTeam = draftTeam(teamOneData)
+
+                        teamTwoData : list[draftPlayer] = list()
+                        for player_dict_team_two in df['payload.payload.payload.teamTwo.players'][0]:
+                            teamTwoData.append(draftPlayer(player_dict_team_two['championID'], player_dict_team_two['summonerName']))
+                        teamTwo : draftTeam = draftTeam(teamTwoData)
+
+                        draftSnapshot : DraftSnapshot = DraftSnapshot(df['seqIdx'].to_list()[0], file, teamOne, teamTwo)
+                        tempDraftSnapshotList.append(draftSnapshot)
+            self.draft : Draft = Draft(tempPicks, tempBans, tempDraftSnapshotList)
         else:
             print("Invalid arguments passed")
 

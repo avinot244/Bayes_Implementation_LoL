@@ -9,7 +9,7 @@ import pickle
 from utils_stuff.globals import *
 from EMH.Summary.SummaryData import SummaryData
 from YamlParser import YamlParer
-from Separated.SeparatedData import SeparatedData
+from Separated.Game.SeparatedData import SeparatedData
 
 
 def get_all_event_types(json_path_details:str) -> dict:

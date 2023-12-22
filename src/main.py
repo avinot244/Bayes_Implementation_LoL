@@ -19,9 +19,9 @@ from errorHandling import checkMatchName, checkTeamComposition
 
 from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
-from Separated.SeparatedData import SeparatedData
-from Separated.Snapshot import Snapshot
-from Separated.Player import Player
+from Separated.Game.SeparatedData import SeparatedData
+from Separated.Game.Snapshot import Snapshot
+from Separated.Game.Player import Player
 from GameStat import GameStat
 from YamlParser import YamlParer
 from API.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
@@ -99,8 +99,8 @@ if __name__ == "__main__":
             downloadOption = value
 
     yamlParser : YamlParer = YamlParer("./config.yml")
-
-    assert checkMatchName(yamlParser, DATA_PATH)
+    if not(download):
+        assert checkMatchName(yamlParser, DATA_PATH)
 
     if pathing:
         
@@ -276,7 +276,6 @@ if __name__ == "__main__":
         print(jungleProxList)
 
     elif download:
-        print(dateBeg, dateEnd)
         if dateBeg != None and dateEnd != None:
             assert page == -1
             assert gameType in GAME_TYPES
@@ -289,13 +288,13 @@ if __name__ == "__main__":
 
             gameNames : list[str] = get_games_by_page(page, gameType)
             for gameName in gameNames :
-                if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/Separated/".format(gameName))):
-                    os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/Separated/".format(gameName))
+                if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
+                    os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
 
-                path = yamlParser.ymlDict['brute_data'] + "{}/".format(gameName)
+                path = yamlParser.ymlDict['brute_data'] + "{}/g1".format(gameName)
 
                 if downloadOption == "HISTORIC_BAYES_SEPARATED":
-                    path += "Separated/"
+                    path += "/Separated/"
                 
                 save_downloaded_file(get_download_link(gameName, downloadOption), path, gameName, downloadOption)
 

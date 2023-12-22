@@ -1,4 +1,4 @@
-from Separated.SeparatedData import SeparatedData
+from Separated.Game.SeparatedData import SeparatedData
 from AreaMapping.Grid import Grid
 from AreaMapping.Zone import Zone
 

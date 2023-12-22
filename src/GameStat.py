@@ -1,5 +1,5 @@
-from Separated.Snapshot import Snapshot
-from Separated.Player import Player
+from Separated.Game.Snapshot import Snapshot
+from Separated.Game.Player import Player
 
 class GameStat:
     def __init__(self, 

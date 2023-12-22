@@ -1,6 +1,6 @@
 from utils_stuff.Position import Position
-from Separated.Item import Item
-from Separated.Stat import Stat
+from Separated.Game.Item import Item
+from Separated.Game.Stat import Stat
 
 class Player:
     def __init__(self,

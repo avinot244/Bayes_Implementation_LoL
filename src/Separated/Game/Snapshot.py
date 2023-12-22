@@ -1,11 +1,13 @@
-from Separated.Team import Team 
+from Separated.Game.Team import Team 
 
 class Snapshot:
     def __init__(self,
+                 seqIdx : int,
                  filename : str,
                  gameTime : int,
                  teamOne : Team,
                  teamTwo : Team):
+        self.seqIdx = seqIdx
         self.filename = filename
         self.gameTime = gameTime
         self.teamOne = teamOne
