@@ -296,9 +296,9 @@ class SeparatedData:
 
         # Asserting the right open option
         if new:
-            open_option = 'w'
+            open_option = 'w+'
         else:
-            open_option = 'r'
+            open_option = 'a+'
         
         # Writing the draft pick order database
         full_path = path + "draft_pick_order.csv"
@@ -311,7 +311,6 @@ class SeparatedData:
             data : list = list()
             data.append(self.matchName)
             data.append(self.winningTeam)
-
 
             # Getting data for bans for blue side
             data.append(convertToChampionName(self.draft.bans[0].championId))
@@ -343,6 +342,26 @@ class SeparatedData:
         full_path = path + "draft_player_picks.csv"
         with open(full_path, open_option) as csv_file:
             writer = csv.writer(csv_file)
+            data : list = list()
             if new :
                 header = ['MatchName', 'SummonerName', 'championName']
                 writer.writerow(header)
+            
+
+            
+            maxSeqIdx : int = self.draft.data[0].seqIdx
+            idx : int = 0
+            for i in range(len(self.draft.data)):
+                if self.draft.data[i].seqIdx > maxSeqIdx:
+                    maxSeqIdx = self.draft.data[i].seqIdx
+                    idx = i
+                
+            lastDraftSnapshot = self.draft.data[idx]
+            # Getting data for team one 
+            for player in lastDraftSnapshot.teamOne.players:
+                data.append(self.matchName)
+                data.append(player.summonerName)
+                data.append(convertToChampionName(player.championID))
+            
+                writer.writerow(data)
+                data = []
