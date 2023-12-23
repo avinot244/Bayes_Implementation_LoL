@@ -1,8 +1,11 @@
 brute_data: "../data/"
 save_path: "./saved_data"
 serialized_path: "../data/"
-match: "LOLTMNT99_112765"
+database_path: "../db/"
+
+match: "JDGvsT1"
 split: 90,540,900,1500
+
 playersTeamOne: 
   - "T1 Oner"
 

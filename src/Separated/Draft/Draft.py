@@ -9,5 +9,5 @@ class Draft:
                  data : list[DraftSnapshot]) -> None:
         self.picks = picks
         self.bans = bans
-        self.data = data.sort(key=lambda x: x.seqIdx, reverse=True)
-        
+        self.data = data
+

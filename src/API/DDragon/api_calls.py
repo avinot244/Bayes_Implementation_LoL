@@ -17,8 +17,7 @@ def get_champion_mapping_key():
     res : dict = dict()
     
     for championName, data in response.json()['data'].items():
-        res[data['key']] = championName
-    
+        res[int(data['key'])] = championName
     return res
 
 def get_item_mapping_key():

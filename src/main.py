@@ -25,6 +25,7 @@ from Separated.Game.Player import Player
 from GameStat import GameStat
 from YamlParser import YamlParer
 from API.Bayes.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
+from Separated.Draft.Draft import Draft
 
 
 
@@ -308,4 +309,20 @@ if __name__ == "__main__":
                 save_downloaded_file(get_download_link(gameName, downloadOption), path, gameName, downloadOption)
     elif draft:
         print("Getting draft of game {}".format(yamlParser.ymlDict['match']))
-                
+
+        # Set upping ath for database saving
+        if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
+            os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
+        new = False
+        if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
+            new = True
+        save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
+
+        # Loading data of the game
+        match = yamlParser.ymlDict['match']
+        rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
+        # Getting global info of the game
+        summaryData : SummaryData = getSummaryData(rootdir)
+        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+
+        data.draftToCSV(save_path, new)
