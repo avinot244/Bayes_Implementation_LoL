@@ -7,7 +7,7 @@ import urllib.request
 import json
 import shutil
 
-from API.get_token import get_token
+from API.Bayes.get_token import get_token
 
 
 def get_games_by_page(page : int, gameType : str) -> list:

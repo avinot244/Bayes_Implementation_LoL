@@ -24,7 +24,7 @@ from Separated.Game.Snapshot import Snapshot
 from Separated.Game.Player import Player
 from GameStat import GameStat
 from YamlParser import YamlParer
-from API.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
+from API.Bayes.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
 
 
 
@@ -36,11 +36,14 @@ if __name__ == "__main__":
     parser.add_argument("-a", "--anim", action="store_true", default=False, help="Tells if we want to plot animations. Only with --pathing option")
     parser.add_argument("-d", "--density", action="store_true", default=False, help="Tells if we want to plot the position density. Only with --pathing option")
     parser.add_argument("-g", "--game", metavar="[1|2|3|4|5|BO]", type=str, help="Game to analyse or if we want the whole Best-Off")
+    
     parser.add_argument("-o", "--overview", action="store_true", default=False, help="Compute game stat of players")
     parser.add_argument("-gr", "--graph", action="store_true", default=False, help="Tells if we want to plot the stats")
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
+    
     parser.add_argument("-j", "--jungle-prox", action="store_true", default=False, help="Prints jungle proximity at a given time")
     parser.add_argument("-l", "--load", action="store_true", default=False, help="Tells if we want to load serialized object")
+    
     parser.add_argument("-dl", "--download", action="store_true", default=False, help="Tells if we want to download game data from api")
     parser.add_argument("-dB", "--dateBeg", metavar="[YYYY-MM-DD]", type=str, help="Beginning date of when we extract game")
     parser.add_argument("-dE", "--dateEnd", metavar="[YYYY-MM-DD]", type=str, help="End date of when we extract game")
@@ -48,6 +51,9 @@ if __name__ == "__main__":
     parser.add_argument("-gT", "--game-type", metavar="[ESPORTS, SCRIM, CHAMPIONS_QUEUE, GENERIC]", type=str, help="Game type we want to download")
     parser.add_argument("-dlO", "--download-option", metavar="[GAMH_DETAILS, GAMH_SUMMARY, ROFL_REPLAY, HISTORIC_BAYES_SEPARATED, HISTORIC_BAYES_DUMP]", type=str, help="Type of data we want to downoad form the game")
 
+    parser.add_argument("-dr", "--draft", action="store_true", default=False, help="Tells if we want to get draft details")
+    parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
+    
     args = parser.parse_args()
     args_data = vars(args)
 
@@ -65,6 +71,7 @@ if __name__ == "__main__":
     page = -1
     gameType = ""
     downloadOption = ""
+    draft = False
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -97,6 +104,8 @@ if __name__ == "__main__":
             gameType = value
         if arg == "download_option":
             downloadOption = value
+        if arg == "draft":
+            draft = value
 
     yamlParser : YamlParer = YamlParer("./config.yml")
     if not(download):
@@ -297,5 +306,6 @@ if __name__ == "__main__":
                     path += "/Separated/"
                 
                 save_downloaded_file(get_download_link(gameName, downloadOption), path, gameName, downloadOption)
-
+    elif draft:
+        print("Getting draft of game {}".format(yamlParser.ymlDict['match']))
                 
