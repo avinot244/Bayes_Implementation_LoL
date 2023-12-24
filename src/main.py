@@ -26,6 +26,7 @@ from GameStat import GameStat
 from YamlParser import YamlParer
 from API.Bayes.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
 from Separated.Draft.Draft import Draft
+from draftDBQueries.getPlayerPicks import getPlayerPicks
 
 
 
@@ -54,7 +55,8 @@ if __name__ == "__main__":
 
     parser.add_argument("-dr", "--draft", action="store_true", default=False, help="Tells if we want to get draft details")
     parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
-    
+    parser.add_argument("-qr", "--querry", metavar="[player_name]", type=str, help="Gets the pickrate of each champion of the given player")
+
     args = parser.parse_args()
     args_data = vars(args)
 
@@ -73,6 +75,7 @@ if __name__ == "__main__":
     gameType = ""
     downloadOption = ""
     draft = False
+    querry = ""
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -107,6 +110,8 @@ if __name__ == "__main__":
             downloadOption = value
         if arg == "draft":
             draft = value
+        if arg == "querry":
+            querry = value
 
     yamlParser : YamlParer = YamlParer("./config.yml")
     if not(download):
@@ -308,21 +313,24 @@ if __name__ == "__main__":
                 
                 save_downloaded_file(get_download_link(gameName, downloadOption), path, gameName, downloadOption)
     elif draft:
-        print("Getting draft of game {}".format(yamlParser.ymlDict['match']))
+        if querry == None:
+            print("Getting draft of game {}".format(yamlParser.ymlDict['match']))
 
-        # Set upping ath for database saving
-        if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
-            os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
-        new = False
-        if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
-            new = True
-        save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
+            # Set upping ath for database saving
+            if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
+                os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
+            new = False
+            if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
+                new = True
+            save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
 
-        # Loading data of the game
-        match = yamlParser.ymlDict['match']
-        rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-        # Getting global info of the game
-        summaryData : SummaryData = getSummaryData(rootdir)
-        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
-        patch = summaryData.patch
-        data.draftToCSV(save_path, new, patch)
+            # Loading data of the game
+            match = yamlParser.ymlDict['match']
+            rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
+            # Getting global info of the game
+            summaryData : SummaryData = getSummaryData(rootdir)
+            (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+            patch = summaryData.patch
+            data.draftToCSV(save_path, new, patch)
+        else:
+            getPlayerPicks(querry, "13.19.535.4316", yamlParser)

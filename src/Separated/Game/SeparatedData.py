@@ -305,7 +305,7 @@ class SeparatedData:
         # Writing the draft pick order database   
         full_path = path + "draft_pick_order.csv"
         with open(full_path, open_option) as csv_file:
-            writer = csv.writer(csv_file)
+            writer = csv.writer(csv_file, delimiter=";")
             if new :
                 header = ["Patch", "MatchName", "MatchId", "Winner", "BB1", "BB2", "BB3", "BB4", "BB5", "BP1", "BP2", "BP3", "BP4", "BP5", "RB1", "RB2", "RB3", "RB4", "RB5", "RP1", "RP2", "RP3", "RP4", "RP5"]
                 writer.writerow(header)

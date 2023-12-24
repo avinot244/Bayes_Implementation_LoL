@@ -5,18 +5,18 @@ main.py --pathing --density --anim --game [1|5]
         --draft --game [1|5]
         --load
 
-yaml :
-    - path brute data
-    - path where to save results
-    - path where to save serialized objets
-
-
-- position des ward
 - herald drop zone ?
-
 - word embedding de champion ?
 
 Forward%
 
-TODO : 
-- normaliser les stats sur les autres games -> extraction automatiques des données via l'api
+TODO :
+- Refactor main so we have one function foe each main program entry point
+- Add team names to the csv db files for esports game
+- Refactor the match paramter in the config.yml file. We want it to be a list so we can compute several files at a time
+    Entry points to refactor:
+    -> pathing
+    -> overview
+- Fo Forward% delimitations
+- PCA for various stats (CSDiff, XPDiff GoldDiff, LanePresence, Forward%) -> project on the new features extracted from PCA -> abs value to determine factor importance on observation
+- BERT for champion embedding
