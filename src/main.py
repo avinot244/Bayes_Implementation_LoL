@@ -324,5 +324,5 @@ if __name__ == "__main__":
         # Getting global info of the game
         summaryData : SummaryData = getSummaryData(rootdir)
         (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
-
-        data.draftToCSV(save_path, new)
+        patch = summaryData.patch
+        data.draftToCSV(save_path, new, patch)

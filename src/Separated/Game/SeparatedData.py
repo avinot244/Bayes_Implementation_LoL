@@ -29,7 +29,7 @@ class SeparatedData:
                  begGameTime : int = 0,
                  endGameTime : int = 0) -> None:
         self.matchName = root_dir.split('/')[2]
-        print(self.matchName)
+        
         if not(gameSnapShotList is None) and not(begGameTime == 0) and not(endGameTime == 0):
             self.gameSnapshotList = gameSnapShotList
             self.begGameTime = begGameTime
@@ -56,9 +56,9 @@ class SeparatedData:
                         # Getting the winning team
                         if df['payload.payload.payload.gameOver'][0]:
                             if df['payload.payload.payload.winningTeam'][0] == 100:
-                                self.winningTeam = 1
+                                self.winningTeam = 0
                             else:
-                                self.winningTeam = 2 
+                                self.winningTeam = 1 
                         
                         players_team_one : list[separatedPlayer] = list()
 
@@ -191,6 +191,7 @@ class SeparatedData:
                                                         teamOne,
                                                         teamTwo)
                         self.gameSnapshotList.append(gameSnapshot)
+                        self.matchId : str = df['payload.payload.payload.name'][0]
                     elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'START_MAP':
                         self.begGameTime = df['payload.payload.payload.gameTime'][0]
                     elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'END_MAP':
@@ -198,10 +199,12 @@ class SeparatedData:
                     elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'BANNED_HERO':
                         
                         
-                        banHeroSnapShot : BanHeroSnapShot = BanHeroSnapShot(df['payload.payload.payload.championId'].to_list()[0])
+                        banHeroSnapShot : BanHeroSnapShot = BanHeroSnapShot(df['seqIdx'][0],
+                                                                            df['payload.payload.payload.championId'].to_list()[0])
                         tempBans.append(banHeroSnapShot)
                     elif df['payload.payload.type'][0] == 'GAME_EVENT' and df['payload.payload.action'][0] == 'SELECTED_HERO':
-                        selectedHeroSnapshot : SelectedHeroSnapshot = SelectedHeroSnapshot(df['payload.payload.payload.championId'].to_list()[0])
+                        selectedHeroSnapshot : SelectedHeroSnapshot = SelectedHeroSnapshot(df['seqIdx'][0],
+                                                                                           df['payload.payload.payload.championId'].to_list()[0])
                         tempPicks.append(selectedHeroSnapshot)
                     elif df['payload.payload.type'][0] == 'SNAPSHOT' and df['payload.payload.subject'][0] == 'TEAM':
                         teamOneData : list[draftPlayer] = list()
@@ -216,6 +219,7 @@ class SeparatedData:
 
                         draftSnapshot : DraftSnapshot = DraftSnapshot(df['seqIdx'].to_list()[0], file, teamOne, teamTwo)
                         tempDraftSnapshotList.append(draftSnapshot)
+                    
             self.draft : Draft = Draft(tempPicks, tempBans, tempDraftSnapshotList)
         else:
             print("Invalid arguments passed")
@@ -291,26 +295,34 @@ class SeparatedData:
         teamName[teamNameTwo] = 1
         return teamName
 
-    def draftToCSV(self, path : str, new : bool):
-        print(path, new)
-
+    def draftToCSV(self, path : str, new : bool, patch: str):
         # Asserting the right open option
         if new:
             open_option = 'w+'
         else:
             open_option = 'a+'
         
-        # Writing the draft pick order database
+        # Writing the draft pick order database   
         full_path = path + "draft_pick_order.csv"
         with open(full_path, open_option) as csv_file:
             writer = csv.writer(csv_file)
             if new :
-                header = ["MatchName", "Winner", "BB1", "BB2", "BB3", "BB4", "BB5", "BP1", "BP2", "BP3", "BP4", "BP5", "RB1", "RB2", "RB3", "RB4", "RB5", "RP1", "RP2", "RP3", "RP4", "RP5"]
+                header = ["Patch", "MatchName", "MatchId", "Winner", "BB1", "BB2", "BB3", "BB4", "BB5", "BP1", "BP2", "BP3", "BP4", "BP5", "RB1", "RB2", "RB3", "RB4", "RB5", "RP1", "RP2", "RP3", "RP4", "RP5"]
                 writer.writerow(header)
             
             data : list = list()
+            data.append(patch)
             data.append(self.matchName)
+            data.append(self.matchId)
             data.append(self.winningTeam)
+
+            if len(self.draft.bans) < 10 :
+                for i in range(10-len(self.draft.bans)):
+                    self.draft.bans.append(BanHeroSnapShot(-1, -1))
+            
+            if len(self.draft.picks) < 10:
+                for i in range(10-len(self.draft.picks)):
+                    self.draft.picks.append(BanHeroSnapShot(-1, -1))
 
             # Getting data for bans for blue side
             data.append(convertToChampionName(self.draft.bans[0].championId))
@@ -340,11 +352,13 @@ class SeparatedData:
             writer.writerow(data)
         
         full_path = path + "draft_player_picks.csv"
+
+        # Writing the draft player picks database
         with open(full_path, open_option) as csv_file:
             writer = csv.writer(csv_file)
             data : list = list()
             if new :
-                header = ['MatchName', 'SummonerName', 'championName']
+                header = ['Patch', 'MatchName', 'MatchId', 'SummonerName', 'championName']
                 writer.writerow(header)
             
 
@@ -359,9 +373,21 @@ class SeparatedData:
             lastDraftSnapshot = self.draft.data[idx]
             # Getting data for team one 
             for player in lastDraftSnapshot.teamOne.players:
+                data.append(patch)
                 data.append(self.matchName)
+                data.append(self.matchId)
                 data.append(player.summonerName)
                 data.append(convertToChampionName(player.championID))
             
+                writer.writerow(data)
+                data = []
+
+            for player in lastDraftSnapshot.teamTwo.players:
+                data.append(patch)
+                data.append(self.matchName)
+                data.append(self.matchId)
+                data.append(player.summonerName)
+                data.append(convertToChampionName(player.championID))
+
                 writer.writerow(data)
                 data = []

@@ -3,7 +3,7 @@ save_path: "./saved_data"
 serialized_path: "../data/"
 database_path: "../db/"
 
-match: "JDGvsT1"
+match: WBGvsT1
 split: 90,540,900,1500
 
 playersTeamOne: 

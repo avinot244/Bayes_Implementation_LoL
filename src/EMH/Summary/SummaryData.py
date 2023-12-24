@@ -13,6 +13,7 @@ class SummaryData:
         with open(DATA_PATH + json_path) as f:
             data = json.loads(f.read())
         df = pd.json_normalize(data)
+        self.patch : str = df['gameVersion'][0]
         self.gameCreation : int = df['gameCreation'][0]
         self.gameDuration : int = df['gameDuration'][0]
         self.gameEndTimestamp : int = df['gameEndTimestamp'][0]
