@@ -6,6 +6,7 @@ import os
 import re
 import pickle
 import yaml
+import time
 
 from utils_stuff.globals import *
 from EMH.Summary.SummaryData import SummaryData
@@ -92,6 +93,27 @@ def replaceMatchName(gameName : str, path : str):
         # Write back to the YAML file
         with open(path, 'w') as file:
             yaml.dump(data, file, default_flow_style=False)
+        
+            file.flush()
+            os.fsync(file.fileno())
+    except Exception as e:
+        print(f"Error: {e}")
+
+def write_yaml_file(data, file_path):
+    try:
+        # Try to read existing data
+        try:
+            with open(file_path, 'r') as file:
+                existing_data = yaml.safe_load(file)
+        except FileNotFoundError:
+            existing_data = {}
+
+        # Update existing data with new data
+        existing_data.update(data)
+
+        # Write the combined data back to the file
+        with open(file_path, 'w') as file:
+            yaml.safe_dump(existing_data, file)
 
     except Exception as e:
         print(f"Error: {e}")

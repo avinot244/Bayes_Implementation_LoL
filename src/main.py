@@ -53,6 +53,7 @@ if __name__ == "__main__":
     parser.add_argument("-gT", "--game-type", metavar="[ESPORTS, SCRIM, CHAMPIONS_QUEUE, GENERIC]", type=str, help="Game type we want to download")
     parser.add_argument("-dlO", "--download-option", metavar="[GAMH_DETAILS, GAMH_SUMMARY, ROFL_REPLAY, HISTORIC_BAYES_SEPARATED, HISTORIC_BAYES_DUMP]", type=str, help="Type of data we want to downoad form the game")
     parser.add_argument("-n", "--number", metavar="[Amounf_of_game_wanted]", type=int, help="Amount of game we want to download")
+    parser.add_argument("-f", "--from", metavar="[page_number]", type=int, help="Page number from where we get data")
 
     parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
     parser.add_argument("-qr", "--querry", metavar="[player_name]", type=str, help="Gets the pickrate of each champion of the given player")
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     draft = False
     querry = ""
     number = -1
+    fromPage = 0
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -109,6 +111,8 @@ if __name__ == "__main__":
             querry = value
         if arg == "number":
             number = value
+        if arg == "from":
+            fromPage = value
 
     yamlParser : YamlParser = YamlParser("./config.yml")
     if not(download):
@@ -298,45 +302,9 @@ if __name__ == "__main__":
             assert number != -1
 
             print("amount of pages to get : {}".format(number//10))
-            # nbPage = number//10
-            # for page in range(nbPage):
-            #     downloadGames(page, gameType, yamlParser, load, game)
-            page = 5
-            downloadGames(page, gameType, yamlParser, load, game)
-
-            # gameNames : list[str] = get_games_by_page(page, gameType)
-            # gameNames = getUnsavedGameNames(gameNames, yamlParser.ymlDict['brute_data'])
-
-            # # Downloading and saving the json files and updating database
-            # for gameName in gameNames :
-            #     if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
-            #         os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
-
-            #     path = yamlParser.ymlDict['brute_data'] + "{}/g1".format(gameName)
-
-            #     # Downloading files
-            #     save_downloaded_file(get_download_link(gameName, "GAMH_DETAILS"), path, gameName, "GAMH_DETAILS")
-            #     save_downloaded_file(get_download_link(gameName, "GAMH_SUMMARY"), path, gameName, "GAMH_SUMMARY")
-            #     save_downloaded_file(get_download_link(gameName, "HISTORIC_BAYES_SEPARATED"), path + "/Separated", gameName, "HISTORIC_BAYES_SEPARATED")
-
-            #     replaceMatchName(gameName, "./config.yml")
-            #     # Set upping path for database saving
-            #     if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
-            #         os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
-            #     new = False
-            #     if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
-            #         new = True
-            #     save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
-
-            #     # Loading data of the game
-            #     rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(gameName, game)
-            #     # Getting global info of the game
-            #     summaryData : SummaryData = getSummaryData(rootdir)
-            #     (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
-            #     patch = summaryData.patch
-
-            #     # Updating database
-            #     data.draftToCSV(save_path, new, patch)
+            nbPage = number//10
+            for page in range(nbPage):
+                downloadGames(page + fromPage, gameType, yamlParser, load, game)
 
     elif draft:
         assert querry != None

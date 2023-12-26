@@ -1,6 +1,7 @@
 brute_data: ../data/
 database_path: ../db/
-match: LOLTMNT99_108522
+match: LOLTMNT99_106535
+patch: 14.1.547.8890
 playersTeamOne:
 - T1 Oner
 playersTeamTwo:
@@ -8,4 +9,3 @@ playersTeamTwo:
 save_path: ./saved_data
 serialized_path: ../data/
 split: 90,540,900,1500
-patch: "14.1.547.8890"

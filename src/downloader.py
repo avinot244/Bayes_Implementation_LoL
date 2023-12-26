@@ -16,14 +16,18 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
         if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
             os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
 
-        path = yamlParser.ymlDict['brute_data'] + "{}/g1".format(gameName)
+        path = yamlParser.ymlDict['brute_data'] + "{}/g1/".format(gameName)
 
         # Downloading files
         save_downloaded_file(get_download_link(gameName, "GAMH_DETAILS"), path, gameName, "GAMH_DETAILS")
         save_downloaded_file(get_download_link(gameName, "GAMH_SUMMARY"), path, gameName, "GAMH_SUMMARY")
         save_downloaded_file(get_download_link(gameName, "HISTORIC_BAYES_SEPARATED"), path + "/Separated", gameName, "HISTORIC_BAYES_SEPARATED")
 
+        
+        print("Updating yml file")
+        yamlParser.ymlDict['match'] = gameName
         replaceMatchName(gameName, "./config.yml")
+        yamlParser = YamlParser("./config.yml")
         # Set upping path for database saving
         if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
             os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
@@ -34,11 +38,12 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
 
         # Loading data of the game
         rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}/".format(gameName, game)
-        print(rootdir)
         # Getting global info of the game
-        summaryData : SummaryData = getSummaryData(rootdir)
         (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+        summaryData : SummaryData = getSummaryData(rootdir)
+
         patch = summaryData.patch
 
         # Updating database
+        print("Saving to database")
         data.draftToCSV(save_path, new, patch)

@@ -10,7 +10,7 @@ from EMH.Summary.Objective import Objective
 
 class SummaryData:
     def __init__(self, json_path : str):
-        with open(DATA_PATH + json_path) as f:
+        with open(json_path) as f:
             data = json.loads(f.read())
         df = pd.json_normalize(data)
         self.patch : str = df['gameVersion'][0]

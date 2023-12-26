@@ -29,6 +29,7 @@ class SeparatedData:
                  begGameTime : int = 0,
                  endGameTime : int = 0) -> None:
         self.matchName = root_dir.split('/')[2]
+        self.winningTeam = -1
         
         if not(gameSnapShotList is None) and not(begGameTime == 0) and not(endGameTime == 0):
             self.gameSnapshotList = gameSnapShotList
@@ -57,8 +58,9 @@ class SeparatedData:
                         if df['payload.payload.payload.gameOver'][0]:
                             if df['payload.payload.payload.winningTeam'][0] == 100:
                                 self.winningTeam = 0
-                            else:
-                                self.winningTeam = 1 
+                            elif df['payload.payload.payload.winningTeam'][0] == 200:
+                                self.winningTeam = 1
+                            
                         
                         players_team_one : list[separatedPlayer] = list()
 
@@ -298,9 +300,9 @@ class SeparatedData:
     def draftToCSV(self, path : str, new : bool, patch: str):
         # Asserting the right open option
         if new:
-            open_option = 'w+'
+            open_option = 'w'
         else:
-            open_option = 'a+'
+            open_option = 'a'
         
         # Writing the draft pick order database   
         full_path = path + "draft_pick_order.csv"
