@@ -5,10 +5,11 @@ import math
 import os
 import re
 import pickle
+import yaml
 
 from utils_stuff.globals import *
 from EMH.Summary.SummaryData import SummaryData
-from YamlParser import YamlParer
+from YamlParser import YamlParser
 from Separated.Game.SeparatedData import SeparatedData
 
 
@@ -42,7 +43,7 @@ def getSummaryData(rootdir : str) -> SummaryData:
                 return SummaryData(os.path.join(subdir, file))
 
 def getData(load : bool,
-             yamlParser : YamlParer,
+             yamlParser : YamlParser,
              game : str):
     match = yamlParser.ymlDict['match']
     rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
@@ -66,3 +67,31 @@ def getData(load : bool,
     begGameTime : int = data.begGameTime
     endGameTime : int = data.endGameTime
     return (data, gameDuration, begGameTime, endGameTime)
+
+
+def getUnsavedGameNames(gameNames : list[str], path : str) -> list[str]:
+    res = []
+    presentGameNames = []
+    for root, _, _ in os.walk(path, topdown=False):
+        presentGameNames.append(root.split("/")[2])
+
+    for gameName in gameNames:
+        if not(gameName in presentGameNames):
+            res.append(gameName)
+    return res
+
+def replaceMatchName(gameName : str, path : str):
+    try:
+        # Read YAML file
+        with open(path, 'r') as file:
+            data = yaml.safe_load(file)
+
+        # Update the field with the new value
+        data['match'] = gameName
+
+        # Write back to the YAML file
+        with open(path, 'w') as file:
+            yaml.dump(data, file, default_flow_style=False)
+
+    except Exception as e:
+        print(f"Error: {e}")

@@ -1,8 +1,8 @@
-from YamlParser import YamlParer
+from YamlParser import YamlParser
 
 import pandas as pd
 
-def getPlayerPicks(summonerName : str, patch : str, yamlParser : YamlParer):
+def getPlayerPicks(summonerName : str, patch : str, yamlParser : YamlParser):
     df = pd.read_csv(yamlParser.ymlDict['database_path'] + "drafts/draft_player_picks.csv")
 
     res : dict = dict()

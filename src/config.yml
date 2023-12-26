@@ -1,13 +1,11 @@
-brute_data: "../data/"
-save_path: "./saved_data"
-serialized_path: "../data/"
-database_path: "../db/"
-
-match: ESPORTSTMNT03_3222943
-split: 90,540,900,1500
-
-playersTeamOne: 
-  - "T1 Oner"
-
+brute_data: ../data/
+database_path: ../db/
+match: LOLTMNT99_108522
+playersTeamOne:
+- T1 Oner
 playersTeamTwo:
-  - "JDG Kanavi"
+- JDG Kanavi
+save_path: ./saved_data
+serialized_path: ../data/
+split: 90,540,900,1500
+patch: "14.1.547.8890"

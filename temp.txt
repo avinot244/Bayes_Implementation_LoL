@@ -11,12 +11,14 @@ main.py --pathing --density --anim --game [1|5]
 Forward%
 
 TODO :
-- Refactor main so we have one function foe each main program entry point
+- Refactor main so we have one function for each main program entry point
 - Add team names to the csv db files for esports game
 - Refactor the match paramter in the config.yml file. We want it to be a list so we can compute several files at a time
     Entry points to refactor:
+    -> folder architecture
     -> pathing
     -> overview
-- Fo Forward% delimitations
+    - Make a function that get filename of games from the same BO
+- Do Forward% delimitations
 - PCA for various stats (CSDiff, XPDiff GoldDiff, LanePresence, Forward%) -> project on the new features extracted from PCA -> abs value to determine factor importance on observation
 - BERT for champion embedding

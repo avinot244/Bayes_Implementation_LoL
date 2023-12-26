@@ -68,19 +68,20 @@ replace_yaml_value() {
 }
 
 # Start the recursive listing from the current directory
-paths=($(list_directories_recursive "../data" 0 1))
-delimiter="/"
-for path in ${paths[@]}; do
+# paths=($(list_directories_recursive "../data" 0 1))
+# delimiter="/"
+# for path in ${paths[@]}; do
 
-    result=($(split_string "$path" "$delimiter"))
-    matchName=${result[2]}
-    replace_yaml_value "config.yml" "match" "$matchName"
-
-    python3 main.py --draft --game 1
-done
-
-# for matchNumber in "113188" "112248" "113183" "113180" "112229" "113164" "113155" "113151" "113144" "113168" do
-#     matchName="LOLMNT99_$matchNumber"
+#     result=($(split_string "$path" "$delimiter"))
+#     matchName=${result[2]}
 #     replace_yaml_value "config.yml" "match" "$matchName"
+
 #     python3 main.py --draft --game 1
 # done
+
+for matchNumber in "110332" "111286" "111284" "110320" "111258" "111111" "108605" "109580" "109568" "111282"; do
+    matchName="LOLTMNT99_$matchNumber"
+    echo $matchName
+    replace_yaml_value "config.yml" "match" "$matchName"
+    python3 main.py --draft --game 1
+done

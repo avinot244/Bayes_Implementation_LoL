@@ -10,7 +10,7 @@ import shutil
 from API.Bayes.get_token import get_token
 
 
-def get_games_by_page(page : int, gameType : str) -> list:
+def get_games_by_page(page : int, gameType : str, patch : str) -> list:
     token = get_token()
     querystring = {"type": gameType, "page" : page}
 
@@ -25,8 +25,9 @@ def get_games_by_page(page : int, gameType : str) -> list:
 
     platformGameIdList : list = list()
 
-    for games in result['items']:
-        platformGameIdList.append(games['platformGameId'])
+    for game in result['items']:
+        if game['gameVersion'] == patch:
+            platformGameIdList.append(game['platformGameId'])
     
     return platformGameIdList
 

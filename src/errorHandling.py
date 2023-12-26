@@ -1,9 +1,9 @@
-from YamlParser import YamlParer
+from YamlParser import YamlParser
 from Separated.Game.SeparatedData import SeparatedData
 import os
 import re
 
-def checkMatchName(yamlParser : YamlParer, rootdir : str) -> bool:
+def checkMatchName(yamlParser : YamlParser, rootdir : str) -> bool:
     matchName = yamlParser.ymlDict['match']
     res = False
     for _, dir, _ in os.walk(rootdir):

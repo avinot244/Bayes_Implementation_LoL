@@ -10,7 +10,7 @@ import pickle
 import datetime
 
 from utils_stuff.globals import *
-from utils_stuff.utils_func import getSummaryData, getData
+from utils_stuff.utils_func import getSummaryData, getData, getUnsavedGameNames, replaceMatchName
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
@@ -23,10 +23,11 @@ from Separated.Game.SeparatedData import SeparatedData
 from Separated.Game.Snapshot import Snapshot
 from Separated.Game.Player import Player
 from GameStat import GameStat
-from YamlParser import YamlParer
+from YamlParser import YamlParser
 from API.Bayes.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
 from Separated.Draft.Draft import Draft
 from draftDBQueries.getPlayerPicks import getPlayerPicks
+from downloader import downloadGames
 
 
 
@@ -49,11 +50,10 @@ if __name__ == "__main__":
     parser.add_argument("-dl", "--download", action="store_true", default=False, help="Tells if we want to download game data from api")
     parser.add_argument("-dB", "--dateBeg", metavar="[YYYY-MM-DD]", type=str, help="Beginning date of when we extract game")
     parser.add_argument("-dE", "--dateEnd", metavar="[YYYY-MM-DD]", type=str, help="End date of when we extract game")
-    parser.add_argument("-pa", "--page", metavar="[int]", type=int, help="Page of 10 games we want to download")
     parser.add_argument("-gT", "--game-type", metavar="[ESPORTS, SCRIM, CHAMPIONS_QUEUE, GENERIC]", type=str, help="Game type we want to download")
     parser.add_argument("-dlO", "--download-option", metavar="[GAMH_DETAILS, GAMH_SUMMARY, ROFL_REPLAY, HISTORIC_BAYES_SEPARATED, HISTORIC_BAYES_DUMP]", type=str, help="Type of data we want to downoad form the game")
+    parser.add_argument("-n", "--number", metavar="[Amounf_of_game_wanted]", type=int, help="Amount of game we want to download")
 
-    parser.add_argument("-dr", "--draft", action="store_true", default=False, help="Tells if we want to get draft details")
     parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
     parser.add_argument("-qr", "--querry", metavar="[player_name]", type=str, help="Gets the pickrate of each champion of the given player")
 
@@ -71,11 +71,10 @@ if __name__ == "__main__":
     graph = False
     download = False
     dateBeg, dateEnd = ("", "")
-    page = -1
     gameType = ""
-    downloadOption = ""
     draft = False
     querry = ""
+    number = -1
 
     for arg, value in args_data.items():
         if arg == "pathing":
@@ -102,18 +101,16 @@ if __name__ == "__main__":
             dateBeg = value
         if arg == "dateEnd":
             dateEnd = value
-        if arg == "page":
-            page = value
         if arg == "game_type":
             gameType = value
-        if arg == "download_option":
-            downloadOption = value
         if arg == "draft":
             draft = value
         if arg == "querry":
             querry = value
+        if arg == "number":
+            number = value
 
-    yamlParser : YamlParer = YamlParer("./config.yml")
+    yamlParser : YamlParser = YamlParser("./config.yml")
     if not(download):
         assert checkMatchName(yamlParser, DATA_PATH)
 
@@ -292,45 +289,55 @@ if __name__ == "__main__":
 
     elif download:
         if dateBeg != None and dateEnd != None:
-            assert page == -1
             assert gameType in GAME_TYPES
-            assert downloadOption != None
             # get_games_by_date(dateBeg, dateEnd, )
-        elif page != -1:
+        else:
             assert dateBeg == None and dateEnd == None
             assert gameType in GAME_TYPES
-            assert downloadOption != None
 
-            gameNames : list[str] = get_games_by_page(page, gameType)
-            for gameName in gameNames :
-                if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
-                    os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
+            assert number != -1
 
-                path = yamlParser.ymlDict['brute_data'] + "{}/g1".format(gameName)
+            print("amount of pages to get : {}".format(number//10))
+            # nbPage = number//10
+            # for page in range(nbPage):
+            #     downloadGames(page, gameType, yamlParser, load, game)
+            page = 5
+            downloadGames(page, gameType, yamlParser, load, game)
 
-                if downloadOption == "HISTORIC_BAYES_SEPARATED":
-                    path += "/Separated/"
-                
-                save_downloaded_file(get_download_link(gameName, downloadOption), path, gameName, downloadOption)
+            # gameNames : list[str] = get_games_by_page(page, gameType)
+            # gameNames = getUnsavedGameNames(gameNames, yamlParser.ymlDict['brute_data'])
+
+            # # Downloading and saving the json files and updating database
+            # for gameName in gameNames :
+            #     if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
+            #         os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
+
+            #     path = yamlParser.ymlDict['brute_data'] + "{}/g1".format(gameName)
+
+            #     # Downloading files
+            #     save_downloaded_file(get_download_link(gameName, "GAMH_DETAILS"), path, gameName, "GAMH_DETAILS")
+            #     save_downloaded_file(get_download_link(gameName, "GAMH_SUMMARY"), path, gameName, "GAMH_SUMMARY")
+            #     save_downloaded_file(get_download_link(gameName, "HISTORIC_BAYES_SEPARATED"), path + "/Separated", gameName, "HISTORIC_BAYES_SEPARATED")
+
+            #     replaceMatchName(gameName, "./config.yml")
+            #     # Set upping path for database saving
+            #     if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
+            #         os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
+            #     new = False
+            #     if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
+            #         new = True
+            #     save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
+
+            #     # Loading data of the game
+            #     rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(gameName, game)
+            #     # Getting global info of the game
+            #     summaryData : SummaryData = getSummaryData(rootdir)
+            #     (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+            #     patch = summaryData.patch
+
+            #     # Updating database
+            #     data.draftToCSV(save_path, new, patch)
+
     elif draft:
-        if querry == None:
-            print("Getting draft of game {}".format(yamlParser.ymlDict['match']))
-
-            # Set upping ath for database saving
-            if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
-                os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
-            new = False
-            if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
-                new = True
-            save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
-
-            # Loading data of the game
-            match = yamlParser.ymlDict['match']
-            rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
-            # Getting global info of the game
-            summaryData : SummaryData = getSummaryData(rootdir)
-            (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
-            patch = summaryData.patch
-            data.draftToCSV(save_path, new, patch)
-        else:
-            getPlayerPicks(querry, "13.19.535.4316", yamlParser)
+        assert querry != None
+        getPlayerPicks(querry, "13.19.535.4316", yamlParser)

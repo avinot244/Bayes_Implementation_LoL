@@ -355,7 +355,7 @@ class SeparatedData:
 
         # Writing the draft player picks database
         with open(full_path, open_option) as csv_file:
-            writer = csv.writer(csv_file)
+            writer = csv.writer(csv_file, delimiter=";")
             data : list = list()
             if new :
                 header = ['Patch', 'MatchName', 'MatchId', 'SummonerName', 'championName']
