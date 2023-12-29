@@ -28,17 +28,20 @@ class SeparatedData:
                  gameSnapShotList : list[Snapshot] = None,
                  begGameTime : int = 0,
                  endGameTime : int = 0) -> None:
-        self.matchName = root_dir.split('/')[2]
+        
         self.winningTeam = -1
         
         if not(gameSnapShotList is None) and not(begGameTime == 0) and not(endGameTime == 0):
             self.gameSnapshotList = gameSnapShotList
             self.begGameTime = begGameTime
             self.endGameTime = endGameTime
+            
+
         elif not(root_dir is None):
             self.gameSnapshotList : list[Snapshot] = list()
             self.begGameTime : int = 0
             self.endGameTime : int = 0
+            self.matchName = root_dir.split('/')[2]
 
             tempBans : list[BanHeroSnapShot] = list()
             tempPicks : list[SelectedHeroSnapshot] = list()

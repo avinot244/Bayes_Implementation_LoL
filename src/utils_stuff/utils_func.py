@@ -47,7 +47,7 @@ def getData(load : bool,
              yamlParser : YamlParser,
              idx : int):
     match = yamlParser.ymlDict['match'][idx]
-    rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(match)
+    rootdir = yamlParser.ymlDict['brute_data'] + "{}".format(match)
     summaryData = getSummaryData(rootdir)
 
     pathData = yamlParser.ymlDict['serialized_path'] + match + "data"

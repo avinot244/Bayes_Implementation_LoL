@@ -4,13 +4,15 @@ import os
 import re
 
 def checkMatchName(yamlParser : YamlParser, rootdir : str) -> bool:
-    matchName = yamlParser.ymlDict['match']
-    res = False
-    for _, dir, _ in os.walk(rootdir):
-        for file in dir:
-            x = re.search(matchName, file)
-            if x != None:
-                res = True
+    res = True
+    for matchName in yamlParser.ymlDict['match']:
+        tempres = False
+        for _, dir, _ in os.walk(rootdir):
+            for file in dir:
+                x = re.search(matchName, file)
+                if x != None:
+                    tempres = True
+        res = res and tempres 
     return res
 
 def checkTeamComposition(playerNameList : list[list[str]], data : SeparatedData) -> bool :

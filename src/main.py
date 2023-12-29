@@ -1,31 +1,22 @@
 # clear && python3 main.py --match NORDvsBRUTE --game 1 --file DETAILS
 # clear && python3 main.py --match JDGvsT1 --game 1 --file DETAILS
-from tqdm import tqdm
 
 import argparse
 import os
-import json
-import pandas as pd
-import pickle
-import datetime
 
 from utils_stuff.globals import *
-from utils_stuff.utils_func import getSummaryData, getData, getUnsavedGameNames, replaceMatchName
+from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
 from utils_stuff.plots.densityPlot import densityPlot
 from errorHandling import checkMatchName, checkTeamComposition
 
-from EMH.Details.DetailsData import DetailsData
 from EMH.Summary.SummaryData import SummaryData
 from Separated.Game.SeparatedData import SeparatedData
 from Separated.Game.Snapshot import Snapshot
-from Separated.Game.Player import Player
 from GameStat import GameStat
 from YamlParser import YamlParser
-from API.Bayes.api_calls import get_games_by_date, get_games_by_page, save_downloaded_file, get_download_link
-from Separated.Draft.Draft import Draft
 from draftDBQueries.getPlayerPicks import getPlayerPicks
 from downloader import downloadGames
 
@@ -119,7 +110,7 @@ if __name__ == "__main__":
         assert len(yamlParser.ymlDict['match']) == 1
 
         match = yamlParser.ymlDict['match'][0]
-        rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(match)
+        rootdir = yamlParser.ymlDict['brute_data'] + "{}".format(match)
         # Getting global info of the game
         summaryData : SummaryData = getSummaryData(rootdir)
         (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
@@ -144,13 +135,13 @@ if __name__ == "__main__":
         if anim:
             print("Ploting pathing with animation of game {} for players {}".format(yamlParser.ymlDict['match'][0], playerNameList))
             if not(os.path.exists("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))):
-                    os.makedirs("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))
+                os.makedirs("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))
             
             i = 0
             for split in splittedDataset:
                 name = ""
                 if i < len(splitList):
-                    name = "position_both_teams_{}}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
+                    name = "position_both_teams_{}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
                     path = "{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
                     print("saving it to :", path)
                     plotBothTeamsPositionAnimated(playerNameList[0], playerNameList[1], split, name, path)        
@@ -204,7 +195,7 @@ if __name__ == "__main__":
                     plotDiffStatGame(gameStat, path, snapShot)
                     
         else :
-            if yamlParser.ymlDict['match'] > 1:
+            if len(yamlParser.ymlDict['match']) > 1:
                 print("Computing overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match'][0]))
                 rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(yamlParser.ymlDict['match'][0])
                 pathData = yamlParser.ymlDict['serialized_path'] + yamlParser.ymlDict['match'][0] + "BOData"

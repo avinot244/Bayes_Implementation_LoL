@@ -1,11 +1,11 @@
 brute_data: ../data/
 database_path: ../db/
 match: 
-- LOLTMNT99_106535
+- ESPORTSTMNT03_3227454
 patch: 14.1.547.8890
-playersTeamOne:
-- T1 Oner
 playersTeamTwo:
+- T1 Oner
+playersTeamOne:
 - JDG Kanavi
 save_path: ./saved_data
 serialized_path: ../data/
