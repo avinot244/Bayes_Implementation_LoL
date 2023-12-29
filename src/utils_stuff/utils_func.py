@@ -45,12 +45,12 @@ def getSummaryData(rootdir : str) -> SummaryData:
 
 def getData(load : bool,
              yamlParser : YamlParser,
-             game : str):
-    match = yamlParser.ymlDict['match']
-    rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}".format(match, game)
+             idx : int):
+    match = yamlParser.ymlDict['match'][idx]
+    rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(match)
     summaryData = getSummaryData(rootdir)
 
-    pathData = yamlParser.ymlDict['serialized_path'] + match + "g{}data".format(game)
+    pathData = yamlParser.ymlDict['serialized_path'] + match + "data"
     data : SeparatedData = None
     if load :
         print("Loading serialized data")
@@ -59,7 +59,7 @@ def getData(load : bool,
         file.close()
     else :
         data = SeparatedData(rootdir + "/Separated")
-        pathData = DATA_PATH + match + "g{}".format(game) + "data"
+        pathData = DATA_PATH + match + "data"
         file = open(pathData, 'ab')
         pickle.dump(data, file)
         file.close()

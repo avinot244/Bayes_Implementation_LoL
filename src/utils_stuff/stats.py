@@ -9,12 +9,12 @@ from utils_stuff.globals import *
 from GameStat import GameStat
 
 
-def saveDiffStatGame(stat : GameStat, game : str, path : str, snapShot : Snapshot):
+def saveDiffStatGame(stat : GameStat, snapShot : Snapshot):
     teamOneName = snapShot.teamOne.getTeamName()
     teamTwoName = snapShot.teamTwo.getTeamName()
 
-    csv_name = "{}diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamOneName, teamTwoName)
-    csv_name_revert = "{}diff_{}_{}_{}_against_{}.csv".format(path, stat.time, game, teamTwoName, teamOneName)
+    csv_name = "{}diff_{}_against_{}.csv".format(stat.time, teamOneName, teamTwoName)
+    csv_name_revert = "{}diff_{}_against_{}.csv".format(stat.time, teamTwoName, teamOneName)
 
     with open(csv_name, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)

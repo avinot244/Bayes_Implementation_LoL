@@ -6,7 +6,7 @@ from utils_stuff.utils_func import getUnsavedGameNames, replaceMatchName, getSum
 import os
 
 
-def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bool, game : str):
+def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bool):
     patch = yamlParser.ymlDict['patch']
     gameNames : list[str] = get_games_by_page(page, gameType, patch)
     gameNames = getUnsavedGameNames(gameNames, yamlParser.ymlDict['brute_data'])
@@ -37,9 +37,9 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
         save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
 
         # Loading data of the game
-        rootdir = yamlParser.ymlDict['brute_data'] + "{}/g{}/".format(gameName, game)
+        rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(gameName)
         # Getting global info of the game
-        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, game)
+        (data, _, _, _) = getData(load, yamlParser)
         summaryData : SummaryData = getSummaryData(rootdir)
 
         patch = summaryData.patch

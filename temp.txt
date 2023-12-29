@@ -1,8 +1,8 @@
-main.py --pathing --density --anim --game [1|5]
-        --overview --graph --time [time_wanted] --game [1|5|BO]
+main.py --pathing --density --anim
+        --overview --graph --time [time_wanted]
         --jungle-prox
         --download --dateBeg --dateEnd --page --game-type --download-option
-        --draft --game [1|5]
+        --draft
         --load
 
 - herald drop zone ?

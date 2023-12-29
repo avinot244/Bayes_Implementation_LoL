@@ -1,6 +1,7 @@
 brute_data: ../data/
 database_path: ../db/
-match: LOLTMNT99_106535
+match: 
+- LOLTMNT99_106535
 patch: 14.1.547.8890
 playersTeamOne:
 - T1 Oner
