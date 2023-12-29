@@ -1,8 +1,9 @@
 from YamlParser import YamlParser
 from EMH.Summary.SummaryData import SummaryData
+from Separated.Game.SeparatedData import SeparatedData
 from API.Bayes.api_calls import get_games_by_page, save_downloaded_file, get_download_link
 from utils_stuff.utils_func import getUnsavedGameNames, replaceMatchName, getSummaryData, getData
-
+from errorHandling import checkTeamComposition
 import os
 
 
@@ -47,3 +48,4 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
         # Updating database
         print("Saving to database")
         data.draftToCSV(save_path, new, patch)
+

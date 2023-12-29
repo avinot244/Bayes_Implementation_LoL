@@ -9,8 +9,7 @@ from utils_stuff.utils_func import getSummaryData, getData
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
-from utils_stuff.plots.densityPlot import densityPlot
-from errorHandling import checkMatchName, checkTeamComposition
+from errorHandling import checkMatchName
 
 from EMH.Summary.SummaryData import SummaryData
 from Separated.Game.SeparatedData import SeparatedData
@@ -18,10 +17,11 @@ from Separated.Game.Snapshot import Snapshot
 from GameStat import GameStat
 from YamlParser import YamlParser
 from draftDBQueries.getPlayerPicks import getPlayerPicks
-from downloader import downloadGames
 
-
-
+from runners.global_runners import downloadGames
+from runners.pathing_runners import getDataPathing, makeAnimation, makeDensityPlot, makeStaticPlot
+from runners.overview_runners import plotOverView, computeOverViewBO, computeOverViewGame
+from runners.jungle_proximity_runners import computeJungleProximity
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -68,211 +68,59 @@ if __name__ == "__main__":
     fromPage = 0
 
     for arg, value in args_data.items():
-        if arg == "pathing":
-            pathing = value
-        if arg == "anim":
-            anim = value
-        if arg == "overview":
-            overview = value
-        if arg == "graph":
-            graph = value
-        if arg == "time":
-            time = value
-        if arg == "load":
-            load = value
-        if arg == "jungle_prox":
-            jungleProximity = value
-        if arg == "density":
-            density = value
-        if arg == "download":
-            download = value
-        if arg == "dateBeg":
-            dateBeg = value
-        if arg == "dateEnd":
-            dateEnd = value
-        if arg == "game_type":
-            gameType = value
-        if arg == "draft":
-            draft = value
-        if arg == "querry":
-            querry = value
-        if arg == "number":
-            number = value
-        if arg == "from":
-            fromPage = value
+        if arg == "pathing" : pathing = value 
+        if arg == "anim" : anim = value
+        if arg == "overview" : overview = value
+        if arg == "graph" : graph = value
+        if arg == "time" : time = value
+        if arg == "load" : load = value
+        if arg == "jungle_prox" : jungleProximity = value
+        if arg == "density" : density = value
+        if arg == "download" : download = value
+        if arg == "dateBeg" : dateBeg = value
+        if arg == "dateEnd" : dateEnd = value
+        if arg == "game_type" : gameType = value
+        if arg == "draft" : draft = value
+        if arg == "querry" : querry = value
+        if arg == "number" : number = value
+        if arg == "from" : fromPage = value
 
     yamlParser : YamlParser = YamlParser("./config.yml")
     if not(download):
         assert checkMatchName(yamlParser, DATA_PATH)
 
     if pathing:
-        # Loading data of the game
-        assert len(yamlParser.ymlDict['match']) == 1
-
-        match = yamlParser.ymlDict['match'][0]
-        rootdir = yamlParser.ymlDict['brute_data'] + "{}".format(match)
-        # Getting global info of the game
-        summaryData : SummaryData = getSummaryData(rootdir)
-        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
-
-        splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-        splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-        if splitList[-1] > gameDuration:
-            splitList[-1] = gameDuration
-        else:
-            splitList.append(gameDuration)
-        splittedDataset : list[SeparatedData] = data.splitData(summaryData.gameDuration, splitList)
-        
-        playerNameListTeamOne = yamlParser.ymlDict['playersTeamOne']
-        playerNameListTeamTwo = yamlParser.ymlDict['playersTeamTwo']
-
-        playerNameList = [playerNameListTeamOne, playerNameListTeamTwo]
-
-        assert checkTeamComposition(playerNameList, data)
-
-        if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match'][0]))):
-            os.makedirs(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match'][0]))
+        (splittedDataset, splitList, playerNameList) = getDataPathing(yamlParser, load)
         if anim:
-            print("Ploting pathing with animation of game {} for players {}".format(yamlParser.ymlDict['match'][0], playerNameList))
-            if not(os.path.exists("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))):
-                os.makedirs("{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))
-            
-            i = 0
-            for split in splittedDataset:
-                name = ""
-                if i < len(splitList):
-                    name = "position_both_teams_{}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
-                    path = "{}/Position/PositionAnimated/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                    print("saving it to :", path)
-                    plotBothTeamsPositionAnimated(playerNameList[0], playerNameList[1], split, name, path)        
-                i += 1
+            makeAnimation(yamlParser, playerNameList, splittedDataset, splitList)
         elif density:
-            if len(yamlParser.ymlDict['match']) == 1:
-                print("Plotting position density of game {} for players {}".format(yamlParser.ymlDict['match'][0], playerNameList))
-                if not(os.path.exists("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))):
-                    os.makedirs("{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0]))
-                save_path = "{}/Position/PositionDensity/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                
-                i = 0
-                for split in splittedDataset:
-                    graph_name = ""
-                    if i < len(splitList):
-                        # For team one
-                        graph_name = "position_density_teamOne_{}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
-                        densityPlot(playerNameList[0], graph_name, save_path, split)
-
-                        # For team two
-                        graph_name = "position_density_teamTwo_{}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
-                        densityPlot(playerNameList[1], graph_name, save_path, split)
-                    i += 1
+            makeDensityPlot(yamlParser, playerNameList, splittedDataset, splitList)
         else:
-            assert len(yamlParser.ymlDict['match']) == 1
-            print("Plotting pathing without animation of game {} for players {}".format(yamlParser.ymlDict['match'][0], playerNameList))
-            i = 0
-            for split in splittedDataset:
-                name = ""
-                if i < len(splitList):
-                    name = "position_T1_{}_{}".format(splitList[i], yamlParser.ymlDict['match'][0])
-                    path = "{}/Position/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                    plotTeamPosition(playerNameList[0], split, name, path)
-                i += 1
+            makeStaticPlot(yamlParser, playerNameList, splittedDataset, splitList)
             
     elif overview:
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/".format(yamlParser.ymlDict['match'][0]))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/".format(yamlParser.ymlDict['match'][0]))
         if graph:
             if yamlParser.ymlDict['match'] > 1:
-                print("Plotting overview of th whole Best-Of of match {}".format(yamlParser.ymlDict['match']))
+                print("Plotting overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match']))
             else:
+                assert time != None
                 print("Plotting overview of at {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
-                (data, gameDuration , begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
-                if time != None:
-                    snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
-                    gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
-                    path = "{}/GameStat/Overview/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                    #TODO : do graph stuff
-
-                    plotDiffStatGame(gameStat, path, snapShot)
+                plotOverView(yamlParser, load, time)
                     
         else :
             if len(yamlParser.ymlDict['match']) > 1:
                 print("Computing overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match'][0]))
-                rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(yamlParser.ymlDict['match'][0])
-                pathData = yamlParser.ymlDict['serialized_path'] + yamlParser.ymlDict['match'][0] + "BOData"
-                dirList : list[str] = list()
-                for subdir, dirs, _ in os.walk(rootdir):
-                    dirList.append(dirs)
-                nbGameBo = len(dirList[0])
-                gameList = dirList[0]
-                allSeparatedData : list[SeparatedData] = []
-                allSummaryData : list[SummaryData] = []
-                allSnapshot15 : list[Snapshot] = []
-                allGameStat15 : list[GameStat] = []
-
-                for i in range(len(yamlParser.ymlDict['match'])):
-                    subRootdir = yamlParser.ymlDict['brute_data'] + "/{}/{}".format(yamlParser.ymlDict['match'][i])
-                    pathData = yamlParser.ymlDict['brute_data'] + yamlParser.ymlDict['match'][i] + "data"
-
-                    summaryDataTemp : SummaryData = getSummaryData(subRootdir)
-                    
-                    (separatedDataTemp, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=i)
-
-                    if time != None:
-                        gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(time, gameDuration),
-                                                gameDuration,
-                                                begGameTime,
-                                                endGameTime)
-
-                        allSeparatedData.append(separatedDataTemp)
-                        allSnapshot15.append(separatedDataTemp.getSnapShotByTime(time, gameDuration))
-                        allSummaryData.append(summaryDataTemp)
-                        allGameStat15.append(gameStatTemp)
-                    else:
-                        gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(gameDuration, gameDuration),
-                                                gameDuration,
-                                                begGameTime,
-                                                endGameTime)
-
-                        allSeparatedData.append(separatedDataTemp)
-                        allSnapshot15.append(separatedDataTemp.getSnapShotByTime(gameDuration, gameDuration))
-                        allSummaryData.append(summaryDataTemp)
-                        allGameStat15.append(gameStatTemp)
-
-                pathDiffBO = "./saved_data/GameStat/OverView/" + yamlParser.ymlDict['match']
-                saveDiffStatBO(allGameStat15, pathDiffBO, allSnapshot15)
+                computeOverViewBO(yamlParser, load, time)
             
             else:
                 print("Computing overview at {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
-                (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
-                if time != None:
-                    snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
-                    gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
-                    path = "{}/GameStat/Overview/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                    saveDiffStatGame(gameStat, path, snapShot)
-                else:
-                    snapShot : Snapshot = data.getSnapShotByTime(gameDuration, gameDuration)
-                    gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
-                    path = "{}/GameStat/OverView/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
-                    saveDiffStatGame(gameStat, path, snapShot)
+                computeOverViewGame(yamlParser, load, time)
     
     elif jungleProximity:
         print("Getting jungle proximity of game {}".format(yamlParser.ymlDict['match'][0]))
-        (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
-
-        splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-        if splitList[-1] > gameDuration:
-            splitList[-1] = gameDuration
-        else:
-            splitList.append(gameDuration)
-        splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
-        
-        teamNames = data.getTeamNames()
-
-        jungleProxList : list = list()
-        for splitData in splittedDataset:
-            jungleProxList.append(getJungleProximity(splitData, teamNames['T1']))
-        
-        print(jungleProxList)
+        computeJungleProximity(yamlParser, load)
 
     elif download:
         if dateBeg != None and dateEnd != None:
@@ -281,7 +129,6 @@ if __name__ == "__main__":
         else:
             assert dateBeg == None and dateEnd == None
             assert gameType in GAME_TYPES
-
             assert number != -1
 
             print("amount of pages to get : {}".format(number//10))
