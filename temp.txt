@@ -11,7 +11,6 @@ main.py --pathing --density --anim
 Forward%
 
 TODO :
-- Refactor main so we have one function for each main program entry point
 
 - Make a function that get filename of games from the same BO
 - Do Forward% delimitations

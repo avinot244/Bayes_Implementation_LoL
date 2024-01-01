@@ -5,25 +5,33 @@ from Separated.Game.SeparatedData import SeparatedData
 from EMH.Summary.SummaryData import SummaryData
 
 from utils_stuff.utils_func import getData, getSummaryData
-from utils_stuff.stats import plotDiffStatGame, saveDiffStatBO, saveDiffStatGame
+from utils_stuff.stats import plotDiffStatGame, saveDiffStatBO, saveDiffStatGame, stackPlotDiffStatGame
 
 
 import os
 
 
 def plotOverView(yamlParser : YamlParser,
-                 load : bool,
                  time : int):
     
-    (data, gameDuration , begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
+    (data, gameDuration , begGameTime, endGameTime) = getData(yamlParser, idx=0)
     snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
     gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)
     path = "{}/GameStat/Overview/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
 
     plotDiffStatGame(gameStat, path, snapShot)
 
+def stackPlotOverview(yamlParser : YamlParser,
+                      time : int):
+    (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=0)
+
+    gameStatList : list[GameStat] = list()
+    for snapshot in data.gameSnapshotList:
+        gameStatList.append(GameStat(snapshot, gameDuration, begGameTime, endGameTime))
+    path = "{}/GameStat/Overview/{}/".format(yamlParser.ymlDict['save_path'], yamlParser.ymlDict['match'][0])
+    stackPlotDiffStatGame(gameStatList, path, data, time)
+
 def computeOverViewBO(yamlParser : YamlParser,
-                      load : bool,
                       time : int):
     
     rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(yamlParser.ymlDict['match'][0])
@@ -42,7 +50,7 @@ def computeOverViewBO(yamlParser : YamlParser,
 
         summaryDataTemp : SummaryData = getSummaryData(subRootdir)
         
-        (separatedDataTemp, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=i)
+        (separatedDataTemp, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=i)
 
         if time != None:
             gameStatTemp = GameStat(separatedDataTemp.getSnapShotByTime(time, gameDuration),
@@ -69,9 +77,8 @@ def computeOverViewBO(yamlParser : YamlParser,
     saveDiffStatBO(allGameStat15, pathDiffBO, allSnapshot15)
 
 def computeOverViewGame(yamlParser : YamlParser,
-                        load : bool,
                         time : int):
-    (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
+    (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=0)
     if time != None:
         snapShot : Snapshot = data.getSnapShotByTime(time, gameDuration)
         gameStat : GameStat = GameStat(snapShot, gameDuration, begGameTime, endGameTime)

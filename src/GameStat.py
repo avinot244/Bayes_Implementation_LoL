@@ -10,7 +10,7 @@ class GameStat:
         
 
         
-        self.time = int(snapShot.convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime)//60)
+        self.time = float(snapShot.convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime)/60)
         self.playerXPDiff : list[float] = list()
         self.playerCSDiff : list[float] = list()
         self.playerGoldDiff : list[float] = list()

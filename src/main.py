@@ -20,7 +20,7 @@ from draftDBQueries.getPlayerPicks import getPlayerPicks
 
 from runners.global_runners import downloadGames
 from runners.pathing_runners import getDataPathing, makeAnimation, makeDensityPlot, makeStaticPlot
-from runners.overview_runners import plotOverView, computeOverViewBO, computeOverViewGame
+from runners.overview_runners import plotOverView, computeOverViewBO, computeOverViewGame, stackPlotOverview
 from runners.jungle_proximity_runners import computeJungleProximity
 
 if __name__ == "__main__":
@@ -35,7 +35,6 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
     
     parser.add_argument("-j", "--jungle-prox", action="store_true", default=False, help="Prints jungle proximity at a given time")
-    parser.add_argument("-l", "--load", action="store_true", default=False, help="Tells if we want to load serialized object")
     
     parser.add_argument("-dl", "--download", action="store_true", default=False, help="Tells if we want to download game data from api")
     parser.add_argument("-dB", "--dateBeg", metavar="[YYYY-MM-DD]", type=str, help="Beginning date of when we extract game")
@@ -56,7 +55,6 @@ if __name__ == "__main__":
     density = False
     overview = False
     time = 0
-    load = False
     jungleProximity = False
     graph = False
     download = False
@@ -73,7 +71,6 @@ if __name__ == "__main__":
         if arg == "overview" : overview = value
         if arg == "graph" : graph = value
         if arg == "time" : time = value
-        if arg == "load" : load = value
         if arg == "jungle_prox" : jungleProximity = value
         if arg == "density" : density = value
         if arg == "download" : download = value
@@ -90,7 +87,7 @@ if __name__ == "__main__":
         assert checkMatchName(yamlParser, DATA_PATH)
 
     if pathing:
-        (splittedDataset, splitList, playerNameList) = getDataPathing(yamlParser, load)
+        (splittedDataset, splitList, playerNameList) = getDataPathing(yamlParser)
         if anim:
             makeAnimation(yamlParser, playerNameList, splittedDataset, splitList)
         elif density:
@@ -102,25 +99,26 @@ if __name__ == "__main__":
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/".format(yamlParser.ymlDict['match'][0]))):
             os.makedirs(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/".format(yamlParser.ymlDict['match'][0]))
         if graph:
-            if yamlParser.ymlDict['match'] > 1:
+            if len(yamlParser.ymlDict['match']) > 1:
                 print("Plotting overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match']))
             else:
                 assert time != None
-                print("Plotting overview of at {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
-                plotOverView(yamlParser, load, time)
-                    
+                print("Plotting overview at {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
+                # plotOverView(yamlParser, load, time)
+                print("Plotting GoldDiff evolution before {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
+                stackPlotOverview(yamlParser, time)
         else :
             if len(yamlParser.ymlDict['match']) > 1:
                 print("Computing overview of the whole Best-Of of match {}".format(yamlParser.ymlDict['match'][0]))
-                computeOverViewBO(yamlParser, load, time)
+                computeOverViewBO(yamlParser, time)
             
             else:
                 print("Computing overview at {} for match {}".format(time, yamlParser.ymlDict['match'][0]))
-                computeOverViewGame(yamlParser, load, time)
+                computeOverViewGame(yamlParser, time)
     
     elif jungleProximity:
         print("Getting jungle proximity of game {}".format(yamlParser.ymlDict['match'][0]))
-        computeJungleProximity(yamlParser, load)
+        computeJungleProximity(yamlParser)
 
     elif download:
         if dateBeg != None and dateEnd != None:
@@ -134,8 +132,8 @@ if __name__ == "__main__":
             print("amount of pages to get : {}".format(number//10))
             nbPage = number//10
             for page in range(nbPage):
-                downloadGames(page + fromPage, gameType, yamlParser, load)
-
+                downloadGames(page + fromPage, gameType, yamlParser)
+    
     elif draft:
         assert querry != None
         getPlayerPicks(querry, "13.19.535.4316", yamlParser)

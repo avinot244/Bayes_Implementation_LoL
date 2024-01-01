@@ -69,6 +69,7 @@ class SeparatedData:
 
                         # Parsing players for team one
                         for player_dict_team_one in df['payload.payload.payload.teamOne.players'][0]:
+                            
                             temp_items : list[Item] = list()
                             items = player_dict_team_one['items']
                             for item in items:
@@ -123,7 +124,7 @@ class SeparatedData:
                                     df['payload.payload.payload.teamOne.dragonKills'],
                                     df['payload.payload.payload.teamOne.teamID'],
                                     df['payload.payload.payload.teamOne.inhibKills'],
-                                    df['payload.payload.payload.teamOne.totalGold'],
+                                    df['payload.payload.payload.teamOne.totalGold'][0],
                                     df['payload.payload.payload.teamOne.towerKills'],
                                     df['payload.payload.payload.teamOne.killedDragonTypes'],
                                     players_team_one)
@@ -178,7 +179,6 @@ class SeparatedData:
                                                         player_stat)
                             players_team_two.append(temp_player)
 
-                        
                         teamTwo = separatedTeam(df['payload.payload.payload.teamTwo.assists'],
                                     df['payload.payload.payload.teamTwo.baronKills'],
                                     df['payload.payload.payload.teamTwo.championsKills'],
@@ -186,7 +186,7 @@ class SeparatedData:
                                     df['payload.payload.payload.teamTwo.dragonKills'],
                                     df['payload.payload.payload.teamTwo.teamID'],
                                     df['payload.payload.payload.teamTwo.inhibKills'],
-                                    df['payload.payload.payload.teamTwo.totalGold'],
+                                    df['payload.payload.payload.teamTwo.totalGold'][0],
                                     df['payload.payload.payload.teamTwo.towerKills'],
                                     df['payload.payload.payload.teamTwo.killedDragonTypes'],
                                     players_team_two)

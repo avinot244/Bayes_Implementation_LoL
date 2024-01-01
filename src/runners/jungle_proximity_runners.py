@@ -8,9 +8,8 @@ from utils_stuff.utils_func import getData
 from utils_stuff.stats import getJungleProximity
 
 
-def computeJungleProximity(yamlParser : YamlParser,
-                           load : bool):
-    (data, gameDuration, begGameTime, endGameTime) = getData(load, yamlParser, idx=0)
+def computeJungleProximity(yamlParser : YamlParser):
+    (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=0)
 
     splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
     if splitList[-1] > gameDuration:

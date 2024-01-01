@@ -7,17 +7,17 @@ from errorHandling import checkTeamComposition
 import os
 
 
-def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bool):
+def downloadGames(page : int, gameType : str, yamlParser : YamlParser):
     patch = yamlParser.ymlDict['patch']
     gameNames : list[str] = get_games_by_page(page, gameType, patch)
     gameNames = getUnsavedGameNames(gameNames, yamlParser.ymlDict['brute_data'])
 
     # Downloading and saving the json files and updating database
     for gameName in gameNames :
-        if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))):
-            os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/g1/Separated/".format(gameName))
+        if not(os.path.exists(yamlParser.ymlDict['brute_data'] + "{}/Separated/".format(gameName))):
+            os.makedirs(yamlParser.ymlDict['brute_data'] + "{}/Separated/".format(gameName))
 
-        path = yamlParser.ymlDict['brute_data'] + "{}/g1/".format(gameName)
+        path = yamlParser.ymlDict['brute_data'] + "{}/".format(gameName)
 
         # Downloading files
         save_downloaded_file(get_download_link(gameName, "GAMH_DETAILS"), path, gameName, "GAMH_DETAILS")
@@ -27,7 +27,7 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
         
         print("Updating yml file")
         yamlParser.ymlDict['match'] = gameName
-        replaceMatchName(gameName, "./config.yml")
+        replaceMatchName([gameName], "./config.yml")
         yamlParser = YamlParser("./config.yml")
         # Set upping path for database saving
         if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
@@ -40,7 +40,7 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser, load : bo
         # Loading data of the game
         rootdir = yamlParser.ymlDict['brute_data'] + "{}/".format(gameName)
         # Getting global info of the game
-        (data, _, _, _) = getData(load, yamlParser)
+        (data, _, _, _) = getData(yamlParser, idx=0)
         summaryData : SummaryData = getSummaryData(rootdir)
 
         patch = summaryData.patch

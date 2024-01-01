@@ -43,27 +43,28 @@ def getSummaryData(rootdir : str) -> SummaryData:
             if x != None:
                 return SummaryData(os.path.join(subdir, file))
 
-def getData(load : bool,
-             yamlParser : YamlParser,
-             idx : int):
+def getData(yamlParser : YamlParser,
+            idx : int):
     match = yamlParser.ymlDict['match'][idx]
     rootdir = yamlParser.ymlDict['brute_data'] + "{}".format(match)
     summaryData = getSummaryData(rootdir)
 
     pathData = yamlParser.ymlDict['serialized_path'] + match + "data"
     data : SeparatedData = None
-    if load :
-        print("Loading serialized data")
-        file = open(pathData, 'rb')
-        data : SeparatedData = pickle.load(file)
-        file.close()
-    else :
+    
+    if not(os.path.exists(pathData)):
+        print("Parsing Json files")
         data = SeparatedData(rootdir + "/Separated")
         pathData = DATA_PATH + match + "data"
         file = open(pathData, 'ab')
         pickle.dump(data, file)
         file.close()
-    
+    else:
+        print("Loading serialized data")
+        file = open(pathData, 'rb')
+        data : SeparatedData = pickle.load(file)
+        file.close()
+        
     gameDuration : int = summaryData.gameDuration
     begGameTime : int = data.begGameTime
     endGameTime : int = data.endGameTime
@@ -81,21 +82,23 @@ def getUnsavedGameNames(gameNames : list[str], path : str) -> list[str]:
             res.append(gameName)
     return res
 
-def replaceMatchName(gameName : str, path : str):
+def replaceMatchName(gameNames : list[str], path : str):
     try:
-        # Read YAML file
-        with open(path, 'r') as file:
-            data = yaml.safe_load(file)
+        # Try to read existing data
+        try:
+            with open(path, 'r') as file:
+                existing_data = yaml.safe_load(file)
+        except FileNotFoundError:
+            existing_data = {}
 
-        # Update the field with the new value
-        data['match'] = gameName
+        # Assign the new list to the field
+        existing_data["match"] = gameNames
 
-        # Write back to the YAML file
+        # Write the updated data back to the file
         with open(path, 'w') as file:
-            yaml.dump(data, file, default_flow_style=False)
-        
-            file.flush()
-            os.fsync(file.fileno())
+            yaml.safe_dump(existing_data, file)
+
+        print(f"YAML file successfully updated or created at '{path}'.")
     except Exception as e:
         print(f"Error: {e}")
 

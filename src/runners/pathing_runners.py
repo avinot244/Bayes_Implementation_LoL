@@ -7,7 +7,7 @@ from utils_stuff.plots.densityPlot import densityPlot
 from errorHandling import checkTeamComposition
 import os
 
-def getDataPathing(yamlParser : YamlParser, load : bool):
+def getDataPathing(yamlParser : YamlParser):
      # Loading data of the game
     assert len(yamlParser.ymlDict['match']) == 1
 
@@ -15,7 +15,7 @@ def getDataPathing(yamlParser : YamlParser, load : bool):
     rootdir = yamlParser.ymlDict['brute_data'] + "{}".format(match)
     # Getting global info of the game
     summaryData : SummaryData = getSummaryData(rootdir)
-    (data, gameDuration, _, _) = getData(load, yamlParser, idx=0)
+    (data, gameDuration, _, _) = getData(yamlParser, idx=0)
 
     splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
     splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
