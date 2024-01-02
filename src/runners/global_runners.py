@@ -4,6 +4,9 @@ from Separated.Game.SeparatedData import SeparatedData
 from API.Bayes.api_calls import get_games_by_page, save_downloaded_file, get_download_link
 from utils_stuff.utils_func import getUnsavedGameNames, replaceMatchName, getSummaryData, getData
 from errorHandling import checkTeamComposition
+from AreaMapping.AreaMapping import AreaMapping
+from Separated.Game.SeparatedData import SeparatedData
+
 import os
 
 
@@ -49,3 +52,25 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser):
         print("Saving to database")
         data.draftToCSV(save_path, new, patch)
 
+def areaMappingRunner(yamlParser : YamlParser, time : int):
+    (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=0)
+    areaMapping : AreaMapping = AreaMapping()
+
+    # Splitting our data so we get the interval between [950s; time]
+    splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
+    if splitList[-1] > gameDuration:
+        splitList[-1] = gameDuration
+    else:
+        splitList.append(gameDuration)
+    splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
+    
+    dataBeforeTime : SeparatedData = splittedDataset[1] # Getting the wanted interval
+    
+    # Computing and displaying results
+    areaMapping.computeMapping(dataBeforeTime)
+
+    print("Lane presence for team one at {}:".format(time))
+    print(areaMapping.teamOneMapping)
+    print("\n------------------\n")
+    print("Lane presence for team two at {}:".format(time))
+    print(areaMapping.teamTwoMapping)

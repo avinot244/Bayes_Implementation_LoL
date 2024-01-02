@@ -75,4 +75,7 @@ class AreaMapping:
         for playerName, mapping in self.teamOneMapping.items():
             for key in mapping.keys():
                 mapping[key] /= l
+        for playerName, mapping in self.teamTwoMapping.items():
+            for key in mapping.keys():
+                mapping[key] /= l
             

@@ -18,7 +18,6 @@ def getDataPathing(yamlParser : YamlParser):
     (data, gameDuration, _, _) = getData(yamlParser, idx=0)
 
     splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-    splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
     if splitList[-1] > gameDuration:
         splitList[-1] = gameDuration
     else:

@@ -17,8 +17,9 @@ from Separated.Game.Snapshot import Snapshot
 from GameStat import GameStat
 from YamlParser import YamlParser
 from draftDBQueries.getPlayerPicks import getPlayerPicks
+from AreaMapping.AreaMapping import AreaMapping
 
-from runners.global_runners import downloadGames
+from runners.global_runners import downloadGames, areaMappingRunner
 from runners.pathing_runners import getDataPathing, makeAnimation, makeDensityPlot, makeStaticPlot
 from runners.overview_runners import plotOverView, computeOverViewBO, computeOverViewGame, stackPlotOverview
 from runners.jungle_proximity_runners import computeJungleProximity
@@ -35,7 +36,8 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--time", metavar="[time_wanted_in_seconds]", type=int, help="Game time to analyse")
     
     parser.add_argument("-j", "--jungle-prox", action="store_true", default=False, help="Prints jungle proximity at a given time")
-    
+    parser.add_argument("-lp", "--lane-presence", action="store_true", default=False, help="Prints jungle presense at a given time")
+
     parser.add_argument("-dl", "--download", action="store_true", default=False, help="Tells if we want to download game data from api")
     parser.add_argument("-dB", "--dateBeg", metavar="[YYYY-MM-DD]", type=str, help="Beginning date of when we extract game")
     parser.add_argument("-dE", "--dateEnd", metavar="[YYYY-MM-DD]", type=str, help="End date of when we extract game")
@@ -56,6 +58,7 @@ if __name__ == "__main__":
     overview = False
     time = 0
     jungleProximity = False
+    lanePresence = False
     graph = False
     download = False
     dateBeg, dateEnd = ("", "")
@@ -72,6 +75,7 @@ if __name__ == "__main__":
         if arg == "graph" : graph = value
         if arg == "time" : time = value
         if arg == "jungle_prox" : jungleProximity = value
+        if arg == "lane_presence": lanePresence = value
         if arg == "density" : density = value
         if arg == "download" : download = value
         if arg == "dateBeg" : dateBeg = value
@@ -119,6 +123,11 @@ if __name__ == "__main__":
     elif jungleProximity:
         print("Getting jungle proximity of game {}".format(yamlParser.ymlDict['match'][0]))
         computeJungleProximity(yamlParser)
+
+    elif lanePresence:
+        assert time != None
+        print("Getting lane presence of game {}".format(yamlParser.ymlDict['match'][0]))
+        areaMappingRunner(yamlParser, time)
 
     elif download:
         if dateBeg != None and dateEnd != None:

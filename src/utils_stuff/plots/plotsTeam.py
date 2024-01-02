@@ -49,7 +49,7 @@ def plot_player_position(positionList : list[Position], figName : str, path : st
     plt.close()
 
 
-def plot_multiple_players_positions_animated(positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str, path : str):
+def plot_multiple_players_positions_animated(playerNameList : list[str], positionLists : list[list[Position]], colorList : list[str], markerList : list[str], figName : str, path : str):
     
     subteamLength = len(positionLists)//2
     assert figName != "" and path != ""
@@ -83,6 +83,7 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
             scatters.append(ax.scatter([], [], color=colorList[i%subteamLength], s=[25], marker=markerList[i%subteamLength]))
         else:
             scatters.append(ax.scatter([], [], color=colorList[i%subteamLength], s=[25], marker=markerList[5+i%subteamLength]))
+    
     def update(frame):
         for i in range(len(positionLists)):
             X = [pos.x for pos in positionLists[i]]
@@ -96,6 +97,7 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
             
             data = np.stack([x, y]).T
             scatters[i].set_offsets(data)
+            ax.annotate(playerNameList[i], x[-1], y[-1])
         return scatters
     ani = animation.FuncAnimation(fig=fig, func=update, frames=len(positionLists[0]), interval=200)
     writervideo = animation.FFMpegWriter(fps=60) 
@@ -173,7 +175,7 @@ def plotAllTeamPositionAnimated(playerNameList : list[str], data : SeparatedData
         positionLists.append(positionHistory)
     colorList = ["blue", "green", "red", "yellow", "purple"]
     markerList = ["o"]*5
-    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name, path)
+    plot_multiple_players_positions_animated(playerNameList, positionLists, colorList, markerList, name, path)
 
 def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameListTeamTwo : list[str], data : SeparatedData, name : str, path : str):
     positionLists : list[list[Position]] = list()
@@ -193,4 +195,4 @@ def plotBothTeamsPositionAnimated(playerNameListTeamOne : list[str], playerNameL
         positionLists.append(positionHistory)
     colorList = ["blue", "green", "red", "yellow", "purple"] * 2
     markerList = ["o"] * 5 + ["^"] * 5
-    plot_multiple_players_positions_animated(positionLists, colorList, markerList, name, path)
+    plot_multiple_players_positions_animated(playerNameListTeamOne + playerNameListTeamTwo, positionLists, colorList, markerList, name, path)

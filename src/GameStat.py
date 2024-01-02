@@ -8,7 +8,7 @@ class GameStat:
                  begGameTime : int = None,
                  endGameTime : int = None):
         
-
+        
         
         self.time = float(snapShot.convertGameTimeToSeconds(gameDuration, begGameTime, endGameTime)/60)
         self.playerXPDiff : list[float] = list()

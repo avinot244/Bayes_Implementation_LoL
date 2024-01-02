@@ -1,7 +1,7 @@
 brute_data: ../data/
 database_path: ../db/
 match:
-- LOLTMNT99_121238
+- LOLTMNT99_114847
 patch: 14.1.547.8890
 playersTeamOne:
 - JDG Kanavi
