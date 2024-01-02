@@ -57,11 +57,7 @@ def areaMappingRunner(yamlParser : YamlParser, time : int):
     areaMapping : AreaMapping = AreaMapping()
 
     # Splitting our data so we get the interval between [950s; time]
-    splitList : list[int] = [int(e) for e in yamlParser.ymlDict['split'].split(',')]
-    if splitList[-1] > gameDuration:
-        splitList[-1] = gameDuration
-    else:
-        splitList.append(gameDuration)
+    splitList : list[int] = [120, time, gameDuration]
     splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
     
     dataBeforeTime : SeparatedData = splittedDataset[1] # Getting the wanted interval

@@ -119,7 +119,7 @@ def saveDiffStatBO(statList : list[GameStat], path : str, snapShotList : list[Sn
 
             
 def getJungleProximity(data : SeparatedData, team : int):
-    """team attribute stands for the number of the team (can be either one or two)"""
+    """team attribute stands for the number of the team (can be either zero or one)"""
     jungleProximitySummary : dict = dict()
     
     if team == 0:
@@ -130,6 +130,7 @@ def getJungleProximity(data : SeparatedData, team : int):
         playerList = data.gameSnapshotList[0].teamTwo.getPlayerList()
         for playerName in playerList:
             jungleProximitySummary[playerName] = 0
+    
     c = 0
     for snapshot in data.gameSnapshotList:
         if team == 0:

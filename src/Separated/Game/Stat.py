@@ -17,7 +17,7 @@ class Stat:
                  totalTimeCCOthers : float):
         self.minionsKilled = minionsKilled
         self.championsKilled = championsKilled
-        self;numDeaths = numDeaths
+        self.numDeaths = numDeaths
         self.assists = assists
         self.wardPlaced = wardPlaced
         self.wardKilled = wardKilled

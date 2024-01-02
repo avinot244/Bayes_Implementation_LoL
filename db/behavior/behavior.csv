@@ -1,2 +1,2 @@
-MatchId;SummonnerName;CSD@15;GD@15;Kills;Deaths;Assists
-0;0;0;0;0;0;0
+MatchId;SummonnerName;CSD@15;GD@15;Kills;Deaths;Assists;DamageDealt;DamageTaken;JungleProximity;midLanePresence;topLanePresence;botLanePresence;jungleBlueEntryPresence;jungleRedEntryPresence
+110853020184706759|game2;T1 Faker;13.0;771;0;0;2;47922.24609375;5699.95849609375;0.45953654188948306;0.6755793226381461;0.0;0.08591800356506239;0.006417112299465241;0.004634581105169341

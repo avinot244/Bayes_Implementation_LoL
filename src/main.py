@@ -23,6 +23,7 @@ from runners.global_runners import downloadGames, areaMappingRunner
 from runners.pathing_runners import getDataPathing, makeAnimation, makeDensityPlot, makeStaticPlot
 from runners.overview_runners import plotOverView, computeOverViewBO, computeOverViewGame, stackPlotOverview
 from runners.jungle_proximity_runners import computeJungleProximity
+from BehaviorAnalysis.behaviorAnalysis import getBehaviorData, saveToDataBase
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -49,6 +50,8 @@ if __name__ == "__main__":
     parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
     parser.add_argument("-qr", "--querry", metavar="[player_name]", type=str, help="Gets the pickrate of each champion of the given player")
 
+    parser.add_argument("-b", "--behavior-analysis", action="store_true", default=False, help="Does behavior analysis")
+
     args = parser.parse_args()
     args_data = vars(args)
 
@@ -67,6 +70,7 @@ if __name__ == "__main__":
     querry = ""
     number = -1
     fromPage = 0
+    behaviorAnalysis = False
 
     for arg, value in args_data.items():
         if arg == "pathing" : pathing = value 
@@ -85,6 +89,7 @@ if __name__ == "__main__":
         if arg == "querry" : querry = value
         if arg == "number" : number = value
         if arg == "from" : fromPage = value
+        if arg == "behavior_analysis" : behaviorAnalysis = value
 
     yamlParser : YamlParser = YamlParser("./config.yml")
     if not(download):
@@ -126,6 +131,7 @@ if __name__ == "__main__":
 
     elif lanePresence:
         assert time != None
+        assert time > 120
         print("Getting lane presence of game {}".format(yamlParser.ymlDict['match'][0]))
         areaMappingRunner(yamlParser, time)
 
@@ -146,3 +152,34 @@ if __name__ == "__main__":
     elif draft:
         assert querry != None
         getPlayerPicks(querry, "13.19.535.4316", yamlParser)
+    
+    elif behaviorAnalysis:
+        assert time != None
+        assert time > 120
+        print("Behavior Analysis")
+        (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, 0)
+        matchId = data.matchId
+        # Splitting our data so we get the interval between [950s; time]
+        splitList : list[int] = [120, time, gameDuration]
+        splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
+        areaMapping : AreaMapping = AreaMapping()
+
+        dataBeforeTime : SeparatedData = splittedDataset[1] # Getting the wanted interval
+        areaMapping.computeMapping(dataBeforeTime)
+        summonnerName = "T1 Faker"
+
+        gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
+
+        (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+        
+        print(csDiff, goldDiff, statDict, lanePresenceMapping, sep="\n")
+
+        if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
+            os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
+        new = False
+        
+        if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
+            new = True
+        save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
+        
+        saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
