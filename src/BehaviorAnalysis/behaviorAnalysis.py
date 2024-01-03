@@ -29,17 +29,24 @@ def getBehaviorData(areMapping : AreaMapping,
         statDict["Kills"] = snapshot.teamOne.players[participantIdx].stats.championsKilled
         statDict["Deaths"] = snapshot.teamOne.players[participantIdx].stats.numDeaths
         statDict["Assists"] = snapshot.teamOne.players[participantIdx].stats.assists
-        statDict["DamageDealt"] = snapshot.teamOne.players[participantIdx].stats.totalDamageDealt
-        statDict["DamageTaken"] = snapshot.teamOne.players[participantIdx].stats.totalDamageTaken
-        statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)
+        statDict["WardPlaced"] = snapshot.teamOne.players[participantIdx].stats.wardPlaced
+        statDict["WardKilled"] = snapshot.teamOne.players[participantIdx].stats.wardKilled
+        statDict["TotalDamageShieldedOnTeammates"] = snapshot.teamOne.players[participantIdx].stats.totalDamageShieldedOnTeammates
+        statDict["TotalDamageDealtToBuilding"] = snapshot.teamOne.players[participantIdx].stats.totalDamageDealtToBuildings
+        statDict["TotalDamageDealtToObjectives"] = snapshot.teamOne.players[participantIdx].stats.totalDamageDealtToObjectives
+        statDict["TotalTimeCrowdControlDealt"] = snapshot.teamOne.players[participantIdx].stats.totalTimeCrowdControlDealt
+        statDict["TotalTimeCCOthers"] = snapshot.teamOne.players[participantIdx].stats.totalTimeCCOthers
+
+        statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)[summonerName]
+        
 
         lanePresenceMapping = areMapping.teamOneMapping[summonerName]
-        csDiff : float = stat.playerCSDiff[participantIdx]
+        xpDiff : float = stat.playerXPDiff[participantIdx]
         goldDiff : float = stat.playerGoldDiff[participantIdx]
 
-        return csDiff, goldDiff, statDict, lanePresenceMapping
+        return xpDiff, goldDiff, statDict, lanePresenceMapping
 
-    elif datasetSplit.gameSnapshotList[0].teamTwo.isPlayerInTeam(participantID) :
+    elif datasetSplit.gameSnapshotList[0].teamTwo.isPlayerInTeam(participantID):
         participantIdx : int = datasetSplit.gameSnapshotList[0].teamTwo.getPlayerIdx(participantID)
         
         # Computing general statistics about the player
@@ -47,15 +54,21 @@ def getBehaviorData(areMapping : AreaMapping,
         statDict["Kills"] = snapshot.teamTwo.players[participantIdx].stats.championsKilled
         statDict["Deaths"] = snapshot.teamTwo.players[participantIdx].stats.numDeaths
         statDict["Assists"] = snapshot.teamTwo.players[participantIdx].stats.assists
-        statDict["DamageDealt"] = snapshot.teamTwo.players[participantIdx].stats.totalDamageDealt
-        statDict["DamageTaken"] = snapshot.teamTwo.players[participantIdx].stats.totalDamageTaken
+        statDict["WardPlaced"] = snapshot.teamTwo.players[participantIdx].stats.wardPlaced
+        statDict["WardKilled"] = snapshot.teamTwo.players[participantIdx].stats.wardKilled
+        statDict["TotalDamageShieldedOnTeammates"] = snapshot.teamTwo.players[participantIdx].stats.totalDamageShieldedOnTeammates
+        statDict["TotalDamageDealtToBuilding"] = snapshot.teamTwo.players[participantIdx].stats.totalDamageDealtToBuildings
+        statDict["TotalDamageDealtToObjectives"] = snapshot.teamTwo.players[participantIdx].stats.totalDamageDealtToObjectives
+        statDict["TotalTimeCrowdControlDealt"] = snapshot.teamTwo.players[participantIdx].stats.totalTimeCrowdControlDealt
+        statDict["TotalTimeCCOthers"] = snapshot.teamTwo.players[participantIdx].stats.totalTimeCCOthers
+
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 1)[summonerName]
 
         lanePresenceMapping = areMapping.teamTwoMapping[summonerName]
-        csDiff : float = stat.playerCSDiff[participantIdx]
+        xpDiff : float = stat.playerXPDiff[participantIdx]
         goldDiff : float = stat.playerGoldDiff[participantIdx]
 
-        return csDiff, goldDiff, statDict, lanePresenceMapping
+        return xpDiff, goldDiff, statDict, lanePresenceMapping
 
 def saveToDataBase(csDiff : float, 
                    goldDiff : float, 
@@ -76,7 +89,7 @@ def saveToDataBase(csDiff : float,
     with open(full_path, open_option) as csv_file:
         writer = csv.writer(csv_file, delimiter=";")
         if new :
-            header = ["MatchId", "SummonnerName","CSD@15","GD@15"]
+            header = ["MatchId", "SummonnerName","XPD@15","GD@15"]
             for key in statDict.keys():
                 header.append(key)
             for key in lanePresenceMapping.keys():

@@ -7,6 +7,7 @@ import re
 import pickle
 import yaml
 import time
+import shutils
 
 from utils_stuff.globals import *
 from EMH.Summary.SummaryData import SummaryData
@@ -60,6 +61,7 @@ def getData(yamlParser : YamlParser,
         pickle.dump(data, file)
         file.close()
     else:
+        
         print("Loading serialized data")
         file = open(pathData, 'rb')
         data : SeparatedData = pickle.load(file)

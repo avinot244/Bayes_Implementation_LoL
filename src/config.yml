@@ -2,6 +2,9 @@ brute_data: ../data/
 database_path: ../db/
 match:
 - ESPORTSTMNT03_3227454
+- ESPORTSTMNT03_3227455
+- ESPORTSTMNT03_3228010
+- ESPORTSTMNT03_3228025
 patch: 14.1.547.8890
 playersTeamOne:
 - JDG Kanavi

@@ -3,7 +3,7 @@ main.py --pathing --density --anim
         --jungle-prox
         --download --dateBeg --dateEnd --page --game-type --download-option
         --draft
-        --load
+        --behavior-analysis --time
 
 - herald drop zone ?
 - word embedding de champion ?
@@ -12,7 +12,7 @@ Forward%
 
 TODO :
 
-- Make a function that get filename of games from the same BO
 - Do Forward% delimitations
+
 - PCA for various stats (CSDiff, XPDiff GoldDiff, LanePresence, Forward%) -> project on the new features extracted from PCA -> abs value to determine factor importance on observation
 - BERT for champion embedding

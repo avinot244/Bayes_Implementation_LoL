@@ -157,29 +157,48 @@ if __name__ == "__main__":
         assert time != None
         assert time > 120
         print("Behavior Analysis")
-        (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, 0)
-        matchId = data.matchId
-        # Splitting our data so we get the interval between [950s; time]
-        splitList : list[int] = [120, time, gameDuration]
-        splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
-        areaMapping : AreaMapping = AreaMapping()
+        for i in range(len(yamlParser.ymlDict['match'])):
+            (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=i)
+            matchId = data.matchId
+            # Splitting our data so we get the interval between [950s; time]
+            splitList : list[int] = [120, time, gameDuration]
+            splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
+            areaMapping : AreaMapping = AreaMapping()
 
-        dataBeforeTime : SeparatedData = splittedDataset[1] # Getting the wanted interval
-        areaMapping.computeMapping(dataBeforeTime)
-        summonnerName = "T1 Faker"
+            dataBeforeTime : SeparatedData = splittedDataset[1] # Getting the wanted interval
+            areaMapping.computeMapping(dataBeforeTime)
 
-        gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
+            for playerTeamOne in dataBeforeTime.gameSnapshotList[0].teamOne.players:
+                summonnerName = playerTeamOne.summonerName
 
-        (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
-        
-        print(csDiff, goldDiff, statDict, lanePresenceMapping, sep="\n")
+                gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
-        if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
-            os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
-        new = False
-        
-        if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
-            new = True
-        save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
-        
-        saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
+                (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+
+                if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
+                    os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
+                new = False
+                
+                if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
+                    new = True
+                save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
+                
+                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
+            
+            for playerTeamTwo in dataBeforeTime.gameSnapshotList[0].teamTwo.players:
+                summonnerName = playerTeamTwo.summonerName
+
+                gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
+
+                (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+                
+                if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
+                    os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
+                new = False
+                
+                if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
+                    new = True
+                save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
+
+                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
+
