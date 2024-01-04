@@ -77,7 +77,8 @@ def saveToDataBase(csDiff : float,
                    path : str,
                    new : bool,
                    matchId : str,
-                   summonnerName : str):
+                   summonnerName : str,
+                   role : str):
     
     # Asserting the right open option
     if new:
@@ -85,7 +86,7 @@ def saveToDataBase(csDiff : float,
     else:
         open_option = 'a'
     
-    full_path = path + "behavior.csv"
+    full_path = path + "behavior_{}.csv".format(role)
     with open(full_path, open_option) as csv_file:
         writer = csv.writer(csv_file, delimiter=";")
         if new :

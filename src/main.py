@@ -5,7 +5,7 @@ import argparse
 import os
 
 from utils_stuff.globals import *
-from utils_stuff.utils_func import getSummaryData, getData
+from utils_stuff.utils_func import getSummaryData, getData, getRole
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
@@ -171,6 +171,7 @@ if __name__ == "__main__":
 
             for playerTeamOne in dataBeforeTime.gameSnapshotList[0].teamOne.players:
                 summonnerName = playerTeamOne.summonerName
+                role = getRole(dataBeforeTime, summonnerName)
 
                 gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
@@ -178,16 +179,17 @@ if __name__ == "__main__":
 
                 if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
                     os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
-                new = False
                 
-                if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
+                new = False
+                if not(os.path.exists("{}/behavior/behavior_{}.csv".format(yamlParser.ymlDict['database_path'], role))):
                     new = True
                 save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
                 
-                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
+                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
             
             for playerTeamTwo in dataBeforeTime.gameSnapshotList[0].teamTwo.players:
                 summonnerName = playerTeamTwo.summonerName
+                role = getRole(dataBeforeTime, summonnerName)
 
                 gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
@@ -195,11 +197,11 @@ if __name__ == "__main__":
                 
                 if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
                     os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
-                new = False
                 
-                if not(os.path.exists("{}/behavior/behavior.csv".format(yamlParser.ymlDict['database_path']))):
+                new = False
+                if not(os.path.exists("{}/behavior/behavior_{}.csv".format(yamlParser.ymlDict['database_path'], role))):
                     new = True
                 save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
 
-                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName)
+                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
 

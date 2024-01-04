@@ -52,7 +52,7 @@ def getData(yamlParser : YamlParser,
 
     pathData = yamlParser.ymlDict['serialized_path'] + match + "data"
     data : SeparatedData = None
-    
+
     if not(os.path.exists(pathData)):
         print("Parsing Json files")
         data = SeparatedData(rootdir + "/Separated")
@@ -61,8 +61,9 @@ def getData(yamlParser : YamlParser,
         pickle.dump(data, file)
         file.close()
     else:
-        print("Removing Json files")
-        shutil.rmtree(yamlParser.ymlDict['brute_data'] + match)
+        if os.path.exists(yamlParser.ymlDict['serialized_path'] + match):
+            print("Removing Json files")
+            shutil.rmtree(yamlParser.ymlDict['brute_data'] + match)
         print("Loading serialized data")
 
         file = open(pathData, 'rb')
@@ -124,3 +125,15 @@ def write_yaml_file(data, file_path):
 
     except Exception as e:
         print(f"Error: {e}")
+    
+
+def getRole(data : SeparatedData, summonnerName : str = None, participantID : int = None):
+    if summonnerName != None:
+        participantID = data.getPlayerID(summonnerName)
+    
+    if data.gameSnapshotList[0].teamOne.isPlayerInTeam(participantID):
+        participantIdx = data.gameSnapshotList[0].teamOne.getPlayerIdx(participantID)
+        return roleMap[participantIdx]
+    elif data.gameSnapshotList[0].teamTwo.isPlayerInTeam(participantID):
+        participantIdx = data.gameSnapshotList[0].teamTwo.getPlayerIdx(participantID)
+        return roleMap[participantIdx]

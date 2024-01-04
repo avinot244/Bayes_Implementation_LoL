@@ -6,13 +6,17 @@ import re
 def checkMatchName(yamlParser : YamlParser, rootdir : str) -> bool:
     res = True
     for matchName in yamlParser.ymlDict['match']:
-        tempres = False
-        for _, dir, _ in os.walk(rootdir):
-            for file in dir:
-                x = re.search(matchName, file)
-                if x != None:
-                    tempres = True
-        res = res and tempres 
+        tempRes = False
+        for item in os.listdir(rootdir):
+            # print(os.path.join(rootdir, item))
+            if os.path.isfile(os.path.join(rootdir, item)):
+                if re.search(matchName, os.path.join(rootdir, item)) != None:
+                    tempRes = True
+            if os.path.isdir(os.path.join(rootdir, item)):
+                if re.search(matchName, os.path.join(rootdir, item)) != None:
+                    tempRes = True
+        
+        res = res and tempRes 
     return res
 
 def checkTeamComposition(playerNameList : list[list[str]], data : SeparatedData) -> bool :
