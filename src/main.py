@@ -144,6 +144,7 @@ if __name__ == "__main__":
             assert gameType in GAME_TYPES
             assert number != -1
 
+            print(gameType)
             print("amount of pages to get : {}".format(number//10))
             nbPage = number//10
             for page in range(nbPage):

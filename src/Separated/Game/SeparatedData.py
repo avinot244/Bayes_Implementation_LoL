@@ -300,7 +300,7 @@ class SeparatedData:
         teamName[teamNameTwo] = 1
         return teamName
 
-    def draftToCSV(self, path : str, new : bool, patch: str):
+    def draftToCSV(self, path : str, new : bool, patch: str, gameType : str):
         # Asserting the right open option
         if new:
             open_option = 'w'
@@ -308,7 +308,7 @@ class SeparatedData:
             open_option = 'a'
         
         # Writing the draft pick order database   
-        full_path = path + "draft_pick_order.csv"
+        full_path = path + "draft_pick_order_{}.csv".format(gameType)
         with open(full_path, open_option) as csv_file:
             writer = csv.writer(csv_file, delimiter=";")
             if new :
@@ -356,7 +356,7 @@ class SeparatedData:
             
             writer.writerow(data)
         
-        full_path = path + "draft_player_picks.csv"
+        full_path = path + "draft_player_picks_{}.csv".format(gameType)
 
         # Writing the draft player picks database
         with open(full_path, open_option) as csv_file:

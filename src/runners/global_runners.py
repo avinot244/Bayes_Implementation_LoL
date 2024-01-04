@@ -50,7 +50,7 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser):
 
         # Updating database
         print("Saving to database")
-        data.draftToCSV(save_path, new, patch)
+        data.draftToCSV(save_path, new, patch, gameType)
 
 def areaMappingRunner(yamlParser : YamlParser, time : int):
     (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=0)
