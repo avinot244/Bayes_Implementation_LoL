@@ -31,9 +31,6 @@ def getDataPathing(yamlParser : YamlParser):
 
     assert checkTeamComposition(playerNameList, data)
 
-    if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match'][0]))):
-        os.makedirs(yamlParser.ymlDict['save_path'] + "/Position/{}/".format(yamlParser.ymlDict['match'][0]))
-
     return splittedDataset, splitList, playerNameList
 
 

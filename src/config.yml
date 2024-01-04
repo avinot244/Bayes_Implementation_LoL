@@ -1,21 +1,12 @@
 brute_data: ../data/
 database_path: ../db/
 match:
-- ESPORTSTMNT03_3226463
-- ESPORTSTMNT03_3227424
-- ESPORTSTMNT03_3227455
-- ESPORTSTMNT03_3228010
-- ESPORTSTMNT03_3228396
-- ESPORTSTMNT03_3227454
-- ESPORTSTMNT03_3227846
-- ESPORTSTMNT03_3227847
-- ESPORTSTMNT03_3228025
 - ESPORTSTMNT03_3225986
 patch: 13.19.535.4316
 playersTeamOne:
-- JDG Kanavi
+- WBG TheShy
 playersTeamTwo:
-- T1 Oner
+- BLG Bin
 save_path: ./saved_data
 serialized_path: ../data/
 split: 90,540,900,1500

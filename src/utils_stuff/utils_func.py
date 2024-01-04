@@ -63,7 +63,7 @@ def getData(yamlParser : YamlParser,
     else:
         if os.path.exists(yamlParser.ymlDict['serialized_path'] + match):
             print("Removing Json files")
-            shutil.rmtree(yamlParser.ymlDict['brute_data'] + match)
+            # shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")
         print("Loading serialized data")
 
         file = open(pathData, 'rb')

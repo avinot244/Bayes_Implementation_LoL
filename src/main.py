@@ -161,6 +161,7 @@ if __name__ == "__main__":
         for i in range(len(yamlParser.ymlDict['match'])):
             (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=i)
             matchId = data.matchId
+            
             # Splitting our data so we get the interval between [950s; time]
             splitList : list[int] = [120, time, gameDuration]
             splittedDataset : list[SeparatedData] = data.splitData(gameDuration, splitList)
