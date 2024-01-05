@@ -32,11 +32,12 @@ def downloadGames(page : int, gameType : str, yamlParser : YamlParser):
         yamlParser.ymlDict['match'] = gameName
         replaceMatchName([gameName], "./config.yml")
         yamlParser = YamlParser("./config.yml")
+        
         # Set upping path for database saving
         if not(os.path.exists("{}/drafts/".format(yamlParser.ymlDict['database_path']))):
             os.mkdir("{}/drafts/".format(yamlParser.ymlDict['database_path']))
         new = False
-        if not(os.path.exists("{}/drafts/draft_pick_order.csv".format(yamlParser.ymlDict['database_path']))):
+        if not(os.path.exists("{}/drafts/draft_pick_order_{}.csv".format(yamlParser.ymlDict['database_path'], gameType))):
             new = True
         save_path = "{}/drafts/".format(yamlParser.ymlDict['database_path'])
 

@@ -8,10 +8,15 @@ from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity
 from factor_analyzer.factor_analyzer import calculate_kmo
 
 factors = 6
-df = pd.read_csv("./behavior_Mid.csv", sep=";")
+df = pd.read_csv("./behavior_Jungle.csv", sep=";")
+df.replace([np.inf, -np.inf], np.nan, inplace=True)
+df.dropna(axis=0, how='any', inplace=True)
+
 behavior = df[["XPD@15","GD@15","Kills","Deaths","Assists","WardPlaced","WardKilled","TotalDamageShieldedOnTeammates","TotalDamageDealtToBuilding","TotalDamageDealtToObjectives","TotalTimeCrowdControlDealt","TotalTimeCCOthers","JungleProximity","midLanePresence","topLanePresence","botLanePresence","jungleBlueEntryPresence","jungleRedEntryPresence"]]
 # X = StandardScaler().fit_transform(behavior)
 X = behavior
+
+print(X)
 
 
 # Testing if we can use factor analysis on our dataset
@@ -20,7 +25,6 @@ print(chi_square_value, p_value)
 
 kmo_all,kmo_model=calculate_kmo(X)                             # if kmo_model > 0.6 we good
 print(kmo_model)
-
 
 
 fas = [
