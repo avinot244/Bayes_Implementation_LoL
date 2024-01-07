@@ -10,10 +10,10 @@ from utils_stuff.globals import *
 
 def getPositionsMultipleGames(participantNames : list[str], dataLst : list[SeparatedData]):
     # Getting player positions
-    participantIds : list[int] = [dataLst[0].getPlayerID(playerName) for playerName in participantNames]
     participantPositions : list[Position] = list()
 
     for data in dataLst:
+        participantIds : list[int] = [data.getPlayerID(playerName) for playerName in participantNames]
         for playerId in participantIds:
             participantPositions += data.getPlayerPositionHistory(playerId)
     
@@ -47,6 +47,7 @@ def densityPlot(participantPositions : list[Position], graphName : str, save_pat
     xi, yi = np.mgrid[x.min():x.max():nbins*1j, y.min():y.max():nbins*1j] # Meshing our positions
     zi = k(np.vstack([xi.flatten(), yi.flatten()])) # Making a kernel density estimation with a gaussian projection
 
+    
     # Making the plot
     fig, ax = plt.subplots()
     plt.pcolormesh(xi, yi, zi.reshape(xi.shape), shading='auto', zorder=-1)
@@ -72,6 +73,7 @@ def densityPlot(participantPositions : list[Position], graphName : str, save_pat
     plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
     ax.set_aspect("equal", adjustable="box")
     plt.axis('off')
+    plt.colorbar(ax=ax, location='right', label="density")
     plt.title(graphName)
     plt.savefig("{}/{}.png".format(save_path, graphName))
     plt.clf()

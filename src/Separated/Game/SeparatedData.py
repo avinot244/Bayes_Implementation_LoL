@@ -229,6 +229,10 @@ class SeparatedData:
                     
             self.draft : Draft = Draft(tempPicks, tempBans, tempDraftSnapshotList)
         else:
+            print("root_dir : {}".format(root_dir))
+            print("gameSnapShotList : {}".format(gameSnapShotList))
+            print("begGameTime : {}".format(begGameTime))
+            print("endGameTime : {}".format(endGameTime))
             print("Invalid arguments passed")
 
 
@@ -256,7 +260,7 @@ class SeparatedData:
     
 
     def getPlayerID(self, playerName : str) -> int:
-        assert playerName in self.gameSnapshotList[0].teamOne.getPlayerList() or playerName in self.gameSnapshotList[0].teamTwo.getPlayerList()
+        assert (playerName in self.gameSnapshotList[0].teamOne.getPlayerList()) or (playerName in self.gameSnapshotList[0].teamTwo.getPlayerList())
         if playerName in self.gameSnapshotList[0].teamOne.getPlayerList():
             return self.gameSnapshotList[0].teamOne.getPlayerID(playerName)
         else:

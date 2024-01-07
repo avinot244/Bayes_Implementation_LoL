@@ -54,7 +54,6 @@ def getData(yamlParser : YamlParser,
     data : SeparatedData = None
 
     if not(os.path.exists(pathData)):
-        print("Parsing Json files")
         data = SeparatedData(rootdir + "/Separated")
         pathData = DATA_PATH + match + "data"
         file = open(pathData, 'ab')
@@ -62,9 +61,7 @@ def getData(yamlParser : YamlParser,
         file.close()
     else:
         if os.path.exists(yamlParser.ymlDict['brute_data'] + match + "/Separated/"):
-            print("Removing Json files")
-            # shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")
-        print("Loading serialized data")
+            shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")
 
         file = open(pathData, 'rb')
         data : SeparatedData = pickle.load(file)
@@ -126,7 +123,6 @@ def write_yaml_file(data, file_path):
     except Exception as e:
         print(f"Error: {e}")
     
-
 def getRole(data : SeparatedData, summonnerName : str = None, participantID : int = None):
     if summonnerName != None:
         participantID = data.getPlayerID(summonnerName)
@@ -137,3 +133,16 @@ def getRole(data : SeparatedData, summonnerName : str = None, participantID : in
     elif data.gameSnapshotList[0].teamTwo.isPlayerInTeam(participantID):
         participantIdx = data.gameSnapshotList[0].teamTwo.getPlayerIdx(participantID)
         return roleMap[participantIdx]
+    
+
+def splitPlayerNameListPerTeam(data : SeparatedData, playerNameList : list[str]):
+    playerNameListTeamOne : list = list()
+    playerNameListTeamTwo : list = list()
+
+    for playerName in playerNameList:
+        playerID = data.getPlayerID(playerName)
+        if data.gameSnapshotList[0].teamOne.isPlayerInTeam(playerID):
+            playerNameListTeamOne.append(playerName)
+        elif data.gameSnapshotList[0].teamTwo.isPlayerInTeam(playerID):
+            playerNameListTeamTwo.append(playerName)
+    return [playerNameListTeamOne, playerNameListTeamTwo]

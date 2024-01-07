@@ -10,11 +10,10 @@ match:
 - LOLTMNT99_126859
 - LOLTMNT99_127543
 - LOLTMNT99_126612
+
 patch: '14.1'
-playersTeamOne:
-- WBG TheShy
-playersTeamTwo:
-- BLG Bin
+players:
+- AEG Ryuzaki
 save_path: ./saved_data
 serialized_path: ../data/
-split: 90,540,900,1500
+split: 90,540,900
