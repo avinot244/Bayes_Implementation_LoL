@@ -9,6 +9,7 @@ class Stat:
                  visionScore : float,
                  totalDamageDealt : float,
                  totalDamageTaken : float,
+                 totalDamageDealtChampions : float,
                  totalDamageSelfMitigated : float,
                  totalDamageShieldedOnTeammates : float,
                  totalDamageDealtToBuildings : float,
@@ -24,6 +25,7 @@ class Stat:
         self.visionScore = visionScore
         self.totalDamageDealt = totalDamageDealt
         self.totalDamageTaken = totalDamageTaken
+        self.totalDamageDealtChampions = totalDamageDealtChampions
         self.totalDamageSelfMitigated = totalDamageSelfMitigated
         self.totalDamageShieldedOnTeammates = totalDamageShieldedOnTeammates
         self.totalDamageDealtToBuildings = totalDamageDealtToBuildings

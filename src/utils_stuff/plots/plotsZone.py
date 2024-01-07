@@ -7,7 +7,7 @@ from Separated.Game.SeparatedData import SeparatedData
 from utils_stuff.globals import *
 from AreaMapping.Grid import Grid
 
-def plotZones(grid : Grid, colorLst : list[str]):
+def plotZones(gridList : list[Grid], colorLst : list[str]):
     img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
 
     _, ax = plt.subplots()
@@ -29,12 +29,13 @@ def plotZones(grid : Grid, colorLst : list[str]):
     plt.scatter(inhibitorRedX, inhibitorRedY, color="Orange", s=[100])
     plt.scatter(inhibitorBlueX, inhibitorBlueY, color="Cyan", s=[100])
 
-    for i in range(len(grid.zoneList)):
-        zone = grid.zoneList[i]
-        X : list = [(lambda pos : pos.x)(pos) for pos in zone.boundary]
-        Y : list = [(lambda pos : pos.y)(pos) for pos in zone.boundary]
-        X.append(X[0])
-        Y.append(Y[0])
-        plt.plot(X,Y,"{}-".format(colorLst[i]))
-    # plt.show()
-    plt.savefig("temp.png")
+    for i in range(len(gridList)):
+        for j in range(len(gridList[i].zoneList)):
+            zone = gridList[i].zoneList[j]
+            X : list = [(lambda pos : pos.x)(pos) for pos in zone.boundary]
+            Y : list = [(lambda pos : pos.y)(pos) for pos in zone.boundary]
+            X.append(X[0])
+            Y.append(Y[0])
+            plt.plot(X,Y,"{}-".format(colorLst[i]))
+        # plt.show()
+        plt.savefig("temp.png")

@@ -61,7 +61,7 @@ def getData(yamlParser : YamlParser,
         pickle.dump(data, file)
         file.close()
     else:
-        if os.path.exists(yamlParser.ymlDict['serialized_path'] + match):
+        if os.path.exists(yamlParser.ymlDict['brute_data'] + match + "/Separated/"):
             print("Removing Json files")
             # shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")
         print("Loading serialized data")

@@ -6,13 +6,42 @@ main.py --pathing --density --anim
         --behavior-analysis --time
 
 - herald drop zone ?
-- word embedding de champion ?
-
-Forward%
 
 TODO :
-
-- Do Forward% delimitations
-
 - PCA for various stats (CSDiff, XPDiff GoldDiff, LanePresence, Forward%) -> project on the new features extracted from PCA -> abs value to determine factor importance on observation
 - BERT for champion embedding
+
+- pondérer en fonction des sides pour les entrées jungle
+- RiverPresence
+- JunglePresence
+- Forward%
+
+- Density plot of last 2 scrims versus all of the other scrims for Nafkhela
+
+
+- ESPORTSTMNT03_3222943
+- ESPORTSTMNT03_3225556
+- ESPORTSTMNT03_3227010
+- ESPORTSTMNT03_3226069
+- ESPORTSTMNT03_3225718
+- ESPORTSTMNT03_3227177
+- ESPORTSTMNT03_3226221
+- ESPORTSTMNT03_3227417
+- ESPORTSTMNT03_3225383
+- ESPORTSTMNT03_3224688
+- ESPORTSTMNT03_3224326
+- ESPORTSTMNT03_3223364
+- ESPORTSTMNT03_3223353
+- ESPORTSTMNT03_3224309
+- ESPORTSTMNT03_3224306
+- ESPORTSTMNT03_3224291
+- ESPORTSTMNT03_3222348
+- ESPORTSTMNT03_3224254
+- ESPORTSTMNT03_3224164
+- ESPORTSTMNT03_3223206
+- ESPORTSTMNT03_3224155
+- ESPORTSTMNT03_3223190
+- ESPORTSTMNT03_3225580
+- ESPORTSTMNT03_3226447
+- ESPORTSTMNT03_3222743
+- ESPORTSTMNT03_3224008

@@ -88,6 +88,7 @@ class SeparatedData:
                                                     player_stat_dict['visionScore'],
                                                     player_stat_dict['totalDamageDealt'],
                                                     player_stat_dict['totalDamageTaken'],
+                                                    player_stat_dict['totalDamageDealtChampions'],
                                                     player_stat_dict['totalDamageSelfMitigated'],
                                                     player_stat_dict['totalDamageShieldedOnTeammates'],
                                                     player_stat_dict['totalDamageDealtToBuildings'],
@@ -117,16 +118,16 @@ class SeparatedData:
                                                         player_stat)
                             players_team_one.append(temp_player)
                         
-                        teamOne = separatedTeam(df['payload.payload.payload.teamOne.assists'],
-                                    df['payload.payload.payload.teamOne.baronKills'],
-                                    df['payload.payload.payload.teamOne.championsKills'],
-                                    df['payload.payload.payload.teamOne.deaths'],
-                                    df['payload.payload.payload.teamOne.dragonKills'],
-                                    df['payload.payload.payload.teamOne.teamID'],
-                                    df['payload.payload.payload.teamOne.inhibKills'],
+                        teamOne = separatedTeam(df['payload.payload.payload.teamOne.assists'][0],
+                                    df['payload.payload.payload.teamOne.baronKills'][0],
+                                    df['payload.payload.payload.teamOne.championsKills'][0],
+                                    df['payload.payload.payload.teamOne.deaths'][0],
+                                    df['payload.payload.payload.teamOne.dragonKills'][0],
+                                    df['payload.payload.payload.teamOne.teamID'][0],
+                                    df['payload.payload.payload.teamOne.inhibKills'][0],
                                     df['payload.payload.payload.teamOne.totalGold'][0],
-                                    df['payload.payload.payload.teamOne.towerKills'],
-                                    df['payload.payload.payload.teamOne.killedDragonTypes'],
+                                    df['payload.payload.payload.teamOne.towerKills'][0],
+                                    df['payload.payload.payload.teamOne.killedDragonTypes'][0],
                                     players_team_one)
                         
                         players_team_two : list[separatedPlayer] = list()
@@ -150,6 +151,7 @@ class SeparatedData:
                                                     player_stat_dict['visionScore'],
                                                     player_stat_dict['totalDamageDealt'],
                                                     player_stat_dict['totalDamageTaken'],
+                                                    player_stat_dict['totalDamageDealtChampions'],
                                                     player_stat_dict['totalDamageSelfMitigated'],
                                                     player_stat_dict['totalDamageShieldedOnTeammates'],
                                                     player_stat_dict['totalDamageDealtToBuildings'],
@@ -179,16 +181,16 @@ class SeparatedData:
                                                         player_stat)
                             players_team_two.append(temp_player)
 
-                        teamTwo = separatedTeam(df['payload.payload.payload.teamTwo.assists'],
-                                    df['payload.payload.payload.teamTwo.baronKills'],
-                                    df['payload.payload.payload.teamTwo.championsKills'],
-                                    df['payload.payload.payload.teamTwo.deaths'],
-                                    df['payload.payload.payload.teamTwo.dragonKills'],
-                                    df['payload.payload.payload.teamTwo.teamID'],
-                                    df['payload.payload.payload.teamTwo.inhibKills'],
+                        teamTwo = separatedTeam(df['payload.payload.payload.teamTwo.assists'][0],
+                                    df['payload.payload.payload.teamTwo.baronKills'][0],
+                                    df['payload.payload.payload.teamTwo.championsKills'][0],
+                                    df['payload.payload.payload.teamTwo.deaths'][0],
+                                    df['payload.payload.payload.teamTwo.dragonKills'][0],
+                                    df['payload.payload.payload.teamTwo.teamID'][0],
+                                    df['payload.payload.payload.teamTwo.inhibKills'][0],
                                     df['payload.payload.payload.teamTwo.totalGold'][0],
-                                    df['payload.payload.payload.teamTwo.towerKills'],
-                                    df['payload.payload.payload.teamTwo.killedDragonTypes'],
+                                    df['payload.payload.payload.teamTwo.towerKills'][0],
+                                    df['payload.payload.payload.teamTwo.killedDragonTypes'][0],
                                     players_team_two)
                         gameSnapshot : Snapshot = Snapshot(file,
                                                            df['seqIdx'],

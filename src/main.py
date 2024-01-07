@@ -96,13 +96,13 @@ if __name__ == "__main__":
         assert checkMatchName(yamlParser, DATA_PATH)
 
     if pathing:
-        (splittedDataset, splitList, playerNameList) = getDataPathing(yamlParser)
+        (data, splitList, playerNameList) = getDataPathing(yamlParser)
         if anim:
-            makeAnimation(yamlParser, playerNameList, splittedDataset, splitList)
+            makeAnimation(yamlParser, playerNameList, data, splitList)
         elif density:
-            makeDensityPlot(yamlParser, playerNameList, splittedDataset, splitList)
+            makeDensityPlot(yamlParser, playerNameList, data, splitList)
         else:
-            makeStaticPlot(yamlParser, playerNameList, splittedDataset, splitList)
+            makeStaticPlot(yamlParser, playerNameList, data, splitList)
             
     elif overview:
         if not(os.path.exists(yamlParser.ymlDict['save_path'] + "/GameStat/OverView/{}/".format(yamlParser.ymlDict['match'][0]))):
@@ -176,7 +176,7 @@ if __name__ == "__main__":
 
                 gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
-                (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+                (statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
 
                 if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
                     os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
@@ -186,7 +186,7 @@ if __name__ == "__main__":
                     new = True
                 save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
                 
-                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
+                saveToDataBase(statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
             
             for playerTeamTwo in dataBeforeTime.gameSnapshotList[0].teamTwo.players:
                 summonnerName = playerTeamTwo.summonerName
@@ -194,7 +194,7 @@ if __name__ == "__main__":
 
                 gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
-                (csDiff, goldDiff, statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+                (tatDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
                 
                 if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
                     os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
@@ -204,5 +204,5 @@ if __name__ == "__main__":
                     new = True
                 save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
 
-                saveToDataBase(csDiff, goldDiff, statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
+                saveToDataBase(statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
 

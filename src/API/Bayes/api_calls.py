@@ -24,9 +24,10 @@ def get_games_by_page(page : int, gameType : str, patch : str) -> list:
     result : dict = response.json()
 
     platformGameIdList : list = list()
-
     for game in result['items']:
-        if game['gameVersion'] == patch:
+        gameVersion = game['gameVersion'].split('.')[0] + game['gameVersion'].split('.')[1]
+        patchVersion = patch.split(".")[0] + patch.split(".")[1]
+        if gameVersion == patchVersion:
             platformGameIdList.append(game['platformGameId'])
     
     return platformGameIdList

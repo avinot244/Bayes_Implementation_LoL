@@ -8,13 +8,28 @@ from utils_stuff.Position import Position
 from utils_stuff.globals import *
 
 
-def densityPlot(participantNames : list[str], graphName : str, save_path : str, data : SeparatedData):
+def getPositionsMultipleGames(participantNames : list[str], dataLst : list[SeparatedData]):
+    # Getting player positions
+    participantIds : list[int] = [dataLst[0].getPlayerID(playerName) for playerName in participantNames]
+    participantPositions : list[Position] = list()
+
+    for data in dataLst:
+        for playerId in participantIds:
+            participantPositions += data.getPlayerPositionHistory(playerId)
+    
+    return participantPositions
+
+def getPositionsSingleGame(participantNames : list[str], data : SeparatedData):
     # Getting player positions
     participantIds : list[int] = [data.getPlayerID(playerName) for playerName in participantNames]
     participantPositions : list[Position] = list()
+    
     for playerId in participantIds:
         participantPositions += data.getPlayerPositionHistory(playerId)
 
+    return participantPositions
+
+def densityPlot(participantPositions : list[Position], graphName : str, save_path : str):
     # Splitting positions and adding map borders to it
     x = [(lambda pos : pos.x)(pos) for pos in participantPositions]
     x.append(0)
