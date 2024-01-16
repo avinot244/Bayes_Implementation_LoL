@@ -53,7 +53,7 @@ def densityPlot(participantPositions : list[Position], graphName : str, save_pat
     plt.pcolormesh(xi, yi, zi.reshape(xi.shape), shading='auto', zorder=-1)
 
     # Plotting minimap
-    img = np.asarray(Image.open("../Summoner's_Rift_MinimapTransparent.webp"))
+    img = np.asarray(Image.open("../Summoner's_Rift_MinimapTransparent.png"))
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
 
     towerRedX = [pos.x for pos in towerPositionRedSide]

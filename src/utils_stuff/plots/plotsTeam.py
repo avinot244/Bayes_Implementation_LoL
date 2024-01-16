@@ -27,7 +27,7 @@ def plot_player_position(positionList : list[Position], figName : str, path : st
     inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
     inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
 
-    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.png"))
 
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
@@ -64,7 +64,7 @@ def plot_multiple_players_positions_animated(positionLists : list[list[Position]
     inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
     inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
 
-    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.png"))
 
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])
@@ -117,7 +117,7 @@ def plot_player_position_animated(positionList : list[Position], figName : str):
     inhibitorBlueX = [pos.x for pos in inhibitorPositionBlueSide]
     inhibitorBlueY = [pos.y for pos in inhibitorPositionBlueSide]
 
-    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.png"))
 
     fig, ax = plt.subplots()
     ax.imshow(img, extent=[0, MINIMAP_WIDTH, 0, MINIMAP_HEIGHT])

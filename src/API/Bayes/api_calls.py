@@ -10,9 +10,9 @@ import shutil
 from API.Bayes.get_token import get_token
 
 
-def get_games_by_page(page : int, gameType : str, patch : str) -> list:
+def get_games_by_page(page : int, gameType : str, patch : str, tournaments : str) -> list:
     token = get_token()
-    querystring = {"type": gameType, "page" : page}
+    querystring = {"type": gameType, "page" : page, "tags": tournaments}
 
     response = requests.get(
         'https://lolesports-api.bayesesports.com/v2/games',

@@ -91,7 +91,13 @@ def getBehaviorDataTop(datasetSplit :SeparatedData,
 
         lanePresenceMapping : dict = dict()
         lanePresenceMapping["topLanePresence"] = areaMapping.teamOneMapping[summonerName]["topLanePresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamOneMapping[summonerName]["riverTopPresence"]
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)[summonerName]
+        
+    
     if team == 1 : 
         statDict["XP/Min"] = 60*snapshot.teamTwo.players[participantIdx].experience/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
         statDict["Gold/Min"] = 60*snapshot.teamTwo.players[participantIdx].totalGold/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
@@ -112,8 +118,11 @@ def getBehaviorDataTop(datasetSplit :SeparatedData,
 
         lanePresenceMapping : dict = dict()
         lanePresenceMapping["topLanePresence"] = areaMapping.teamTwoMapping[summonerName]["topLanePresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamTwoMapping[summonerName]["riverTopPresence"]
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 1)[summonerName]
-   
     return statDict, lanePresenceMapping
 def getBehaviorDataJungle(datasetSplit :SeparatedData,
                        snapshot : Snapshot, 
@@ -151,9 +160,17 @@ def getBehaviorDataJungle(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamOneMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamOneMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamOneMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleRedEntryPresence"]
-    
+        
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyEntryPresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleAllyBotPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyBotPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["jungleEnemyBotPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyBotPresence"]
+
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamOneMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamOneMapping[summonerName]["riverTopPresence"]
+
     if team == 1 : 
         statDict["XP/Min"] = 60*snapshot.teamTwo.players[participantIdx].experience/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
         statDict["Gold/Min"] = 60*snapshot.teamTwo.players[participantIdx].totalGold/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
@@ -175,9 +192,18 @@ def getBehaviorDataJungle(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamTwoMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamTwoMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamTwoMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleRedEntryPresence"]
-    
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyEntryPresence"]
+
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyEntryPresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleAllyBotPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyBotPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["jungleEnemyBotPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyBotPresence"]
+
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamTwoMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamTwoMapping[summonerName]["riverTopPresence"]
     
     return statDict, lanePresenceMapping
 def getBehaviorDataMid(datasetSplit :SeparatedData,
@@ -219,8 +245,11 @@ def getBehaviorDataMid(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamOneMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamOneMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamOneMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleRedEntryPresence"]
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyEntryPresence"]
+        
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamOneMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamOneMapping[summonerName]["riverTopPresence"]
 
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)[summonerName]
     if team == 1 : 
@@ -247,9 +276,12 @@ def getBehaviorDataMid(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamTwoMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamTwoMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamTwoMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleRedEntryPresence"]
-
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyEntryPresence"]
+        
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamTwoMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamTwoMapping[summonerName]["riverTopPresence"]
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 1)[summonerName]
     
     
@@ -281,12 +313,14 @@ def getBehaviorDataADC(datasetSplit :SeparatedData,
         else :
             statDict["KP%"] = 0
 
-        statDict["WardKilled"] = snapshot.teamOne.players[participantIdx].stats.wardKilled
 
         statDict["Damage/Min"] = 60*snapshot.teamOne.players[participantIdx].stats.totalDamageDealtChampions/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
 
         lanePresenceMapping : dict = dict()
         lanePresenceMapping["botLanePresence"] = areaMapping.teamOneMapping[summonerName]["botLanePresence"]
+        
+        lanePresenceMapping["riverBotPresence"] =  areaMapping.teamOneMapping[summonerName]["riverBotPresence"]
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)[summonerName]
     if team == 1 : 
         statDict["XP/Min"] = 60*snapshot.teamTwo.players[participantIdx].experience/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
@@ -301,14 +335,15 @@ def getBehaviorDataADC(datasetSplit :SeparatedData,
         else :
             statDict["KP%"] = 0
 
-        statDict["WardKilled"] = snapshot.teamTwo.players[participantIdx].stats.wardKilled
 
         statDict["Damage/Min"] = 60*snapshot.teamTwo.players[participantIdx].stats.totalDamageDealtChampions/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
 
         lanePresenceMapping : dict = dict()
         lanePresenceMapping["botLanePresence"] = areaMapping.teamTwoMapping[summonerName]["botLanePresence"]
+        
+        lanePresenceMapping["riverBotPresence"] =  areaMapping.teamTwoMapping[summonerName]["riverBotPresence"]
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 1)[summonerName]
-    
     
     return statDict, lanePresenceMapping
 def getBehaviorDataSupport(datasetSplit :SeparatedData,
@@ -345,8 +380,19 @@ def getBehaviorDataSupport(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamOneMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamOneMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamOneMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleRedEntryPresence"]
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyEntryPresence"]
+        
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyEntryPresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleAllyBotPresence"] = areaMapping.teamOneMapping[summonerName]["jungleAllyBotPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["jungleEnemyBotPresence"] = areaMapping.teamOneMapping[summonerName]["jungleEnemyBotPresence"]
+
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamOneMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamOneMapping[summonerName]["riverTopPresence"]
+
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 0)[summonerName]
     if team == 1 : 
         statDict["XP/Min"] = 60*snapshot.teamTwo.players[participantIdx].experience/snapshot.convertGameTimeToSeconds(gameDuration, begGameTime,endGameTime)
@@ -366,8 +412,20 @@ def getBehaviorDataSupport(datasetSplit :SeparatedData,
         lanePresenceMapping["topLanePresence"] = areaMapping.teamTwoMapping[summonerName]["topLanePresence"]
         lanePresenceMapping["midLanePresence"] = areaMapping.teamTwoMapping[summonerName]["midLanePresence"]
         lanePresenceMapping["botLanePresence"] = areaMapping.teamTwoMapping[summonerName]["botLanePresence"]
-        lanePresenceMapping["jungleBlueEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleBlueEntryPresence"]
-        lanePresenceMapping["jungleRedEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleRedEntryPresence"]
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyEntryPresence"]
+        
+        lanePresenceMapping["jungleAllyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyEntryPresence"]
+        lanePresenceMapping["jungleEnemyEntryPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyEntryPresence"]
+        lanePresenceMapping["jungleAllyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyTopPresence"]
+        lanePresenceMapping["jungleAllyBotPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleAllyBotPresence"]
+        lanePresenceMapping["jungleEnemyTopPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyTopPresence"]
+        lanePresenceMapping["jungleEnemyBotPresence"] = areaMapping.teamTwoMapping[summonerName]["jungleEnemyBotPresence"]
+
+        lanePresenceMapping["riverBotPresence"] = areaMapping.teamTwoMapping[summonerName]["riverBotPresence"]
+        lanePresenceMapping["riverTopPresence"] = areaMapping.teamTwoMapping[summonerName]["riverTopPresence"]
+    
+        
         statDict["JungleProximity"] = getJungleProximity(datasetSplit, 1)[summonerName]
     
     
@@ -403,7 +461,6 @@ def saveToDataBase(statDict : dict,
         data.append(summonnerName)
         for _, v in statDict.items():
             data.append(v)
-        
         for _, v in lanePresenceMapping.items():
             data.append(v)
         

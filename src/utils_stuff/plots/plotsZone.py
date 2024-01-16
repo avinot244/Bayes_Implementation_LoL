@@ -8,7 +8,7 @@ from utils_stuff.globals import *
 from AreaMapping.Grid import Grid
 
 def plotZones(gridList : list[Grid], colorLst : list[str]):
-    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.webp"))
+    img = np.asarray(Image.open("../Summoner's_Rift_Minimap.png"))
 
     _, ax = plt.subplots()
 

@@ -10,9 +10,9 @@ from Separated.Game.SeparatedData import SeparatedData
 import os
 
 
-def downloadGames(page : int, gameType : str, yamlParser : YamlParser):
+def downloadGames(page : int, gameType : str, yamlParser : YamlParser, tournaments : str):
     patch = yamlParser.ymlDict['patch']
-    gameNames : list[str] = get_games_by_page(page, gameType, patch)
+    gameNames : list[str] = get_games_by_page(page, gameType, patch, tournaments)
     gameNames = getUnsavedGameNames(gameNames, yamlParser.ymlDict['brute_data'])
 
     # Downloading and saving the json files and updating database

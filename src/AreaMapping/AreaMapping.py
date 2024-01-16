@@ -15,10 +15,17 @@ class AreaMapping:
                                                         Zone(jungleEntry2Blue), 
                                                         Zone(jungleEntry3Blue), 
                                                         Zone(jungleEntry4Blue)])
-        self.jungleRedEntryPresenceGrid : Grid = Grid([Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry1Blue]),
-                                                       Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry2Blue]),
-                                                       Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry3Blue]),
-                                                       Zone([centralSymmetry(coo, mapCenter) for coo in jungleEntry4Blue])])
+        self.jungleRedEntryPresenceGrid : Grid = Grid([Zone(jungleEntry1Red),
+                                                       Zone(jungleEntry2Red),
+                                                       Zone(jungleEntry3Red),
+                                                       Zone(jungleEntry4Red)])
+        
+        self.riverBotPresenceGrid : Grid = Grid([Zone(riverBot)])
+        self.riverTopPresenceGrid : Grid = Grid([Zone(riverTop)])
+        self.jungleBlueTopPresenceGrid : Grid = Grid([Zone(jungleBlueTop)])
+        self.jungleBlueBotPresenceGrid : Grid = Grid([Zone(jungleBlueBot)])
+        self.jungleRedTopPresenceGrid : Grid = Grid([Zone(jungleRedTop)])
+        self.jungleRedBotPresenceGrid : Grid = Grid([Zone(jungleRedBot)])
         
         self.forwardMidBlue : list[Grid] = None
         self.forwardMidRed : list[Grid] = None
@@ -26,23 +33,35 @@ class AreaMapping:
         
         self.teamOneMapping : dict = dict()
         self.teamTwoMapping : dict = dict()
+    
     def computeMapping(self, data : SeparatedData):
-        ["midLanePresence", "topLanePresence", "botLanePresence", "jungleBlueEntryPresence", "jungleRedEntryPresence"]
         
         playerList = [data.gameSnapshotList[0].teamOne.getPlayerList(), data.gameSnapshotList[0].teamTwo.getPlayerList()]
         
-        for playerName in playerList[0]:
-            self.teamOneMapping[playerName] = {"midLanePresence":0, 
-                                        "topLanePresence":0, 
-                                        "botLanePresence":0, 
-                                        "jungleBlueEntryPresence":0, 
-                                        "jungleRedEntryPresence":0}
-        for playerName in playerList[1]:
-            self.teamTwoMapping[playerName] = {"midLanePresence":0, 
-                                        "topLanePresence":0, 
-                                        "botLanePresence":0, 
-                                        "jungleBlueEntryPresence":0, 
-                                        "jungleRedEntryPresence":0}
+        for summonerName in playerList[0]:
+            self.teamOneMapping[summonerName] = {"midLanePresence":0, 
+                                                "topLanePresence":0, 
+                                                "botLanePresence":0, 
+                                                "jungleAllyEntryPresence":0, 
+                                                "jungleEnemyEntryPresence":0,
+                                                "riverBotPresence":0,
+                                                "riverTopPresence":0,
+                                                "jungleAllyTopPresence":0,
+                                                "jungleAllyBotPresence":0,
+                                                "jungleEnemyTopPresence":0,
+                                                "jungleEnemyBotPresence":0}
+        for summonerName in playerList[1]:
+            self.teamTwoMapping[summonerName] = {"midLanePresence":0, 
+                                                "topLanePresence":0, 
+                                                "botLanePresence":0, 
+                                                "jungleEnemyEntryPresence":0, 
+                                                "jungleAllyEntryPresence":0,
+                                                "riverBotPresence":0,
+                                                "riverTopPresence":0,
+                                                "jungleAllyTopPresence":0,
+                                                "jungleAllyBotPresence":0,
+                                                "jungleEnemyTopPresence":0,
+                                                "jungleEnemyBotPresence":0}
         l = len(data.gameSnapshotList)
         for snapshot in data.gameSnapshotList:
             # For team one
@@ -54,9 +73,23 @@ class AreaMapping:
                 if self.botLanePresenceGrid.containsPoint(player.position):
                     self.teamOneMapping[player.summonerName]['botLanePresence'] += 1
                 if self.jungleBlueEntryPresenceGrid.containsPoint(player.position):
-                    self.teamOneMapping[player.summonerName]['jungleBlueEntryPresence'] += 1
+                    self.teamOneMapping[player.summonerName]['jungleAllyEntryPresence'] += 1
                 if self.jungleRedEntryPresenceGrid.containsPoint(player.position):
-                    self.teamOneMapping[player.summonerName]['jungleRedEntryPresence'] += 1
+                    self.teamOneMapping[player.summonerName]['jungleEnemyEntryPresence'] += 1
+                
+                if self.riverBotPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['riverBotPresence'] += 1
+                if self.riverTopPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['riverTopPresence'] += 1
+
+                if self.jungleBlueTopPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['jungleAllyTopPresence'] += 1
+                if self.jungleBlueBotPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['jungleAllyBotPresence'] += 1
+                if self.jungleRedTopPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['jungleEnemyTopPresence'] += 1
+                if self.jungleRedBotPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]['jungleEnemyBotPresence'] += 1
             
             # For team two
             for player in snapshot.teamTwo.players:
@@ -67,15 +100,28 @@ class AreaMapping:
                 if self.botLanePresenceGrid.containsPoint(player.position):
                     self.teamTwoMapping[player.summonerName]['botLanePresence'] += 1
                 if self.jungleBlueEntryPresenceGrid.containsPoint(player.position):
-                    self.teamTwoMapping[player.summonerName]['jungleBlueEntryPresence'] += 1
+                    self.teamTwoMapping[player.summonerName]['jungleEnemyEntryPresence'] += 1
                 if self.jungleRedEntryPresenceGrid.containsPoint(player.position):
-                    self.teamTwoMapping[player.summonerName]['jungleRedEntryPresence'] += 1
+                    self.teamTwoMapping[player.summonerName]['jungleAllyEntryPresence'] += 1
 
+                if self.riverBotPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['riverBotPresence'] += 1
+                if self.riverTopPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['riverTopPresence'] += 1
+
+                if self.jungleBlueTopPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['jungleEnemyTopPresence'] += 1
+                if self.jungleBlueBotPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['jungleEnemyBotPresence'] += 1
+                if self.jungleRedTopPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['jungleAllyTopPresence'] += 1
+                if self.jungleRedBotPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]['jungleAllyBotPresence'] += 1
         
-        for playerName, mapping in self.teamOneMapping.items():
+        for summonerName, mapping in self.teamOneMapping.items():
             for key in mapping.keys():
                 mapping[key] /= l
-        for playerName, mapping in self.teamTwoMapping.items():
+        for summonerName, mapping in self.teamTwoMapping.items():
             for key in mapping.keys():
                 mapping[key] /= l
             

@@ -46,6 +46,7 @@ if __name__ == "__main__":
     parser.add_argument("-dlO", "--download-option", metavar="[GAMH_DETAILS, GAMH_SUMMARY, ROFL_REPLAY, HISTORIC_BAYES_SEPARATED, HISTORIC_BAYES_DUMP]", type=str, help="Type of data we want to downoad form the game")
     parser.add_argument("-n", "--number", metavar="[Amounf_of_game_wanted]", type=int, help="Amount of game we want to download")
     parser.add_argument("-f", "--from", metavar="[page_number]", type=int, help="Page number from where we get data")
+    parser.add_argument("-to", "--tournaments", metavar="\"tournament_name_1, tournament_name_2\"", type=str, help="Tournaments we want to to download from")
 
     parser.add_argument("-pr", "--pick-rate", metavar="[player_name]", type=str, help="Name of the player we want to get pick rate")
     parser.add_argument("-qr", "--querry", metavar="[player_name]", type=str, help="Gets the pickrate of each champion of the given player")
@@ -71,6 +72,7 @@ if __name__ == "__main__":
     number = -1
     fromPage = 0
     behaviorAnalysis = False
+    tournaments : str = None
 
     for arg, value in args_data.items():
         if arg == "pathing" : pathing = value 
@@ -90,6 +92,7 @@ if __name__ == "__main__":
         if arg == "number" : number = value
         if arg == "from" : fromPage = value
         if arg == "behavior_analysis" : behaviorAnalysis = value
+        if arg == "tournaments": tournaments = value
 
     yamlParser : YamlParser = YamlParser("./config.yml")
     if not(download):
@@ -143,12 +146,13 @@ if __name__ == "__main__":
             assert dateBeg == None and dateEnd == None
             assert gameType in GAME_TYPES
             assert number != -1
+            assert tournaments != None
 
             print(gameType)
             print("amount of pages to get : {}".format(number//10))
             nbPage = number//10
             for page in range(nbPage):
-                downloadGames(page + fromPage, gameType, yamlParser)
+                downloadGames(page + fromPage, gameType, yamlParser, tournaments)
     
     elif draft:
         assert querry != None
@@ -159,6 +163,7 @@ if __name__ == "__main__":
         assert time > 120
         print("Behavior Analysis")
         for i in range(len(yamlParser.ymlDict['match'])):
+            print("Getting behavior analysis of game : {}".format(yamlParser.ymlDict['match'][i]))
             (data, gameDuration, begGameTime, endGameTime) = getData(yamlParser, idx=i)
             matchId = data.matchId
             
@@ -194,7 +199,7 @@ if __name__ == "__main__":
 
                 gameStat : GameStat = GameStat(dataBeforeTime.getSnapShotByTime(time, gameDuration), gameDuration, begGameTime, endGameTime) 
 
-                (tatDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
+                (statDict, lanePresenceMapping) = getBehaviorData(areaMapping, gameStat, dataBeforeTime, summonnerName, time, gameDuration)
                 
                 if not(os.path.exists("{}/behavior/".format(yamlParser.ymlDict['database_path']))):
                     os.mkdir("{}/behavior/".format(yamlParser.ymlDict['database_path']))
@@ -203,6 +208,6 @@ if __name__ == "__main__":
                 if not(os.path.exists("{}/behavior/behavior_{}.csv".format(yamlParser.ymlDict['database_path'], role))):
                     new = True
                 save_path = "{}/behavior/".format(yamlParser.ymlDict['database_path'])
-
+                
                 saveToDataBase(statDict, lanePresenceMapping, save_path, new, matchId, summonnerName, role)
 
