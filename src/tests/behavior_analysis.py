@@ -8,13 +8,13 @@ from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity
 from factor_analyzer.factor_analyzer import calculate_kmo
 
 factorsPerRole : dict = {"Top" : 7,
-                         "Jungle" : 8,
+                         "Jungle" : 7,
                          "Mid" : 9,
-                         "ADC" : 6,
+                         "ADC" : 5,
                          "Support" : 8}
 
 
-role = "ADC"
+role = "Jungle"
 title = "Loading oblique rotation {}".format(role)
 factors = factorsPerRole[role]
 
@@ -41,7 +41,7 @@ fa =  FactorAnalyzer(n_factors=factors, rotation="promax")
 
 
 #  Let's prepare some plots on one canvas (subplots)
-fig, axes = plt.subplots(ncols=1, figsize=(10, 7))
+fig, axes = plt.subplots(ncols=1, figsize=(12, 7))
 
 #  Fit the model to the standardized food data
 fa = fa.fit(X)
@@ -56,6 +56,33 @@ for line in factor_matrix:
 
 scaled_factor_matrix = np.array(scaled_factor_matrix)
 
+
+#  Plot the data as a heat map
+im = axes.imshow(factor_matrix, cmap="RdBu_r", vmax=1, vmin=-1, aspect='auto')
+#  and add the corresponding value to the center of each cell
+for (i,j), z in np.ndenumerate(factor_matrix):
+    
+    axes.text(j, i, str(z.round(factors)), ha="center", va="center")
+#  Tell matplotlib about the metadata of the plot
+axes.set_yticks(np.arange(len(behavior.columns)))
+if axes.get_subplotspec().is_first_col():
+    axes.set_yticklabels(behavior.columns)
+else:
+    axes.set_yticklabels([])
+axes.set_title(title)
+axes.set_xticks(np.arange(factors))
+axes.set_xticklabels(["Factor {}".format(i+1) for i in range(factors)])
+#  and squeeze the axes tight, to save space
+plt.tight_layout()
+    
+#  and add a colorbar
+cb = fig.colorbar(im, ax=axes, location='right', label="loadings")
+plt.savefig("./results/results_{}.png".format(role))
+
+plt.clf()
+
+#  Let's prepare some plots on one canvas (subplots)
+fig, axes = plt.subplots(ncols=1, figsize=(12, 7))
 
 #  Plot the data as a heat map
 im = axes.imshow(scaled_factor_matrix, cmap="RdBu_r", vmax=1, vmin=0, aspect='auto')
@@ -77,7 +104,7 @@ plt.tight_layout()
     
 #  and add a colorbar
 cb = fig.colorbar(im, ax=axes, location='right', label="loadings")
-plt.savefig("results_{}_scaled.png".format(role))
+plt.savefig("./results/results_{}_scaled.png".format(role))
 
 plt.clf()
 
@@ -127,6 +154,6 @@ plt.title('Scree Plot {}'.format(role))
 plt.xlabel('Factors')
 plt.ylabel('Eigenvalue')
 plt.grid()
-plt.savefig("Scree Plot {}".format(role))
+plt.savefig("./results/Scree Plot {}".format(role))
 plt.clf()
 

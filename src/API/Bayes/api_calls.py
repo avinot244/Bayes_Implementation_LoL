@@ -12,7 +12,10 @@ from API.Bayes.get_token import get_token
 
 def get_games_by_page(page : int, gameType : str, patch : str, tournaments : str) -> list:
     token = get_token()
-    querystring = {"type": gameType, "page" : page, "tags": tournaments}
+    if tournaments != "":
+        querystring = {"type": gameType, "page" : page, "tags": tournaments}
+    else:
+        querystring = {"type": gameType, "page" : page}
 
     response = requests.get(
         'https://lolesports-api.bayesesports.com/v2/games',
@@ -22,12 +25,16 @@ def get_games_by_page(page : int, gameType : str, patch : str, tournaments : str
     if response.status_code != 200:
         response.raise_for_status()
     result : dict = response.json()
+    
 
     platformGameIdList : list = list()
     for game in result['items']:
-        gameVersion = game['gameVersion'].split('.')[0] + game['gameVersion'].split('.')[1]
-        patchVersion = patch.split(".")[0] + patch.split(".")[1]
-        if gameVersion == patchVersion:
+        if patch != "":
+            gameVersion = game['gameVersion'].split('.')[0] + game['gameVersion'].split('.')[1]
+            patchVersion = patch.split(".")[0] + patch.split(".")[1]
+            if gameVersion == patchVersion:
+                platformGameIdList.append(game['platformGameId'])
+        else:
             platformGameIdList.append(game['platformGameId'])
     
     return platformGameIdList

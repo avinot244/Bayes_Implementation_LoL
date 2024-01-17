@@ -11,14 +11,16 @@ class AreaMapping:
         self.midLanePresenceGrid : Grid = Grid([Zone(midLaneBoundary)])
         self.topLanePresenceGrid : Grid = Grid([Zone(topLaneBoundary)])
         self.botLanePresenceGrid : Grid = Grid([Zone(botLaneBoundary)])
-        self.jungleBlueEntryPresenceGrid : Grid = Grid([Zone(jungleEntry1Blue), 
-                                                        Zone(jungleEntry2Blue), 
-                                                        Zone(jungleEntry3Blue), 
-                                                        Zone(jungleEntry4Blue)])
-        self.jungleRedEntryPresenceGrid : Grid = Grid([Zone(jungleEntry1Red),
-                                                       Zone(jungleEntry2Red),
-                                                       Zone(jungleEntry3Red),
-                                                       Zone(jungleEntry4Red)])
+
+        self.jungleBlueEntryTopPresenceGrid : Grid = Grid([Zone(jungleEntry1Blue)])
+        self.jungleBlueEntryMidPresenceGrid : Grid = Grid([Zone(jungleEntry2Blue),
+                                                           Zone(jungleEntry3Blue)])
+        self.jungleBlueEntryBotPresenceGrid : Grid = Grid([Zone(jungleEntry4Blue)])
+
+        self.jungleRedEntryTopPresenceGrid : Grid = Grid([Zone(jungleEntry1Red)])
+        self.jungleRedEntryMidPresenceGrid : Grid = Grid([Zone(jungleEntry2Red),
+                                                           Zone(jungleEntry3Red)])
+        self.jungleRedEntryBotPresenceGrid : Grid = Grid([Zone(jungleEntry4Red)])
         
         self.riverBotPresenceGrid : Grid = Grid([Zone(riverBot)])
         self.riverTopPresenceGrid : Grid = Grid([Zone(riverTop)])
@@ -41,9 +43,13 @@ class AreaMapping:
         for summonerName in playerList[0]:
             self.teamOneMapping[summonerName] = {"midLanePresence":0, 
                                                 "topLanePresence":0, 
-                                                "botLanePresence":0, 
-                                                "jungleAllyEntryPresence":0, 
-                                                "jungleEnemyEntryPresence":0,
+                                                "botLanePresence":0,
+                                                "jungleAllyTopEntryPresence":0,
+                                                "jungleAllyMidEntryPresence":0,
+                                                "jungleAllyBotEntryPresence":0,
+                                                "jungleEnemyTopEntryPresence":0,
+                                                "jungleEnemyMidEntryPresence":0,
+                                                "jungleEnemyBotEntryPresence":0,
                                                 "riverBotPresence":0,
                                                 "riverTopPresence":0,
                                                 "jungleAllyTopPresence":0,
@@ -53,9 +59,13 @@ class AreaMapping:
         for summonerName in playerList[1]:
             self.teamTwoMapping[summonerName] = {"midLanePresence":0, 
                                                 "topLanePresence":0, 
-                                                "botLanePresence":0, 
-                                                "jungleEnemyEntryPresence":0, 
-                                                "jungleAllyEntryPresence":0,
+                                                "botLanePresence":0,
+                                                "jungleAllyTopEntryPresence":0,
+                                                "jungleAllyMidEntryPresence":0,
+                                                "jungleAllyBotEntryPresence":0,
+                                                "jungleEnemyTopEntryPresence":0,
+                                                "jungleEnemyMidEntryPresence":0,
+                                                "jungleEnemyBotEntryPresence":0,
                                                 "riverBotPresence":0,
                                                 "riverTopPresence":0,
                                                 "jungleAllyTopPresence":0,
@@ -72,10 +82,21 @@ class AreaMapping:
                     self.teamOneMapping[player.summonerName]['topLanePresence'] += 1
                 if self.botLanePresenceGrid.containsPoint(player.position):
                     self.teamOneMapping[player.summonerName]['botLanePresence'] += 1
-                if self.jungleBlueEntryPresenceGrid.containsPoint(player.position):
-                    self.teamOneMapping[player.summonerName]['jungleAllyEntryPresence'] += 1
-                if self.jungleRedEntryPresenceGrid.containsPoint(player.position):
-                    self.teamOneMapping[player.summonerName]['jungleEnemyEntryPresence'] += 1
+
+                if self.jungleBlueEntryTopPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleAllyTopEntryPresence"] += 1
+                if self.jungleBlueEntryMidPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleAllyMidEntryPresence"] += 1
+                if self.jungleBlueEntryBotPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleAllyBotEntryPresence"] += 1
+
+                if self.jungleRedEntryTopPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleEnemyTopEntryPresence"] += 1
+                if self.jungleRedEntryMidPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleEnemyMidEntryPresence"] += 1
+                if self.jungleRedEntryBotPresenceGrid.containsPoint(player.position):
+                    self.teamOneMapping[player.summonerName]["jungleEnemyBotEntryPresence"] += 1
+
                 
                 if self.riverBotPresenceGrid.containsPoint(player.position):
                     self.teamOneMapping[player.summonerName]['riverBotPresence'] += 1
@@ -99,10 +120,21 @@ class AreaMapping:
                     self.teamTwoMapping[player.summonerName]['topLanePresence'] += 1
                 if self.botLanePresenceGrid.containsPoint(player.position):
                     self.teamTwoMapping[player.summonerName]['botLanePresence'] += 1
-                if self.jungleBlueEntryPresenceGrid.containsPoint(player.position):
-                    self.teamTwoMapping[player.summonerName]['jungleEnemyEntryPresence'] += 1
-                if self.jungleRedEntryPresenceGrid.containsPoint(player.position):
-                    self.teamTwoMapping[player.summonerName]['jungleAllyEntryPresence'] += 1
+                
+                
+                if self.jungleBlueEntryTopPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleEnemyTopEntryPresence"] += 1
+                if self.jungleBlueEntryMidPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleEnemyMidEntryPresence"] += 1
+                if self.jungleBlueEntryBotPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleEnemyBotEntryPresence"] += 1
+
+                if self.jungleRedEntryTopPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleAllyTopEntryPresence"] += 1
+                if self.jungleRedEntryMidPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleAllyMidEntryPresence"] += 1
+                if self.jungleRedEntryBotPresenceGrid.containsPoint(player.position):
+                    self.teamTwoMapping[player.summonerName]["jungleAllyBotEntryPresence"] += 1
 
                 if self.riverBotPresenceGrid.containsPoint(player.position):
                     self.teamTwoMapping[player.summonerName]['riverBotPresence'] += 1

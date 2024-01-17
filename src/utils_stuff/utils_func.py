@@ -59,6 +59,8 @@ def getData(yamlParser : YamlParser,
         file = open(pathData, 'ab')
         pickle.dump(data, file)
         file.close()
+        if os.path.exists(yamlParser.ymlDict['brute_data'] + match + "/Separated/"):
+            shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")
     else:
         if os.path.exists(yamlParser.ymlDict['brute_data'] + match + "/Separated/"):
             shutil.rmtree(yamlParser.ymlDict['brute_data'] + match + "/Separated/")

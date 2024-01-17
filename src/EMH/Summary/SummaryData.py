@@ -36,8 +36,7 @@ class SummaryData:
         self.tournamentCode : str = df['tournamentCode'][0]
 
         for participant in df['participants'][0]:
-            participantEndGameStat = PlayerEndGameStat(participant['allInPings'],
-                                                       participant['assistMePings'],
+            participantEndGameStat = PlayerEndGameStat(participant['assistMePings'],
                                                        participant['assists'],
                                                        participant['baronKills'],
                                                        participant['basicPings'],
@@ -106,12 +105,6 @@ class SummaryData:
                                                        participant['physicalDamageDealt'],
                                                        participant['physicalDamageDealtToChampions'],
                                                        participant['physicalDamageTaken'],
-                                                       participant['placement'],
-                                                       participant['playerAugment1'],
-                                                       participant['playerAugment2'],
-                                                       participant['playerAugment3'],
-                                                       participant['playerAugment4'],
-                                                       participant['playerSubteamId'],
                                                        participant['profileIcon'],
                                                        participant['pushPings'],
                                                        participant['quadraKills'],

@@ -1,6 +1,5 @@
 class PlayerEndGameStat:
     def __init__(self,
-                 allInPing : int,
                  assistMePings : int,
                  assists : int,
                  baronKills : int,
@@ -70,12 +69,6 @@ class PlayerEndGameStat:
                  physicalDamageDealt : int,
                  physicalDamageDealtToChampions : int,
                  physicalDamageTaken : int,
-                 placement : int,
-                 playerAugment1 : int,
-                 playerAugment2 : int,
-                 playerAugment3 : int,
-                 playerAugment4 : int,
-                 playerSubteamId : int,
                  profileIcon : int,
                  pushPings : int,
                  quadraKills : int,
@@ -125,7 +118,6 @@ class PlayerEndGameStat:
                  wardsPlaced : int,
                  win : bool
                  ) -> None:
-        self.allInPings = allInPing
         self.assistMePings = assistMePings
         self.assists = assists
         self.baronKills = baronKills
@@ -195,12 +187,6 @@ class PlayerEndGameStat:
         self.physicalDamageDealt = physicalDamageDealt
         self.physicalDamageDealtToChampions = physicalDamageDealtToChampions
         self.physicalDamageTaken = physicalDamageTaken
-        self.placement = placement
-        self.playerAugment1 = playerAugment1
-        self.playerAugment2 = playerAugment2
-        self.playerAugment3 = playerAugment3
-        self.playerAugment4 = playerAugment4
-        self.playerSubteamId = playerSubteamId
         self.profileIcon = profileIcon
         self.pushPings = pushPings
         self.quadraKills = quadraKills
@@ -228,6 +214,7 @@ class PlayerEndGameStat:
         self.totalDamageDealtToChampions = totalDamageDealtToChampions
         self.totalDamageShieldedOnTeammates = totalDamageShieldedOnTeammates
         self.totalDamageTaken = totalDamageTaken
+        self.totalAllyJungleMinionsKilled = totalAllyJungleMinionsKilled
         self.totalHeal = totalHeal
         self.totalHealsOnTeammates = totalHealsOnTeammates
         self.totalMinionsKilled = totalMinionsKilled

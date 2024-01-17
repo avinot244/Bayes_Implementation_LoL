@@ -3,9 +3,10 @@
 
 import argparse
 import os
+import re
 
 from utils_stuff.globals import *
-from utils_stuff.utils_func import getSummaryData, getData, getRole
+from utils_stuff.utils_func import replaceMatchName, getData, getRole
 from utils_stuff.Types import *
 from utils_stuff.plots.plotsTeam import *
 from utils_stuff.stats import *
@@ -151,6 +152,7 @@ if __name__ == "__main__":
             print(gameType)
             print("amount of pages to get : {}".format(number//10))
             nbPage = number//10
+            print(tournaments)
             for page in range(nbPage):
                 downloadGames(page + fromPage, gameType, yamlParser, tournaments)
     
@@ -161,6 +163,17 @@ if __name__ == "__main__":
     elif behaviorAnalysis:
         assert time != None
         assert time > 120
+
+        gameNames : list[str] = list()
+
+        for file in os.listdir(yamlParser.ymlDict["brute_data"]):
+            if os.path.isdir(yamlParser.ymlDict["brute_data"] + file):
+                x = re.search("ESPORTSTMNT", file)
+                if x != None:
+                    gameNames.append(file)
+        
+        replaceMatchName(gameNames, "./config.yml")
+        yamlParser : YamlParser = YamlParser("./config.yml")
         print("Behavior Analysis")
         for i in range(len(yamlParser.ymlDict['match'])):
             print("Getting behavior analysis of game : {}".format(yamlParser.ymlDict['match'][i]))
